@@ -1,0 +1,135 @@
+<template>
+
+    <style>
+        /** {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }*/
+
+        html {
+            font-size: calc(10px + 1vw);
+            box-sizing: border-box;
+        }
+
+        .myContainer {
+            position: relative;
+            box-sizing: border-box;
+            height: 100vh;
+            /*border: 10px solid red;*/
+            display: grid;
+            grid-template-rows: 30% 30% 40%;
+            justify-content: center;
+            position: relative;
+        }
+
+        .nameTitle {
+            text-align: center;
+            font-size: 4rem;
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+
+        .DojoButton {
+            /*min-width: 25rem;*/
+            font-size: 1.5rem;
+            margin-top: 0.2rem;
+            display: block;
+            margin: 2px;
+        }
+
+        .level {
+            color: orange;
+            font-size: 1rem;
+        }
+
+        .points {
+            color: orange;
+            font-size: 2rem;
+            text-align: center;
+            margin-top: 0;
+            text-shadow: 2px 2px 5px #000000;
+        }
+
+        .levelUp {
+            display: block;
+        }
+
+        .Loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            opacity: 0.8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 8rem;
+        }
+
+        #kidPicture {
+            width: 200px;
+        }
+
+        .FirstRow {
+            grid-row: 1/2;
+        }
+
+        .RewardsRow {
+            grid-row: 2/3;
+            text-align: center;
+            color: orange;
+            font-size: 1.5rem;
+            text-shadow: 2px 2px 5px #000000;
+            /*background-color: white;*/
+        }
+
+
+        .Buttons {
+            grid-row: 3/4;
+        }
+
+        @media screen and (max-width: 768px ) {
+            .myContainer {
+                height: 90vh;
+            }
+        }
+
+        .childSelection button {
+            margin: 10px;
+            font-size: 3rem;
+        }
+    </style>
+
+
+    <div>
+        <div if.bind="signedIn">
+         
+            <br />
+            <br />
+
+            <div class="row">
+                <div class="col-md-6 col-md-offset-4">
+                    <p>
+                        To invite another parent please enter their email address in the below
+                    </p>
+                    <input type="email" value.bind="newUserInviteEmailAddress" name="newParent" id="newParent" />
+                    <button click.delegate="SendInvite()" class="btn btn-primary">Invite</button>
+                </div>
+            </div>
+        </div>
+        <div if.bind="!signedIn">
+
+            <h3>Welcome to Dojo Points</h3>
+            <p>
+                Please click the below to login if you have an existing account
+            </p>
+
+            <button style="flex-grow:1;display:block;margin-bottom:5px;" class="btn btn-default" click.delegate="Login()">Login</button>
+        </div>
+    </div>
+
+
+</template>
+
+

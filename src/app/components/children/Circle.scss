@@ -1,0 +1,94 @@
+﻿@mixin on-circle($item-count, $circle-size, $item-size) {
+    position: relative;
+    width: $circle-size;
+    height: $circle-size;
+    padding: 0;
+    border-radius: 50%;
+    list-style: none;
+    
+ > * {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: $item-size;
+        height: $item-size + 3;
+        margin: -($item-size / 2);
+        $angle: (360 / $item-count);
+        $rot: 0;
+
+        @for $i from 1 through $item-count {
+            &:nth-of-type(#{$i}) {
+                transform: rotate($rot * 1deg) translate($circle-size / 2) rotate($rot * -1deg);
+            }
+
+            $rot: $rot + $angle;
+        }
+    }
+
+}
+
+
+.circle-container {
+    @include on-circle($item-count: 7, $circle-size: 60vmin, $item-size: 18vmin);
+    /*margin: 5em auto 0;*/
+    border: solid 5px tomato;
+
+    img {
+        display: block;
+        max-width: 100%;
+        border-radius: 50%;
+        filter: grayscale(0%);
+        border: solid 5px tomato;
+        cursor: pointer;
+
+        &:hover,
+        &:active {
+            filter: grayscale(0);
+            background-color: purple;
+        }
+    }
+
+    z-index: 2;
+}
+
+
+.circle-container.au-enter-active {
+    animation: 1.5s ease-in-out ShowCircle;
+}
+
+.circle-container.au-leave-active {
+    animation: 1.5s ease-in-out HideCircle;
+}
+
+@keyframes HideCircle {
+    from {
+        transform: scale(1) Rotate(0deg);
+    }
+
+    to {
+        transform: scale(0) Rotate(360deg);
+    }
+}
+
+
+@keyframes ShowCircle {
+    from {
+        transform: scale(0) Rotate(0deg);
+    }
+
+    to {
+        transform: scale(1) Rotate(360deg);
+    }
+}
+
+
+/*.ActualAvatarImage.au-leave-active {
+    animation: 2s ShowAvatar;
+}
+
+@keyframes ShowAvatar {
+    from { filter: grayscale(100%)}
+    to {filter: grayscale(0%)}
+}*/
+

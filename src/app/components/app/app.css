@@ -1,0 +1,108 @@
+/*@media (max-width: 767px) {
+    /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
+    /*.body-content {
+        padding-top: 50px;
+    }*/
+/*}*/
+
+@keyframes myspinner {
+    to {transform: rotate(360deg) }
+}
+
+.wait {
+    animation: myspinner 3s infinite;
+}
+
+.OfflineDialog {
+    z-index: 2;
+    background-color: darkorange;
+    padding: 2rem;
+}
+
+html, body {
+    font-size: calc(8px + 1vmin);
+    box-sizing: border-box;
+    background-color: orange;
+}
+
+/*This controls the size of the text on all the buttons*/
+.btn, .GlobalButtonTextSize {
+    font-size: 1.5rem;
+}
+
+/*Size of text in all paragraphs*/
+p {
+    font-size: 1.4rem;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 1.7rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.3rem;
+}
+
+h5 {
+    font-size: 1.1rem;
+}
+
+.largeText {
+    font-size: 1.5rem;
+}
+
+
+
+
+.loginScreens {
+    height:90vh;display:flex;flex-direction:column;justify-content:center;align-items:center
+}
+
+.center {
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    flex-direction:column;
+}
+
+
+
+.centerVertical {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.orangeBackground {
+    background-color: orange;
+}
+
+.removeButton {
+    color: red;
+    cursor: pointer;
+}
+
+.addButton {
+    cursor: pointer;
+    color: green;
+}
+
+.editButton {
+    cursor:pointer;
+    color:purple;
+}
+
+
+.rewardText {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+} 
+        

@@ -1,0 +1,460 @@
+<template>
+  <style>
+    #kidPicture {
+      width: 200px;
+    }
+
+    :host {
+      --app-drawer-width: 256px;
+      display: block;
+
+      --app-primary-color: #e91e63;
+      --app-secondary-color: #293237;
+      --app-dark-text-color: var(--app-secondary-color);
+      --app-light-text-color: white;
+      --app-section-even-color: #f7f7f7;
+      --app-section-odd-color: white;
+
+      --app-header-background-color: white;
+      --app-header-text-color: var(--app-dark-text-color);
+      --app-header-selected-color: var(--app-primary-color);
+
+      --app-drawer-background-color: var(--app-secondary-color);
+      --app-drawer-text-color: var(--app-light-text-color);
+      --app-drawer-selected-color: #78909c;
+    }
+
+    app-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      background-color: var(--app-header-background-color);
+      color: var(--app-header-text-color);
+      border-bottom: 1px solid #eee;
+    }
+
+    .toolbar-top {
+      background-color: var(--app-header-background-color);
+    }
+
+    [main-title] {
+      font-family: "Pacifico";
+      text-transform: lowercase;
+      font-size: 30px;
+      /* In the narrow layout, the toolbar is offset by the width of the
+        drawer button, and the text looks not centered. Add a padding to
+        match that button */
+      padding-right: 44px;
+    }
+
+    .toolbar-list {
+      display: none;
+    }
+
+    .toolbar-list > a {
+      display: inline-block;
+      color: var(--app-header-text-color);
+      text-decoration: none;
+      line-height: 30px;
+      padding: 4px 24px;
+    }
+
+    .toolbar-list > a[selected] {
+      color: var(--app-header-selected-color);
+      border-bottom: 4px solid var(--app-header-selected-color);
+    }
+
+    .menu-btn {
+      background: none;
+      border: none;
+      fill: var(--app-header-text-color);
+      cursor: pointer;
+      height: 44px;
+      width: 44px;
+    }
+
+    .drawer-list {
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+      padding: 24px;
+      background: var(--app-drawer-background-color);
+      position: relative;
+    }
+
+    .drawer-list > a {
+      display: block;
+      text-decoration: none;
+      color: var(--app-drawer-text-color);
+      line-height: 40px;
+      padding: 0 24px;
+    }
+
+    .drawer-list > a[selected] {
+      color: var(--app-drawer-selected-color);
+    }
+
+    /* Workaround for IE11 displaying <main> as inline */
+    main {
+      display: block;
+    }
+
+    .main-content {
+      padding-top: 64px;
+      min-height: 100vh;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page[active] {
+      display: block;
+    }
+
+    footer {
+      padding: 24px;
+      background: var(--app-drawer-background-color);
+      color: var(--app-drawer-text-color);
+      text-align: center;
+    }
+
+    /* Wide layout: when the viewport width is bigger than 460px, layout
+      changes to a wide layout. */
+    @media (min-width: 460px) {
+      .toolbar-list {
+        display: block;
+      }
+
+      .menu-btn {
+        display: none;
+      }
+
+      .main-content {
+        padding-top: 107px;
+      }
+
+      /* The drawer button isn't shown in the wide layout, so we don't
+        need to offset the title */
+      [main-title] {
+        padding-right: 0px;
+      }
+    }
+  </style>
+
+  <!-- Header -->
+  <app-header condenses reveals effects="waterfall">
+    <app-toolbar class="toolbar-top">
+      <button class="menu-btn" title="Menu" @click="${this._menuButtonClicked}">
+        ${menuIcon}
+      </button>
+      <div main-title>${this.appTitle}</div>
+    </app-toolbar>
+
+    <!-- This gets hidden on a small screen-->
+    <nav class="toolbar-list">
+      <a ?selected="${this._page === 'view1'}" href="/view1">View One</a>
+      <a ?selected="${this._page === 'view2'}" href="/view2">View Two</a>
+      <a ?selected="${this._page === 'view3'}" href="/view3">View Three</a>
+    </nav>
+  </app-header>
+
+  <!-- Drawer content -->
+  <app-drawer
+    .opened="${this._drawerOpened}"
+    @opened-changed="${this._drawerOpenedChanged}"
+  >
+    <nav class="drawer-list">
+      <a ?selected="${this._page === 'view1'}" href="/view1">View One</a>
+      <a ?selected="${this._page === 'view2'}" href="/view2">View Two</a>
+      <a ?selected="${this._page === 'view3'}" href="/view3">View Three</a>
+    </nav>
+  </app-drawer>
+
+  <paper-toolbar>
+    <paper-icon-button
+      slot="top"
+      icon="menu"
+      on-tap="(menuAction)"
+    ></paper-icon-button>
+    <div slot="top" class="title">Little Heroes</div>
+    <paper-icon-button
+      slot="top"
+      icon="more-vert"
+      on-tap="(moreAction)"
+    ></paper-icon-button>
+  </paper-toolbar>
+
+  <!-- <nav id="MainNav" class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <div class="navbar-brand">
+      <div
+        style="display:flex;justify-content:center;align-items:center;color:orange"
+      >
+        <a class="nav-link" href="/" style="text-decoration:none">
+          <img
+            src="../../../../images/superhero.png"
+            style="width:30px;"
+            alt="Alternate Text"
+          />
+        </a>
+      </div>
+    </div>
+
+    <!-- Toggler/collapsibe Button -->
+  <!-- <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <div class="navbar-nav">
+        <a class="nav-link nav-item" href="/Welcome">Home4</a>
+        <a class="nav-link nav-item" href="/Children">Heroes</a>
+
+        <div class="nav-item dropdown">
+          <a
+            href="#"
+            class="nav-link dropdown-toggle"
+            id="navbardrop"
+            data-toggle="dropdown"
+            >Admin<span class="caret"></span
+          ></a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="/Notifications"
+              >Enable Notifications</a
+            >
+            <a class="dropdown-item" href="/ManageParents">Manage Parents</a>
+            <a class="dropdown-item" href="/ManageHeroes">Manage Heroes</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="navbar-nav ml-auto navbar-text" style="margin-right:10px">
+        <div
+          if.bind="signedIn"
+          style="display:flex;flex-direction:column;align-items:flex-end;justify-content:center"
+        >
+          <span style="font-size:0.6rem">Welcome back! ${signedInAs}</span>
+          <button
+            style="margin-left:1rem;font-size: 0.7rem"
+            class="btn btn-sm btn-outline-secondary"
+            click.delegate="Logout()"
+          >
+            Logout
+          </button>
+        </div>
+        <div if.bind="!signedIn">
+          <button
+            style="font-size:0.6rem"
+            class="btn btn-sm btn-outline-secondary"
+            click.delegate="Login()"
+          >
+            Login
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav> -->
+
+  <div>
+    <div class="row" style="background-color:orange">
+      <div class="col-md-6">
+        <div style="display:flex;justify-content:center;margin-top:2rem">
+          <img
+            style="width:15rem;height:20rem"
+            src="../../../../images/superhero.png"
+            alt="superhero"
+          />
+        </div>
+      </div>
+      <div class="col-md-5 col-lg-4">
+        <div style="text-align:center;margin-bottom:2rem">
+          <h1 style="margin-top:2rem">Welcome to LittleHeroes</h1>
+
+          <p style="text-align:center">
+            Start rewarding your kids for good behaviour today! Keep them
+            engaged with customizable avatars and monster pets. Invite
+            Grandparents and other carers so they can award points. Receive
+            updates when points are awarded by any members of the family.
+          </p>
+
+          <div show.bind="!loading">
+            <div show.bind="!signedIn && !offline">
+              <!--<button style="margin-top:1rem" click.delegate="DevSignup()" class="btn btn-primary btn-lg">Dev Signup</button>-->
+
+              <paper-button
+                style="margin-top:1rem"
+                click.delegate="Signup()"
+                class="btn btn-primary btn-lg"
+              >
+                Signup
+              </paper-button>
+            </div>
+
+            <paper-button
+              style="margin-top:1rem"
+              click.trigger="DevSignup()"
+              class="btn btn-primary btn-lg"
+            >
+              Dev Signup
+            </paper-button>
+
+            <div show.bind="(signedIn && !offline) || dev">
+              <paper-button
+                click.trigger="ViewHeroTastic()"
+                style="margin-top:1rem"
+                class="btn btn-primary btn-lg"
+              >
+                View Heroes
+              </paper-button>
+            </div>
+
+            <div show.bind="offline">
+              <paper-button
+                click.trigger="CheckOnlineOrNot()"
+                style="margin-top:1rem"
+                class="btn btn-primary btn-lg"
+              >
+                Offline - click to try again
+              </paper-button>
+            </div>
+          </div>
+          <div show.bind="loading">
+            <div
+              class="GlobalButtonTextSize"
+              style="display:flex;justify-content:center;align-items:center"
+            >
+              <span
+                style="margin-right:0.5rem;"
+                class="glyphicon glyphicon-refresh wait"
+              ></span>
+              <span>Connecting...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="background-color:white;margin-top:5rem;">
+      <div class="col-md-6" style="margin-bottom:2rem;text-align:center">
+        <p style="text-align:center">
+          Each time 100 points is reached the reward is activated and can be
+          redeemed. Multiple rewards can be built up and used in combination if
+          saving wants to be promoted. The rewards themselves can be entered by
+          the parent to ensure they are relevant. Each time the 100 points
+          barrier is reached the level for that child is bumped and allows
+          access to additional monster customisation
+        </p>
+
+        <h2>Mobile First - Progressive Web Application (PWA)</h2>
+        <p>
+          Little Heroes is a new kind of web page, designed to work across all
+          mobile phones. It has the feel of a native application, will work even
+          when you don't have a internet connection, can be installed and
+          removed from your home screen just like an app, and updates in the
+          background with a much smaller footprint than an equivalent native
+          application.
+        </p>
+        <h3>Offline support*</h3>
+        <p>
+          LittleHeroes will work even when you don't have a signal. Any points
+          awarded will be registered as soon as your device is back on line
+        </p>
+        <h3>Notifications</h3>
+        <p>
+          We can send you updates directly to your phone when a little hero is
+          awarded points. Simply opt into these on the
+          <a href="/Notifications">Notifications page</a>
+        </p>
+        <h3>Fullscreen</h3>
+        <p>
+          LittleHeroes uses all the real estate of your phone just like a native
+          application. There is no browser bar reducing the space available to
+          you.
+        </p>
+      </div>
+      <div class="col-md-6">
+        <div
+          style="height:100%;align-items:center;display:flex;flex-direction:column;justify-content:center"
+        >
+          <img
+            style="width:30vmin;display:block"
+            src="../../../../images/phoneandscreenshot.png"
+            alt="Screenshot"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="background-color:orange;padding-bottom: 2rem">
+      <div class="col-md-12">
+        <h1 style="text-align:center;margin-bottom:3rem">
+          Let's get you up and running
+        </h1>
+
+        <div style="text-align:center">
+          <div style="display:flex;justify-content:center">
+            <h3>Step 1: Click the signup button</h3>
+          </div>
+          <p>
+            We'll just need an email address and password to get you up an
+            running. Or you can simply use your existing Google/Facebook/Twitter
+            account. Super easy!
+          </p>
+
+          <button click.delegate="Signup()" class="btn btn-primary btn-lg">
+            Signup
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="background-color:orange;padding-bottom:2rem">
+      <div class="col-md-12">
+        <div style="text-align:center">
+          <h3>Step 2: Add heroes</h3>
+          <p>
+            By default two heroes will be created and you can edit their names
+            and rewards in place on the heroes page.
+          </p>
+          <p>
+            If you need to add or remove heroes this can be performed on the
+            <a href="/Setup">Admin</a> page.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="background-color:orange;padding-bottom:2rem">
+      <div class="col-md-12">
+        <div style="text-align:center">
+          <h3>Step 3: Select Avatar</h3>
+          <p>Choose an avatar (optional)</p>
+          <p>
+            From the <a href="/Setup">Select Avatar</a> page each hero can
+            choose their avatar
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Error occurred-->
+  <div show.bind="errorHadOccurred">
+    <div class="center">
+      <h2>Oops something went wrong! ${errorMessage}</h2>
+      <button class="btn btn-primary btn-lg " click.delegate="CloseError()">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <div show.bind="offline">
+    <div class="center">
+      <h2>Seems you are offline</h2>
+      <button
+        class="btn btn-primary btn-lg "
+        click.delegate="CheckOnlineOrNot()"
+      >
+        Attempt to connect
+      </button>
+    </div>
+  </div>
+</template>

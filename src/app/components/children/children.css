@@ -1,0 +1,205 @@
+﻿
+.aurelia-animators {
+    padding: 20px;
+    list-style: none;
+}
+.rewardsAnimations {
+
+}
+
+/*.AvailableRewardsRow.au-enter {
+    opacity: 0 !important;
+}*/
+
+/*.AvailableRewardsRow.au-enter-active {
+    animation: animation 1000ms linear both;
+}*/
+
+.AvailableRewardsRow.au-leave-active {
+    animation: fadeOut 2s;
+}
+
+/*.SwitchChild.au-enter {
+    opacity: 0 !important;
+}*/
+
+.SwitchChild {
+    overflow: hidden;
+}
+
+/*.AllChildrenAureliaAnimators div.SwitchChild.au-enter-active {
+    animation: fadeIn 1s;
+}*/
+
+/*.AllChildrenAureliaAnimators div.SwitchChild.au-leave-active {
+    animation: fadeOut 1s;
+}*/
+
+.AllChildrenAureliaAnimators div.SwitchChild div.ControlPanelAnimation.au-leave-active {
+    animation: moveControlPanel 0.8s ease-in-out;
+}
+
+.AllChildrenAureliaAnimators div.SwitchChild div.ControlPanelAnimation.au-enter-active {
+    animation: moveControlPanelBack 0.8s ease-in-out;
+}
+
+.AllChildrenAureliaAnimators  div.SwitchChild div.avatarAnimation.au-enter-active {
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+.AllChildrenAureliaAnimators  div.SwitchChild div.avatarAnimation.au-leave-active {
+    animation: fadeOut 0.8s ease-in-out;
+}
+
+
+.AllChildrenAureliaAnimators div.SwitchChild div.NameAnimation.au-enter-active {
+    animation: moveNameBack 0.8s;
+}
+
+.AllChildrenAureliaAnimators div.SwitchChild div.NameAnimation.au-leave-active {
+    animation: moveName 0.8s;
+}
+
+
+
+
+
+/*.orangeBackground {
+    animation-delay: 2000ms;
+}*/
+
+.KidsSelectionAnimationParent.au-stagger {
+    animation-delay: 500ms;
+}
+
+
+.KidsSelectionAnimation {
+    overflow: hidden;
+}
+
+
+    .KidsSelectionAnimation.au-enter {
+        opacity: 0;
+    }
+
+
+    .KidsSelectionAnimation.au-enter-active {
+        animation: fadeIn 0.5s;
+    }
+
+.rewardsAnimations.au-stagger {
+    animation-delay: 500ms;
+}
+
+
+    .rewardsAnimations.au-enter {
+        opacity: 0;
+    }
+
+
+    .rewardsAnimations.au-enter-active {
+        animation: fadeIn 0.5s;
+    }
+
+.rewardsAnimations.au-leave-active {
+    animation: fadeOut 0.5s;
+}
+
+.rewardsAnimations.au-stagger {
+    animation-delay: 500ms;
+}
+
+
+@keyframes movePet{
+    0% {
+        transform: translateX(100vw)
+    }
+
+    100% {
+        transform: translateX(0)
+    }
+}
+
+/*@keyframes movePetBack {
+    0% {
+        transform: translateX(0)
+    }
+
+    100% {
+        transform: translateX(150vw)
+    }
+}*/
+
+@keyframes moveControlPanel {
+    0% {
+        transform: translateY(0)
+    }
+
+    100% {
+        transform: translateY(150vh)
+    }
+}
+
+@keyframes moveControlPanelBack {
+    0% {
+        transform: translateY(150vh)
+    }
+
+    100% {
+        transform: translateY(0)
+    }
+}
+
+@keyframes moveName {
+    0% {
+        transform: translateY(0)
+    }
+
+    100% {
+        transform: translateY(-50vh)
+    }
+}
+
+@keyframes moveNameBack {
+    0% {
+        transform: translateY(-50vh)
+    }
+
+    100% {
+        transform: translateY(0)
+    }
+}
+
+
+
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3)
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1)
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+}
+
+@keyframes SlideInTest {
+    from {transform: translateX(-100vw) }
+
+    to {transform: translateX(0px)}
+}
+
+
+

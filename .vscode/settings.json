@@ -1,0 +1,8 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "html.suggest.angular1": false,
+  "html.suggest.ionic": false,
+  "appService.defaultWebAppToDeploy": "/subscriptions/ce2b00d4-956a-406a-9cb5-79a8ccec30f9/resourceGroups/appsvc_rg_linux_centralus/providers/Microsoft.Web/sites/LH2",
+  "appService.deploySubpath": ""
+}

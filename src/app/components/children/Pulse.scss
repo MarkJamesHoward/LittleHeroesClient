@@ -1,0 +1,75 @@
+﻿$circle-radius: 36px; 
+$blue: rgba(90, 189, 222, 1);
+
+body {
+    background: #222;
+    position: relative;
+}
+
+.pulse {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    margin-left: -$circle-radius;
+    width: ($circle-radius * 2);
+    height: ($circle-radius * 2);
+    line-height: ($circle-radius * 2);
+    font-family: sans-serif;
+    font-weight: 700;
+    font-size: 34px;
+    text-align: center;
+    color: $blue;
+}
+
+.pulse span,
+.pulse:before,
+.pulse:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 0 solid $blue;
+    border-radius: 100%;
+    animation: da-pulse 1.5s ease-in-out 0s infinite;
+}
+
+.pulse span {
+    border-color: $blue;
+    border-width: 4px;
+    top: 6px;
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+}
+
+.pulse:before {
+    border-color: darken($blue, 25%);
+    border-width: 2px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.pulse:after {
+    border-color: darken($blue, 35%);
+    border-width: 1px;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+}
+
+@keyframes da-pulse {
+    0%, 100% {
+        transform: scale(1.25);
+        opacity: 0;
+    }
+
+    48%, 52% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
