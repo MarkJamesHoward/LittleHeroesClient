@@ -13,20 +13,27 @@ export class App {
   public signedIn: boolean = false;
   public signedInAs: string;
   http: HttpClient;
+  public dev: boolean = false;
+  private DNS: string = "https://littleheroes.azurewebsites.net";
 
   constructor(http: HttpClient) {
     this.http = http;
-    http
-      .fetch("/Account/AmISignedIn", {
-        method: "get",
-        credentials: "same-origin"
-      })
-      .then(result => result.json() as Promise<SignedIn>)
-      .then(data => {
-        console.log(data);
-        this.signedIn = data.signedIn;
-        this.signedInAs = data.signedInAs;
-      });
+
+    if (this.dev) {
+      this.signedIn = true;
+    } else {
+      http
+        .fetch(`${this.DNS}/Account/AmISignedIn`, {
+          method: "get",
+          credentials: "same-origin"
+        })
+        .then(result => result.json() as Promise<SignedIn>)
+        .then(data => {
+          console.log(data);
+          this.signedIn = data.signedIn;
+          this.signedInAs = data.signedInAs;
+        });
+    }
   }
   Logout() {
     this.http

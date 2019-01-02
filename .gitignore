@@ -26,6 +26,7 @@ Thumbs.db
 
 # Dependencies
 node_modules
+dist
 
 # Compiled files
 /scripts
