@@ -207,12 +207,15 @@ module.exports = ({
       {
         test: /\.(png|gif|jpg|cur)$/i,
         loader: "url-loader",
-        options: { limit: 8192 }
+        options: { limit: 8192, publicPath: "../" }
       },
       {
         test: /\.woff2(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
         loader: "url-loader",
-        options: { limit: 10000, mimetype: "application/font-woff2" }
+        options: {
+          limit: 10000,
+          mimetype: "application/font-woff2"
+        }
       },
       {
         test: /\.woff(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
@@ -237,9 +240,6 @@ module.exports = ({
   plugins: [
     ...when(!karma, new DuplicatePackageCheckerPlugin()),
     new AureliaPlugin(),
-    new ProvidePlugin({
-      Promise: "bluebird"
-    }),
     new ModuleDependenciesPlugin({
       "aurelia-testing": ["./compile-spy", "./view-spy"]
     }),
@@ -249,7 +249,7 @@ module.exports = ({
         // available in index.ejs //
         title,
         server,
-        baseUrl
+        baseUrl2: "/"
       }
     }),
     // ref: https://webpack.js.org/plugins/mini-css-extract-plugin/

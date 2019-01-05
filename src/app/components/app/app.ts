@@ -14,7 +14,7 @@ export class App {
   public signedInAs: string;
   http: HttpClient;
   public dev: boolean = false;
-  private DNS: string = "https://littleheroes.azurewebsites.net";
+  private DNS: string = "https://dojopoints.azurewebsites.net";
 
   constructor(http: HttpClient) {
     this.http = http;
@@ -22,17 +22,18 @@ export class App {
     if (this.dev) {
       this.signedIn = true;
     } else {
-      http
-        .fetch(`${this.DNS}/Account/AmISignedIn`, {
-          method: "get",
-          credentials: "same-origin"
-        })
-        .then(result => result.json() as Promise<SignedIn>)
-        .then(data => {
-          console.log(data);
-          this.signedIn = data.signedIn;
-          this.signedInAs = data.signedInAs;
-        });
+      // http
+      //   .fetch(`${this.DNS}/Account/AmISignedIn`, {
+      //     method: "get",
+      //     credentials: "same-origin"
+      //   })
+      //   .then(result => result.json() as Promise<SignedIn>)
+      //   .then(data => {
+      //     console.log(data);
+      //     this.signedIn = data.signedIn;
+      //     this.signedInAs = data.signedInAs;
+      //   });
+      this.signedIn = true;
     }
   }
   Logout() {
@@ -60,6 +61,14 @@ export class App {
     config.options.hashChange = false;
     config.options.root = "/";
     config.map([
+      {
+        route: ["login"],
+        name: "login",
+        settings: { icon: "" },
+        moduleId: PLATFORM.moduleName("../login/login"),
+        nav: true,
+        title: "Login"
+      },
       {
         route: ["", "welcome"],
         name: "welcome",

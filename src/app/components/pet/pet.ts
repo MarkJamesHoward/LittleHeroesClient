@@ -17,7 +17,7 @@ export class Pet {
   child: BrowniePoints;
   childID: number;
   public dev: boolean = false;
-  private DNS: string = "https://littleheroes.azurewebsites.net";
+  private DNS: string = "https://dojopoints.azurewebsites.net";
 
   HandledCharacterChange(e: any) {
     console.log("handled" + e.detail.kicked);

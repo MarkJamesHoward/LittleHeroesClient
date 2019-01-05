@@ -1,5 +1,5 @@
 import { HttpClient } from "aurelia-fetch-client";
-import { inject } from "aurelia-framework";
+import { inject, child } from "aurelia-framework";
 import { Router } from "aurelia-router";
 import "@polymer/paper-icon-button";
 import "@polymer/iron-icons/iron-icons.js";
@@ -42,7 +42,8 @@ export class Home {
   public offline: boolean = false;
   public usingRewardInProgress: boolean = false;
   public dev: boolean = false;
-  private DNS: string = "https://littleheroes.azurewebsites.net";
+  private DNS: string = "https://dojopoints.azurewebsites.net";
+  //private DNS: string = "http://localhost:53067";
 
   Home() {
     console.log("home");
@@ -54,24 +55,24 @@ export class Home {
     this.router.navigate(`pet/${child.id}`);
   }
 
-  EditAvatar(childID: number) {
+  EditAvatar(child: BrowniePoints) {
     console.log("edit avatar");
     this.editingAvatar = true;
   }
 
-  async selectAvatar(event: any, childName: string) {
+  async selectAvatar(event: any, child: BrowniePoints) {
     let img = event.srcElement.src.split("/");
     img = img[img.length - 1];
     console.log(img);
     var result = await this.http.fetch(
-      `${this.DNS}/api/Avatar/${childName}/${img}`,
+      `${this.DNS}/api/Avatar/${child.childName}/${img}`,
       {
         method: "put",
-        credentials: "same-origin"
+        credentials: 'include'
       }
     );
     var data = await result.json();
-    this.currentChildPresenting.avatar = "dist/" + img;
+    child.avatar = img;
     this.editingAvatar = false;
   }
 
@@ -91,34 +92,38 @@ export class Home {
 
   IfEnterKeySaveChanges(
     $event: any,
-    childid: string,
+    child: BrowniePoints,
     childName: string,
     childreward: string
   ) {
     if ($event.key == "Enter") {
-      this.SaveChanges(childid, childName, childreward);
+      this.SaveChanges(child, childName, childreward);
       console.log($event);
     }
     console.log($event);
     return true;
   }
 
-  async SaveChanges(childid: string, childName: string, childreward: string) {
+  async SaveChanges(
+    child: BrowniePoints,
+    childName: string,
+    childreward: string
+  ) {
     console.log("save changes");
     this.editing = false;
     this.editingChildName = false;
     this.editingReward = false;
 
-    await this.saveChildName(childid, childName);
-    await this.SaveReward(childid, childreward);
+    await this.saveChildName(child, childName);
+    await this.SaveReward(child, childreward);
   }
 
-  async saveChildName(childId: string, newName: string) {
+  async saveChildName(child: BrowniePoints, newName: string) {
     try {
       console.log("saveChildName");
       var result = await this.http.fetch(
-        `${this.DNS}/api/Children/EditChildName/${childId}/${newName}`,
-        { method: "put", credentials: "same-origin" }
+        `${this.DNS}/api/Children/EditChildName/${child.childName}/${newName}`,
+        { method: "put", credentials: 'include' }
       );
       if (result.ok) {
         var data = await result.json();
@@ -140,11 +145,13 @@ export class Home {
     this.editingReward = false;
   }
 
-  async SaveReward(childId: string, rewardDescription: string) {
+  async SaveReward(child: BrowniePoints, rewardDescription: string) {
     try {
       var result = await this.http.fetch(
-        `${this.DNS}/api/Children/EditReward/${childId}/${rewardDescription}`,
-        { method: "put", credentials: "same-origin" }
+        `${this.DNS}/api/Children/EditReward/${
+          child.childName
+        }/${rewardDescription}`,
+        { method: "put", credentials: 'include' }
       );
       if (result.ok) {
         var data = await result.json();
@@ -166,82 +173,69 @@ export class Home {
     this.editingReward = false;
   }
 
-  selectChild(child: BrowniePoints) {
-    if (this.currentChildPresenting) {
-      this.currentChildPresenting.presenting = false;
-    }
-    this.currentChildPresenting = child;
-    this.showingChild = child.childName;
-    this.currentChildPresenting.presenting = true;
-    this.showChildData = true;
-    for (var i = 0; i < Object.keys(this.browniePoints).length; i++) {
-      if (
-        this.browniePoints[i].childName == this.currentChildPresenting.childName
-      ) {
-        this.index = i;
-        break;
-      }
-    }
-  }
+  // selectChild(child: BrowniePoints) {
+  //   if (this.currentChildPresenting) {
+  //     this.currentChildPresenting.presenting = false;
+  //   }
+  //   this.currentChildPresenting = child;
+  //   this.showingChild = child.childName;
+  //   this.currentChildPresenting.presenting = true;
+  //   this.showChildData = true;
+  //   for (var i = 0; i < Object.keys(this.browniePoints).length; i++) {
+  //     if (
+  //       this.browniePoints[i].childName == this.currentChildPresenting.childName
+  //     ) {
+  //       this.index = i;
+  //       break;
+  //     }
+  //   }
+  // }
 
-  MoveLeft(index: number) {
-    console.log(index);
-    console.log(this.browniePoints[index - 1]);
-    if (index - 1 >= 0) {
-      if (this.currentChildPresenting) {
-        this.currentChildPresenting.removeForAnimation = true;
-        setTimeout(() => {
-          this.currentChildPresenting.presenting = false;
-        }, 1000);
-      }
-      setTimeout(() => {
-        this.currentChildPresenting = this.browniePoints[index - 1];
-        this.showingChild = this.browniePoints[index - 1].childName;
-        this.currentChildPresenting.presenting = true;
-        this.currentChildPresenting.removeForAnimation = false;
-        this.showChildData = true;
-        this.index = index - 1;
-      }, 1000);
-    } else console.log("out of range left");
-  }
+  // MoveLeft(index: number) {
+  //   console.log(index);
+  //   console.log(this.browniePoints[index - 1]);
+  //   if (index - 1 >= 0) {
+  //     if (this.currentChildPresenting) {
+  //       this.currentChildPresenting.removeForAnimation = true;
+  //       setTimeout(() => {
+  //         this.currentChildPresenting.presenting = false;
+  //       }, 1000);
+  //     }
+  //     setTimeout(() => {
+  //       this.currentChildPresenting = this.browniePoints[index - 1];
+  //       this.showingChild = this.browniePoints[index - 1].childName;
+  //       this.currentChildPresenting.presenting = true;
+  //       this.currentChildPresenting.removeForAnimation = false;
+  //       this.showChildData = true;
+  //       this.index = index - 1;
+  //     }, 1000);
+  //   } else console.log("out of range left");
+  // }
 
-  MoveRight(index: number) {
-    console.log(this.browniePoints[index + 1]);
-    if (index + 1 < Object.keys(this.browniePoints).length) {
-      if (this.currentChildPresenting) {
-        this.currentChildPresenting.removeForAnimation = true;
-        setTimeout(() => {
-          this.currentChildPresenting.presenting = false;
-        }, 1000);
-      }
+  // MoveRight(index: number) {
+  //   console.log(this.browniePoints[index + 1]);
+  //   if (index + 1 < Object.keys(this.browniePoints).length) {
+  //     if (this.currentChildPresenting) {
+  //       this.currentChildPresenting.removeForAnimation = true;
+  //       setTimeout(() => {
+  //         this.currentChildPresenting.presenting = false;
+  //       }, 1000);
+  //     }
 
-      setTimeout(() => {
-        this.currentChildPresenting = this.browniePoints[index + 1];
-        this.showingChild = this.browniePoints[index + 1].childName;
-        this.currentChildPresenting.presenting = true;
-        this.currentChildPresenting.removeForAnimation = false;
-        this.showChildData = true;
-        this.index = index + 1;
-      }, 1000);
-    } else console.log("out of range right");
-  }
+  //     setTimeout(() => {
+  //       this.currentChildPresenting = this.browniePoints[index + 1];
+  //       this.showingChild = this.browniePoints[index + 1].childName;
+  //       this.currentChildPresenting.presenting = true;
+  //       this.currentChildPresenting.removeForAnimation = false;
+  //       this.showChildData = true;
+  //       this.index = index + 1;
+  //     }, 1000);
+  //   } else console.log("out of range right");
+  // }
 
-  BackToBrowse(child: string) {
-    this.router.navigate(child);
-  }
-
-  onSwipe() {
-    console.log("swipe !!");
-  }
-
-  connectedCallback() {
-    try {
-      //customElements.define(MonsterCreator.is, MonsterCreator);
-    } catch (e) {
-      console.log(e);
-    }
-    console.log("custom element defined");
-  }
+  // BackToBrowse(child: string) {
+  //   this.router.navigate(child);
+  // }
 
   constructor(http: any, Router: Router) {
     this.http = http;
@@ -251,8 +245,6 @@ export class Home {
       .then(() => {
         console.log("finished constructor");
         this.loading = false;
-
-        this.selectChild(this.browniePoints[1]);
       })
       .catch(err => {
         if (err == "TypeError: Failed to fetch") {
@@ -270,15 +262,16 @@ export class Home {
   }
 
   public async AmISignedIn() {
-    var result = await this.http.fetch(`${this.DNS}/Account/AmISignedIn`, {
-      method: "get",
-      credentials: "same-origin"
-    });
-    if (result.ok) {
-      var data = await result.json();
-      this.signedIn = data.signedIn;
-      this.signedInAs = data.signedInAs;
-    }
+    // var result = await this.http.fetch(`${this.DNS}/Account/AmISignedIn`, {
+    //   method: "get",
+    //   credentials: "same-origin"
+    // });
+    // if (result.ok) {
+    //   var data = await result.json();
+    //   this.signedIn = data.signedIn;
+    //   this.signedInAs = data.signedInAs;
+    // }
+    this.signedIn = true;
   }
 
   public async CheckOnlineOrNot() {
@@ -305,26 +298,25 @@ export class Home {
 
   public async InitialLoad() {
     let res1;
-    let data: BrowniePoints[];
 
     if (!this.dev) {
-      res1 = await this.http.fetch(`${this.DNS}/Account/AmISignedIn`, {
-        method: "get",
-        credentials: "same-origin"
-      });
-      data = await res1.json();
+      // res1 = await this.http.fetch(`${this.DNS}/Account/AmISignedIn`, {
+      //   method: "get",
+      //   credentials: "same-origin"
+      // });
+      // data = await res1.json();
     }
 
-    if (this.dev || res1.ok) {
-      console.log("sign in info " + data);
-      //this.signedIn = this.dev || data.signedIn;
-      //this.signedInAs = this.dev || data.signedInAs;
-    } else {
-      console.log(
-        "The [AmIlogged] in call failed - just assume not logged in here!"
-      );
-      this.DisplayError("Failed to check the login status");
-    }
+    // if (this.dev || res1.ok) {
+    //   console.log("sign in info " + data);
+    //   //this.signedIn = this.dev || data.signedIn;
+    //   //this.signedInAs = this.dev || data.signedInAs;
+    // } else {
+    //   console.log(
+    //     "The [AmIlogged] in call failed - just assume not logged in here!"
+    //   );
+    //   this.DisplayError("Failed to check the login status");
+    // }
 
     if (this.dev) {
       let myimport = await import("../devdata/childrendata");
@@ -332,9 +324,9 @@ export class Home {
       this.browniePoints = myimport.data;
       this.currentCount = 3; //myimport.length;
     } else {
-      var res2 = await this.http.fetch(`${this.DNS}/api/Children/`, {
+      var res2 = await this.http.fetch(`${this.DNS}/api/Children/all`, {
         method: "get",
-        credentials: "same-origin"
+        credentials: 'include'
       });
 
       if (res2.ok) {
@@ -354,33 +346,25 @@ export class Home {
     this.errorHadOccurred = false;
   }
 
-  public CheckIfLevelCompleted() {
-    if (
-      this.currentChildPresenting.points >=
-      this.currentChildPresenting.pointsNeeded
-    ) {
+  public CheckIfLevelCompleted(child) {
+    if (child.points >= child.pointsNeeded) {
       this.levelledUp = true;
-      let excess =
-        this.currentChildPresenting.points -
-        this.currentChildPresenting.pointsNeeded;
+      let excess = child.points - child.pointsNeeded;
 
       console.log("leveledup");
 
       this.http
-        .fetch(
-          `${this.DNS}/api/PointsData/LevelUp/${
-            this.currentChildPresenting.childName
-          }`,
-          { method: "Get", credentials: "same-origin" }
-        )
+        .fetch(`${this.DNS}/api/PointsData/LevelUp/${child.childName}`, {
+          method: "Get",
+          credentials: 'include'
+        })
         .then(result => result.json() as Promise<BrowniePoints[]>)
         .then(data => {
           for (var i = 0; i < data.length; i++) {
-            if (data[i].id === this.currentChildPresenting.id) {
+            if (data[i].id === child.id) {
               console.log(`updating ${data[i].childName}`);
-              this.currentChildPresenting.points = excess;
-              this.currentChildPresenting.availableRewards =
-                data[i].availableRewards;
+              child.points = excess;
+              child.availableRewards = data[i].availableRewards;
             }
           }
         });
@@ -403,28 +387,21 @@ export class Home {
   private ConfigureDisplay(data: BrowniePoints[]) {
     console.log(this.index);
     this.browniePoints = data;
-    this.currentCount = Object.keys(this.browniePoints).length;
-    this.currentChildPresenting = this.browniePoints[this.index];
-    this.showingChild = this.currentChildPresenting.childName;
-    this.currentChildPresenting.presenting = true;
-    this.showChildData = true;
+    //this.currentCount = Object.keys(this.browniePoints).length;
+    // this.currentChildPresenting = this.browniePoints[this.index];
+    // this.showingChild = this.currentChildPresenting.childName;
+    // this.currentChildPresenting.presenting = true;
+    // this.showChildData = true;
     this.HideWaitingIcon();
   }
 
-  Use(availableReward: IAvailableRewards) {
+  Use(availableReward: IAvailableRewards, child) {
     console.log("use");
     availableReward.beingConsumed = true;
-    for (
-      var i = 0;
-      i < this.currentChildPresenting.availableRewards.length;
-      i++
-    ) {
+    for (var i = 0; i < child.availableRewards.length; i++) {
       console.log(`checking ${i}`);
-      if (
-        this.currentChildPresenting.availableRewards[i].id ===
-        availableReward.id
-      ) {
-        this.currentChildPresenting.availableRewards.splice(i, 1);
+      if (child.availableRewards[i].id === availableReward.id) {
+        child.availableRewards.splice(i, 1);
         console.log(`removed ${i}`);
       }
     }
@@ -435,7 +412,7 @@ export class Home {
         }`,
         {
           method: "put",
-          credentials: "same-origin"
+          credentials: 'include'
         }
       )
       .then(result => result.json() as Promise<BrowniePoints[]>)
@@ -471,7 +448,7 @@ export class Home {
     child.points += amount;
     console.log("child points " + child.points);
 
-    this.CheckIfLevelCompleted();
+    this.CheckIfLevelCompleted(child);
 
     if (child.pendingAdds == 0) {
       console.log("starting timer");
@@ -505,7 +482,7 @@ export class Home {
         `${this.DNS}/api/PointsData/AddBrowniePointExtra/${
           child.childName
         }/${amount}`,
-        { method: "Get", credentials: "same-origin" }
+        { method: "Get", credentials: 'include' }
       );
       if (result.ok) {
         //this.ConfigureDisplay(data);

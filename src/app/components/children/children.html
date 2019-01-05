@@ -184,7 +184,7 @@
 
     .myContainer {
       box-sizing: border-box;
-      height: 100vh;
+      height: 97vh;
       width: 100vw;
       display: grid;
       grid-template-rows: 1fr 8fr 1fr 1fr;
@@ -249,7 +249,7 @@
   <div show.bind="errorHadOccurred">
     <div class="center">
       <h2>Oops something went wrong! ${errorMessage}</h2>
-      <paper-button click.delegate="CloseError()">Close</paper-button>
+      <paper-button click.trigger="CloseError()">Close</paper-button>
     </div>
   </div>
 
@@ -257,7 +257,7 @@
     <div class="center">
       <h2>Seems you are offline</h2>
       <h3>Sorry we failed to add those points</h3>
-      <paper-button click.delegate="CheckOnlineOrNot()"
+      <paper-button click.trigger="CheckOnlineOrNot()"
         >Attempt to reconnect</paper-button
       >
     </div>
@@ -275,7 +275,7 @@
           <div show.bind="errorHadOccurred">
             <div class="center">
               <h2>Oops something went wrong! ${errorMessage}</h2>
-              <paper-button click.delegate="CloseError()">Close</paper-button>
+              <paper-button click.trigger="CloseError()">Close</paper-button>
             </div>
           </div>
 
@@ -318,7 +318,7 @@
               <paper-button
                 style="margin-top:5rem"
                 class="btn btn-primary btn-lg "
-                click.delegate="CloseLevelUp()"
+                click.trigger="CloseLevelUp()"
                 >Continue</paper-button
               >
             </div>
@@ -347,15 +347,15 @@
                   >
                     <div class="fa fa-arrow-circle-o-left "></div>
                     <span style="font-size:1rem;">
-                      ${browniePoints[$index-1].childName}</span
+                      <!-- ${browniePoints[$index-1].childName}--></span
                     >
                   </div>
                 </div>
 
-                <div if.bind="$first">&nbsp &nbsp &nbsp</div>
+                <div if.bind="$first"></div>
                 <!--End Move left-->
 
-                <div if.bind="!editingChildName" click.delegate="EditMode()">
+                <div if.bind="!editingChildName" click.trigger="EditMode()">
                   ${child.childName}
                 </div>
 
@@ -370,9 +370,9 @@
                       class="inline-edit"
                       style="max-width: 60vw"
                       value.bind="child.childName"
-                      keypress.delegate="IfEnterKeySaveChanges($event, child.id, child.childName, child.reward)"
+                      keypress.delegate="IfEnterKeySaveChanges($event, child, child.childName, child.reward)"
                     />
-                    <!--<div style="color:green;font-size:2rem;margin:0.2rem" class="glyphicon glyphicon-floppy-save editButton" click.delegate="SaveChanges(child.id, child.childName, child.reward)"></div>-->
+                    <!--<div style="color:green;font-size:2rem;margin:0.2rem" class="glyphicon glyphicon-floppy-save editButton" click.trigger="SaveChanges(child.id, child.childName, child.reward)"></div>-->
                   </div>
                 </div>
 
@@ -388,11 +388,11 @@
                   >
                     <div class="fa fa-arrow-circle-o-right"></div>
                     <span style="font-size:1rem;">
-                      ${browniePoints[$index+1].childName}</span
-                    >
+                      <!-- ${browniePoints[$index+1].childName}-->
+                    </span>
                   </div>
                 </div>
-                <div if.bind="$last">&nbsp &nbsp &nbsp T</div>
+                <div if.bind="$last"></div>
                 <!--End Move right-->
               </div>
 
@@ -441,7 +441,7 @@
 
                       <img
                         class="ActualAvatarImage ${editingAvatar ? 'MakeMeGrey' : ''}"
-                        click.delegate="EditAvatar(child.id)"
+                        click.trigger="EditAvatar(child)"
                         src.bind="child.avatar"
                         style="grid-area: main;height:60%;object-fit: contain;transition: all 3s;"
                       />
@@ -453,31 +453,31 @@
                       >
                         <img
                           src="../../../../images/superman.png"
-                          click.delegate="selectAvatar($event, child.childName)"
+                          click.trigger="selectAvatar($event, child)"
                         />
                         <img
                           src="../../../../images/batgirl.png"
-                          click.delegate="selectAvatar($event, child.childName)"
+                          click.trigger="selectAvatar($event, child)"
                         />
                         <img
                           src="../../../../images/batman.png"
-                          click.delegate="selectAvatar($event, child.childName)"
+                          click.trigger="selectAvatar($event, child)"
                         />
                         <img
                           src="../../../../images/captain-american.png"
-                          click.delegate="selectAvatar($event, child.childName)"
+                          click.trigger="selectAvatar($event, child)"
                         />
                         <img
                           src="../../../../images/hero.png"
-                          click.delegate="selectAvatar($event, child.childName)"
+                          click.trigger="selectAvatar($event, child)"
                         />
                         <img
                           src="../../../../images/spider-girl.png"
-                          click.delegate="selectAvatar($event, child.childName)"
+                          click.trigger="selectAvatar($event, child)"
                         />
                         <img
                           src="../../../../images/master.png"
-                          click.delegate="selectAvatar($event, child.childName)"
+                          click.trigger="selectAvatar($event, child)"
                         />
                       </div>
 
@@ -598,7 +598,7 @@
                           </div>
                           <paper-button
                             style="font-size:1.5rem"
-                            click.trigger="Use(availableReward)"
+                            click.trigger="Use(availableReward, child)"
                           >
                             Use
                           </paper-button>
@@ -623,7 +623,7 @@
                   <div
                     style="display:flex;justify-content:center;align-items:center"
                   >
-                    <div click.delegate="EditMode()">${child.reward}</div>
+                    <div click.trigger="EditMode()">${child.reward}</div>
                   </div>
                 </div>
                 <div if.bind="editingReward">

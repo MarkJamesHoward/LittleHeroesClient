@@ -21,20 +21,22 @@ export class Welcome {
   public errorMessage: string;
   public errorHadOccurred: boolean = false;
   public dev: boolean = false;
-  private DNS: string = "https://littleheroes.azurewebsites.net";
+  private DNS: string = "https://dojopoints.azurewebsites.net";
 
   public async AmISignedIn() {
     if (this.dev) return true;
 
-    var result = await this.http.fetch(`${this.DNS}/Account/AmISignedIn`, {
-      method: "get",
-      credentials: "same-origin"
-    });
-    if (result.ok == true) {
-      var data = await result.json();
-      this.signedIn = data.signedIn;
-      this.signedInAs = data.signedInAs;
-    }
+    // var result = await this.http.fetch(`${this.DNS}/Account/AmISignedIn`, {
+    //   method: "get",
+    //   credentials: "same-origin"
+    // });
+    // if (result.ok == true) {
+    //   var data = await result.json();
+    //   this.signedIn = data.signedIn;
+    //   this.signedInAs = data.signedInAs;
+    // }
+    this.signedIn = true;
+    return true;
   }
 
   public async GetParentDetails() {
