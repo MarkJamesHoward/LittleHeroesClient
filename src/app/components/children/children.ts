@@ -14,6 +14,7 @@ import "monster-creator";
 import "./circle.scss";
 import "./pulse.scss";
 import { setTimeout } from "timers";
+import { DNS, dev } from "../debug";
 
 @inject(HttpClient, Router)
 export class Home {
@@ -41,13 +42,11 @@ export class Home {
   public syncPending: boolean = false;
   public offline: boolean = false;
   public usingRewardInProgress: boolean = false;
-  public dev: boolean = false;
-  private DNS: string = "https://dojopoints.azurewebsites.net";
-  //private DNS: string = "http://localhost:53067";
 
   Home() {
     console.log("home");
-    this.router.navigate("/welcome");
+    // this.router.navigate("/welcome");
+    this.router.navigate(`welcome/childrenpage`);
   }
 
   ViewPet(child: BrowniePoints) {
@@ -65,10 +64,10 @@ export class Home {
     img = img[img.length - 1];
     console.log(img);
     var result = await this.http.fetch(
-      `${this.DNS}/api/Avatar/${child.childName}/${img}`,
+      `${DNS}/api/Avatar/${child.childName}/${img}`,
       {
         method: "put",
-        credentials: 'include'
+        credentials: "include"
       }
     );
     var data = await result.json();
@@ -122,8 +121,8 @@ export class Home {
     try {
       console.log("saveChildName");
       var result = await this.http.fetch(
-        `${this.DNS}/api/Children/EditChildName/${child.childName}/${newName}`,
-        { method: "put", credentials: 'include' }
+        `${DNS}/api/Children/EditChildName/${child.id}/${newName}`,
+        { method: "put", credentials: "include" }
       );
       if (result.ok) {
         var data = await result.json();
@@ -148,10 +147,10 @@ export class Home {
   async SaveReward(child: BrowniePoints, rewardDescription: string) {
     try {
       var result = await this.http.fetch(
-        `${this.DNS}/api/Children/EditReward/${
+        `${DNS}/api/Children/EditReward/${
           child.childName
         }/${rewardDescription}`,
-        { method: "put", credentials: 'include' }
+        { method: "put", credentials: "include" }
       );
       if (result.ok) {
         var data = await result.json();
@@ -262,7 +261,7 @@ export class Home {
   }
 
   public async AmISignedIn() {
-    // var result = await this.http.fetch(`${this.DNS}/Account/AmISignedIn`, {
+    // var result = await this.http.fetch(`${DNS}/Account/AmISignedIn`, {
     //   method: "get",
     //   credentials: "same-origin"
     // });
@@ -299,18 +298,18 @@ export class Home {
   public async InitialLoad() {
     let res1;
 
-    if (!this.dev) {
-      // res1 = await this.http.fetch(`${this.DNS}/Account/AmISignedIn`, {
+    if (!dev) {
+      // res1 = await this.http.fetch(`${DNS}/Account/AmISignedIn`, {
       //   method: "get",
       //   credentials: "same-origin"
       // });
       // data = await res1.json();
     }
 
-    // if (this.dev || res1.ok) {
+    // if (dev || res1.ok) {
     //   console.log("sign in info " + data);
-    //   //this.signedIn = this.dev || data.signedIn;
-    //   //this.signedInAs = this.dev || data.signedInAs;
+    //   //this.signedIn = dev || data.signedIn;
+    //   //this.signedInAs = dev || data.signedInAs;
     // } else {
     //   console.log(
     //     "The [AmIlogged] in call failed - just assume not logged in here!"
@@ -318,15 +317,15 @@ export class Home {
     //   this.DisplayError("Failed to check the login status");
     // }
 
-    if (this.dev) {
+    if (dev) {
       let myimport = await import("../devdata/childrendata");
       console.log(myimport);
       this.browniePoints = myimport.data;
       this.currentCount = 3; //myimport.length;
     } else {
-      var res2 = await this.http.fetch(`${this.DNS}/api/Children/all`, {
+      var res2 = await this.http.fetch(`${DNS}/api/Children/all`, {
         method: "get",
-        credentials: 'include'
+        credentials: "include"
       });
 
       if (res2.ok) {
@@ -354,9 +353,9 @@ export class Home {
       console.log("leveledup");
 
       this.http
-        .fetch(`${this.DNS}/api/PointsData/LevelUp/${child.childName}`, {
+        .fetch(`${DNS}/api/PointsData/LevelUp/${child.childName}`, {
           method: "Get",
-          credentials: 'include'
+          credentials: "include"
         })
         .then(result => result.json() as Promise<BrowniePoints[]>)
         .then(data => {
@@ -385,7 +384,7 @@ export class Home {
   }
 
   private ConfigureDisplay(data: BrowniePoints[]) {
-    console.log(this.index);
+    //console.log(this.index);
     this.browniePoints = data;
     //this.currentCount = Object.keys(this.browniePoints).length;
     // this.currentChildPresenting = this.browniePoints[this.index];
@@ -407,12 +406,10 @@ export class Home {
     }
     this.http
       .fetch(
-        `${this.DNS}/api/AvailableRewards/SetRewardToUsed/${
-          availableReward.id
-        }`,
+        `${DNS}/api/AvailableRewards/SetRewardToUsed/${availableReward.id}`,
         {
           method: "put",
-          credentials: 'include'
+          credentials: "include"
         }
       )
       .then(result => result.json() as Promise<BrowniePoints[]>)
@@ -479,10 +476,10 @@ export class Home {
       //swReg.sync.register(UpdateScoreDataString);
 
       var result = await this.http.fetch(
-        `${this.DNS}/api/PointsData/AddBrowniePointExtra/${
+        `${DNS}/api/PointsData/AddBrowniePointExtra/${
           child.childName
         }/${amount}`,
-        { method: "Get", credentials: 'include' }
+        { method: "Get", credentials: "include" }
       );
       if (result.ok) {
         //this.ConfigureDisplay(data);

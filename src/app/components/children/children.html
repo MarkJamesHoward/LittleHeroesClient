@@ -3,6 +3,10 @@
   <require from="./levelup.css"></require>
 
   <style>
+    .circle-container > img {
+      width: 15vmin;
+    }
+
     .SnapContainer {
       scroll-snap-type: x mandatory;
       width: 100vw;
@@ -637,7 +641,7 @@
                       style="max-width:60vw;"
                       name="reward"
                       value.bind="child.reward"
-                      keypress.delegate="IfEnterKeySaveChanges($event, child.id, child.childName, child.reward)"
+                      keypress.delegate="IfEnterKeySaveChanges($event, child, child.childName, child.reward)"
                     />
                   </div>
                 </div>

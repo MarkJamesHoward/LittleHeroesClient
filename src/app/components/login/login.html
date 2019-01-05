@@ -3,9 +3,12 @@
     html, body {
       padding:0;margin:0;
     }
-    #RegisterButton {
-      margin-bottom: 4rem;
+
+    H3 {
+      margin-top: 5vh;
+      margin-bottom: 5vh;
     }
+
     paper-button {
       margin-top: 1rem;
     }
@@ -15,41 +18,45 @@
       justify-content: center;
       align-items:center;
     }
-    label {
-      flex-grow:1;
-      
-    }
+
     paper-input {
       font-size: 2rem;
       flex-grow:1;
-      max-width: 40vw;
+      min-height: 20px;
       margin-left: 1rem;
+      flex-shrink:0;
     }
     .data {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items:center;
-      height: 70vh;
+      height: 95vh;
     }
   </style>
 
   <div class="container">
   <form action="post">
     <div class="data">  
-      <h3>Don't have an account? </h3>
-      <paper-button id="RegisterButton" raised onlick.trigger="Register()">Register</paper-button>
-      <h3>Or already signed up?</h3>
+     
+      <h3>Already signed up? </h3>
       <div class="inputgroup" style="grid-area: username">
         <paper-input label="Username"  value.bind="username">
           </paper-input>
       </div>
       <div class="inputgroup" style="grid-area: password">
           <paper-input label="Password" type="Password" value.bind="password">
-            </paper-input>
+          </paper-input>
       </div>
-      <paper-checkbox value.bind="rememberMe">Remember me</paper-checkbox>
-      <paper-button  click.trigger="Login()" raised>Login</paper-button>
+
+      <div>
+          <paper-button  click.trigger="Login()" raised>Login</paper-button>
+          <paper-checkbox value.bind="rememberMe">Remember me</paper-checkbox>
+      </div>
+
+      <h3 id="RegisterTitle">First time here?</h3>
+      <paper-button id="RegisterButton" raised onlick.trigger="Register()">Register</paper-button>
+
     </div>
   </form>
 </div>

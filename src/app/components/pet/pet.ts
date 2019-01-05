@@ -9,6 +9,7 @@ import {
 import { Router } from "aurelia-router";
 import "@polymer/paper-button";
 import "monster-creator";
+import { DNS, dev } from "../debug";
 
 @inject(HttpClient, Router)
 export class Pet {
@@ -16,16 +17,14 @@ export class Pet {
   http: HttpClient;
   child: BrowniePoints;
   childID: number;
-  public dev: boolean = false;
-  private DNS: string = "https://dojopoints.azurewebsites.net";
 
   HandledCharacterChange(e: any) {
     console.log("handled" + e.detail.kicked);
   }
 
   async GetChild(childID: number) {
-    console.log(`${this.DNS}/api/Children/GetChild/${childID}`);
-    if (this.dev) {
+    console.log(`${DNS}/api/Children/GetChild/${childID}`);
+    if (dev) {
       this.child = {
         id: 3,
         presenting: false,
@@ -59,7 +58,7 @@ export class Pet {
       };
     } else {
       var result = await this.http.fetch(
-        `${this.DNS}/api/Children/GetChild/${childID}`,
+        `${DNS}/api/Children/GetChild/${childID}`,
         {
           method: "get",
           credentials: "same-origin"
@@ -81,7 +80,7 @@ export class Pet {
     selectedeyex: number,
     selectedeyey: number
   ) {
-    if (this.dev) {
+    if (dev) {
       this.child.pet.eyes = eyes;
       this.child.pet.mouth = mouth;
       this.child.pet.silhouette = silhouette;
@@ -91,14 +90,10 @@ export class Pet {
       this.child.pet.selectedeyey = selectedeyey;
     } else {
       console.log(
-        `${
-          this.DNS
-        }/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}`
+        `${DNS}/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}`
       );
       var result = await this.http.fetch(
-        `${
-          this.DNS
-        }/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}`,
+        `${DNS}/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}`,
         { method: "put", credentials: "same-origin" }
       );
       var data = await result.json();

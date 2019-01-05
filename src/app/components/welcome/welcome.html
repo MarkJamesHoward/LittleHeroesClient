@@ -144,36 +144,7 @@
     }
   </style>
 
-  <!-- Header -->
-  <app-header condenses reveals effects="waterfall">
-    <app-toolbar class="toolbar-top">
-      <button class="menu-btn" title="Menu" @click="${this._menuButtonClicked}">
-        ${menuIcon}
-      </button>
-      <div main-title>${this.appTitle}</div>
-    </app-toolbar>
-
-    <!-- This gets hidden on a small screen-->
-    <nav class="toolbar-list">
-      <a ?selected="${this._page === 'view1'}" href="/view1">View One</a>
-      <a ?selected="${this._page === 'view2'}" href="/view2">View Two</a>
-      <a ?selected="${this._page === 'view3'}" href="/view3">View Three</a>
-    </nav>
-  </app-header>
-
-  <!-- Drawer content -->
-  <app-drawer
-    .opened="${this._drawerOpened}"
-    @opened-changed="${this._drawerOpenedChanged}"
-  >
-    <nav class="drawer-list">
-      <a ?selected="${this._page === 'view1'}" href="/view1">View One</a>
-      <a ?selected="${this._page === 'view2'}" href="/view2">View Two</a>
-      <a ?selected="${this._page === 'view3'}" href="/view3">View Three</a>
-    </nav>
-  </app-drawer>
-
-  <paper-toolbar>
+  <!-- <paper-toolbar>
     <paper-icon-button
       slot="top"
       icon="menu"
@@ -185,7 +156,7 @@
       icon="more-vert"
       on-tap="(moreAction)"
     ></paper-icon-button>
-  </paper-toolbar>
+  </paper-toolbar> -->
 
   <!-- <nav id="MainNav" class="navbar navbar-expand-sm navbar-dark bg-dark">
     <div class="navbar-brand">
@@ -276,9 +247,7 @@
           </p>
 
           <div show.bind="!loading">
-            <div show.bind="!signedIn && !offline">
-              <!--<button style="margin-top:1rem" click.delegate="DevSignup()" class="btn btn-primary btn-lg">Dev Signup</button>-->
-
+            <!-- <div show.bind="!signedIn && !offline">
               <paper-button
                 style="margin-top:1rem"
                 click.delegate="Signup()"
@@ -286,20 +255,26 @@
               >
                 Signup
               </paper-button>
+            </div> -->
+
+            <div show.bind="(!signedIn && !offline) || dev">
+              <paper-button
+                style="margin-top:1rem;background-color:blue; color: white"
+                click.trigger="Login()"
+                class="btn btn-primary btn-lg"
+              >
+                Let's Start!
+              </paper-button>
             </div>
 
-            <paper-button
-              style="margin-top:1rem"
-              click.trigger="DevSignup()"
-              class="btn btn-primary btn-lg"
-            >
-              Dev Signup
-            </paper-button>
-
             <div show.bind="(signedIn && !offline) || dev">
+              <div style="margin-bottom: 1rem;position:absolute; top:0;">
+                <div>Welcome back</div>
+                <span style="color:red">${username}</span>
+              </div>
               <paper-button
                 click.trigger="ViewHeroTastic()"
-                style="margin-top:1rem"
+                style="margin-top:1rem; background-color: blue; color: white"
                 class="btn btn-primary btn-lg"
               >
                 View Heroes
@@ -434,6 +409,14 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div
+    if.bind="signedIn"
+    raised
+    style="background-color: blue;color: white; text-align: center"
+  >
+    <paper-button click.trigger="Logout()">Logout</paper-button>
   </div>
 
   <!--Error occurred-->

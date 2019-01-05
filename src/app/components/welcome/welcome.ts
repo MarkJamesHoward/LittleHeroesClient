@@ -6,9 +6,14 @@ import "@polymer/paper-button";
 import "@polymer/app-layout/app-layout.js";
 import "@polymer/paper-icon-button";
 import "@polymer/iron-icons/iron-icons.js";
+import "@polymer/paper-toolbar";
+import { AsyncParallelBailHook } from "tapable";
+import { DNS, dev } from "../debug";
 
 @inject(HttpClient, Router)
 export class Welcome {
+  private username: string;
+  private proceedToChildrenScreen: boolean = true;
   public http: HttpClient;
   public loading: boolean = true;
   public router: Router;
@@ -20,66 +25,85 @@ export class Welcome {
   public offline: boolean = false;
   public errorMessage: string;
   public errorHadOccurred: boolean = false;
-  public dev: boolean = false;
-  private DNS: string = "https://dojopoints.azurewebsites.net";
 
   public async AmISignedIn() {
-    if (this.dev) return true;
+    if (dev) return true;
 
-    // var result = await this.http.fetch(`${this.DNS}/Account/AmISignedIn`, {
-    //   method: "get",
-    //   credentials: "same-origin"
-    // });
-    // if (result.ok == true) {
-    //   var data = await result.json();
-    //   this.signedIn = data.signedIn;
-    //   this.signedInAs = data.signedInAs;
-    // }
-    this.signedIn = true;
-    return true;
-  }
-
-  public async GetParentDetails() {
-    var result = await this.http.fetch(
-      `${this.DNS}/api/Parents/GetParentDetails`,
-      {
-        method: "get",
-        credentials: "same-origin"
-      }
-    );
-    if (result.status == 200) {
-      var data = await result.json();
-      this.parent = data;
-    }
-  }
-
-  public async GetGroupDetails() {
-    var result = await this.http.fetch(`${this.DNS}/api/Group`, {
+    fetch(`${DNS}/api/children/all`, {
       method: "get",
-      credentials: "same-origin"
-    });
-    if (result.status == 200) {
-      var data = await result.json();
-      this.groupMembers = data;
-    }
+      credentials: "include"
+    })
+      .then(response => {
+        if (response.ok) {
+          this.signedIn = true;
+          this.offline = false;
+          this.loading = false;
+          console.log(`We are logged in`);
+          console.log(response);
+          //Now let's navigate to the view of hereos
+          if (this.proceedToChildrenScreen) {
+            this.router.navigate("children");
+          } else {
+            this.GetUsername();
+          }
+        } else {
+          console.log(
+            "Not logged in - should see a 401 not auth on the get children call"
+          );
+          this.signedIn = false;
+          this.offline = false;
+          this.loading = false;
+        }
+      })
+      .catch(e => {
+        console.log("failed to login");
+        this.offline = true;
+        this.loading = false;
+        this.signedIn = false;
+      });
   }
 
-  public async CheckOnlineOrNot() {
-    try {
-      await this.AmISignedIn();
-      this.offline = false;
-    } catch (e) {
-      this.offline = true;
-    }
-  }
+  // public async GetParentDetails() {
+  //   var result = await this.http.fetch(
+  //     `${DNS}/api/Parents/GetParentDetails`,
+  //     {
+  //       method: "get",
+  //       credentials: "same-origin"
+  //     }
+  //   );
+  //   if (result.status == 200) {
+  //     var data = await result.json();
+  //     this.parent = data;
+  //   }
+  // }
 
-  public async startup() {
-    let [await1, await2] = await Promise.all([
-      this.GetParentDetails(),
-      this.GetGroupDetails()
-    ]);
-    this.loading = false;
-  }
+  // public async GetGroupDetails() {
+  //   var result = await this.http.fetch(`${DNS}/api/Group`, {
+  //     method: "get",
+  //     credentials: "same-origin"
+  //   });
+  //   if (result.status == 200) {
+  //     var data = await result.json();
+  //     this.groupMembers = data;
+  //   }
+  // }
+
+  // public async CheckOnlineOrNot() {
+  //   try {
+  //     await this.AmISignedIn();
+  //     this.offline = false;
+  //   } catch (e) {
+  //     this.offline = true;
+  //   }
+  // }
+
+  // public async startup() {
+  //   let [await1, await2] = await Promise.all([
+  //     this.GetParentDetails(),
+  //     this.GetGroupDetails()
+  //   ]);
+  //   this.loading = false;
+  // }
 
   constructor(http: HttpClient, router: Router) {
     this.http = http;
@@ -88,10 +112,10 @@ export class Welcome {
     this.AmISignedIn()
       .then(() => {
         if (this.signedIn) {
-          this.startup();
+          // this.startup();
         }
         console.log("finished constructor");
-        this.loading = false;
+        // this.loading = false;
       })
       .catch(err => {
         if (err == "TypeError: Failed to fetch") {
@@ -116,43 +140,63 @@ export class Welcome {
     console.log(msg);
   }
 
+  async GetUsername() {
+    var res = await fetch(`${DNS}/api/auth/getUsername`, {
+      method: "get",
+      credentials: "include"
+    });
+    if (res.ok) {
+      let data: Parent = await res.json();
+      this.username = data.email;
+    }
+  }
+
   ViewHeroTastic() {
     this.router.navigate("children");
   }
 
-  DevSignup() {
-    try {
-      console.log("navigate to login");
-      window.location.href = `${this.DNS}/Account/DevLogin`;
-    } catch (err) {
-      if (err == "TypeError: Failed to fetch") {
-        console.log("Offline " + err);
-        this.offline = true;
-        this.loading = false;
-      } else {
-        console.log("Some error " + err);
-        this.errorHadOccurred = true;
-        this.errorMessage = err;
-        this.loading = false;
+  Login() {
+    this.router.navigate("Login");
+  }
+
+  Logout() {
+    fetch(`${DNS}/api/auth/logout`, {
+      method: "get",
+      credentials: "include"
+    }).then(response => {
+      if (response.ok) {
+        console.log("logged out");
+        this.AmISignedIn();
       }
+    });
+  }
+
+  activate(params: any) {
+    console.log(`loading home page from ${params.id}`);
+    if (params.source == "childrenpage") {
+      console.log("do not navigate to the children screen");
+      this.proceedToChildrenScreen = false;
+    } else {
+      console.log("yep lets navigate");
+      this.proceedToChildrenScreen = true;
     }
   }
 
-  Signup() {
-    try {
-      console.log("navigate to login");
-      window.location.href = `${this.DNS}/Account/Login`;
-    } catch (err) {
-      if (err == "TypeError: Failed to fetch") {
-        console.log("Offline " + err);
-        this.offline = true;
-        this.loading = false;
-      } else {
-        console.log("Some error " + err);
-        this.errorHadOccurred = true;
-        this.errorMessage = err;
-        this.loading = false;
-      }
-    }
-  }
+  // Signup() {
+  //   try {
+  //     console.log("navigate to login");
+  //     window.location.href = `${DNS}/Account/Login`;
+  //   } catch (err) {
+  //     if (err == "TypeError: Failed to fetch") {
+  //       console.log("Offline " + err);
+  //       this.offline = true;
+  //       this.loading = false;
+  //     } else {
+  //       console.log("Some error " + err);
+  //       this.errorHadOccurred = true;
+  //       this.errorMessage = err;
+  //       this.loading = false;
+  //     }
+  //   }
+  // }
 }

@@ -70,7 +70,7 @@ export class App {
         title: "Login"
       },
       {
-        route: ["", "welcome"],
+        route: ["", "welcome/:source"],
         name: "welcome",
         settings: { icon: "" },
         moduleId: PLATFORM.moduleName("../welcome/welcome"),
