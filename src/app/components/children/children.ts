@@ -14,7 +14,7 @@ import "monster-creator";
 import "./circle.scss";
 import "./pulse.scss";
 import { setTimeout } from "timers";
-import { DNS, dev } from "../debug";
+import { DNS, dev } from "../global";
 
 @inject(HttpClient, Router)
 export class Home {

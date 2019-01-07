@@ -8,7 +8,7 @@ import "@polymer/paper-icon-button";
 import "@polymer/iron-icons/iron-icons.js";
 import "@polymer/paper-toolbar";
 import { AsyncParallelBailHook } from "tapable";
-import { DNS, dev } from "../debug";
+import { DNS, dev } from "../global";
 
 @inject(HttpClient, Router)
 export class Welcome {

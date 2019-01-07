@@ -5,12 +5,12 @@ import "@polymer/iron-icons/iron-icons.js";
 import "@polymer/paper-checkbox/paper-checkbox.js";
 import { inject } from "aurelia-framework";
 import { Router } from "aurelia-router";
-import { DNS, dev } from "../debug";
+import { DNS, dev } from "../global";
 
 @inject(Router)
 export class login {
-  private username: string;
-  private password: string;
+  private myusername: string;
+  private mypassword: string;
   private router: Router;
 
   constructor(Router: Router) {
@@ -18,10 +18,9 @@ export class login {
   }
 
   Login() {
-    // console.log(`username: ${this.username}`)
-    // console.log(`password: ${this.password}`)
-    let details = { email: "mark@mjhoward.co.uk", password: "TennisMauser1@" };
-    console.log(details);
+    // console.log(`username: ${this.myusername}`)
+    // console.log(`password: ${this.mypassword}`)
+    let details = { email: this.myusername, password: this.mypassword };
     fetch(`${DNS}/api/auth/login`, {
       method: "post",
       headers: new Headers({

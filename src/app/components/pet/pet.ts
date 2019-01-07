@@ -9,7 +9,7 @@ import {
 import { Router } from "aurelia-router";
 import "@polymer/paper-button";
 import "monster-creator";
-import { DNS, dev } from "../debug";
+import { DNS, dev } from "../global";
 
 @inject(HttpClient, Router)
 export class Pet {
@@ -29,7 +29,7 @@ export class Pet {
         id: 3,
         presenting: false,
         removeForAnimation: false,
-        avatar: "dist/53222aba52433ceaa5bb0e26aa761a82.png",
+        avatar: "53222aba52433ceaa5bb0e26aa761a82.png",
         childName: "bubby",
         points: 50,
         pendingAdds: 0,
@@ -61,7 +61,7 @@ export class Pet {
         `${DNS}/api/Children/GetChild/${childID}`,
         {
           method: "get",
-          credentials: "same-origin"
+          credentials: "include"
         }
       );
       var data = await result.json();
@@ -94,7 +94,7 @@ export class Pet {
       );
       var result = await this.http.fetch(
         `${DNS}/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}`,
-        { method: "put", credentials: "same-origin" }
+        { method: "put", credentials: "include" }
       );
       var data = await result.json();
       console.log(data);
