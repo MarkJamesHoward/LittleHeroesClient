@@ -1,5 +1,5 @@
 const path = require("path");
-const webpack = require('webpack')
+const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -11,6 +11,9 @@ const {
 } = require("aurelia-webpack-plugin");
 const { ProvidePlugin } = require("webpack");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+
+// Inside of webpack.config.js:
+const WorkboxPlugin = require("workbox-webpack-plugin");
 
 // config helpers:
 const ensureArray = config =>
@@ -244,9 +247,9 @@ module.exports = ({
     new ModuleDependenciesPlugin({
       "aurelia-testing": ["./compile-spy", "./view-spy"]
     }),
-    new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery"
+    new WorkboxPlugin.InjectManifest({
+      swSrc: "./src/sw.js",
+      swDest: "./sw.js"
     }),
     new HtmlWebpackPlugin({
       template: "index.ejs",

@@ -8,24 +8,26 @@ import { Router } from "aurelia-router";
 import { DNS, dev } from "../global";
 
 @inject(Router)
-export class login {
+export class Register {
+  router: Router;
+  addedNewUserOk: boolean = false;
+  attemptedAddNewUser: boolean = false;
   private myusername: string;
   private mypassword: string;
-  private router: Router;
 
-  constructor(Router: Router) {
-    this.router = Router;
+  constructor(router: Router) {
+    this.router = router;
+  }
+
+  Home() {
+    this.router.navigate("welcome");
   }
 
   Register() {
-    this.router.navigate("register");
-  }
-
-  Login() {
-    // console.log(`username: ${this.myusername}`)
-    // console.log(`password: ${this.mypassword}`)
     let details = { email: this.myusername, password: this.mypassword };
-    fetch(`${DNS}/api/auth/login`, {
+    this.attemptedAddNewUser = false;
+
+    fetch(`${DNS}/api/auth/register`, {
       method: "post",
       headers: new Headers({
         "Content-Type": "application/json"
@@ -35,16 +37,14 @@ export class login {
     })
       .then(response => {
         if (response.ok) {
-          console.log(`login succeeded! - should have a cookie now:`);
-          console.log(response);
-          //Now let's navigate to the view of hereos
-          this.router.navigate("children");
-        } else {
-          console.log("response was not ok");
+          console.log("added new user successfully!");
+          this.addedNewUserOk = true;
+          this.attemptedAddNewUser = false;
         }
       })
       .catch(e => {
-        console.log("failed to login");
+        this.attemptedAddNewUser = true;
+        console.log("error adding new user");
       });
   }
 }

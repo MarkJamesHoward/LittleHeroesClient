@@ -45,8 +45,7 @@ export class Home {
 
   Home() {
     console.log("home");
-    // this.router.navigate("/welcome");
-    this.router.navigate(`welcome/childrenpage`);
+    this.router.navigate(`welcome`);
   }
 
   ViewPet(child: BrowniePoints) {

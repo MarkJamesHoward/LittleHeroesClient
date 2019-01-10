@@ -16,4 +16,12 @@
       console.log(node);
     }
   </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      var sw = navigator.serviceWorker.register("./sw.js").then(sw => {
+        console.log("registered my service worker: " + sw);
+      });
+    }
+  </script>
 </html>

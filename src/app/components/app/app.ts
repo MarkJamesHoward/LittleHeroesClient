@@ -70,7 +70,7 @@ export class App {
         title: "Login"
       },
       {
-        route: ["", "welcome/:source"],
+        route: ["", "welcome"],
         name: "welcome",
         settings: { icon: "" },
         moduleId: PLATFORM.moduleName("../welcome/welcome"),
@@ -116,6 +116,14 @@ export class App {
         moduleId: PLATFORM.moduleName("../notifications/notifications"),
         nav: true,
         title: "Receive Notifications"
+      },
+      {
+        route: ["register"],
+        name: "register",
+        settings: { icon: "" },
+        moduleId: PLATFORM.moduleName("../register/register"),
+        nav: true,
+        title: "Register"
       }
     ]);
 

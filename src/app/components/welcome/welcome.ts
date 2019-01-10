@@ -8,7 +8,7 @@ import "@polymer/paper-icon-button";
 import "@polymer/iron-icons/iron-icons.js";
 import "@polymer/paper-toolbar";
 import { AsyncParallelBailHook } from "tapable";
-import { DNS, dev } from "../global";
+import { DNS, dev, FirstLoadOData } from "../global";
 
 @inject(HttpClient, Router)
 export class Welcome {
@@ -63,6 +63,14 @@ export class Welcome {
       });
   }
 
+  ManageHeroes() {
+    this.router.navigate("ManageHeroes");
+  }
+
+  ManageNotifications() {
+    this.router.navigate("notifications");
+  }
+
   // public async GetParentDetails() {
   //   var result = await this.http.fetch(
   //     `${DNS}/api/Parents/GetParentDetails`,
@@ -88,14 +96,14 @@ export class Welcome {
   //   }
   // }
 
-  // public async CheckOnlineOrNot() {
-  //   try {
-  //     await this.AmISignedIn();
-  //     this.offline = false;
-  //   } catch (e) {
-  //     this.offline = true;
-  //   }
-  // }
+  public async CheckOnlineOrNot() {
+    try {
+      await this.AmISignedIn();
+      this.offline = false;
+    } catch (e) {
+      this.offline = true;
+    }
+  }
 
   // public async startup() {
   //   let [await1, await2] = await Promise.all([
@@ -173,12 +181,13 @@ export class Welcome {
 
   activate(params: any) {
     console.log(`loading home page from ${params.id}`);
-    if (params.source == "childrenpage") {
+    if (FirstLoadOData.firstLoad) {
       console.log("do not navigate to the children screen");
       this.proceedToChildrenScreen = false;
+      FirstLoadOData.firstLoad = false;
     } else {
       console.log("yep lets navigate");
-      this.proceedToChildrenScreen = true;
+      this.proceedToChildrenScreen = false;
     }
   }
 

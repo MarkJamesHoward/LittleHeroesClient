@@ -1,85 +1,104 @@
-﻿
-<template>
-    <style>
-        .btn {
-            min-width: 200px;
-            margin-bottom: 20px;
-        }
+﻿<template>
+  <style>
+    paper-button {
+      margin-top: 3rem;
+    }
+    .btn {
+      min-width: 200px;
+      margin-bottom: 20px;
+    }
 
-        span {
-            font-size: 0.8em;
-        }
+    span {
+      font-size: 0.8em;
+    }
 
-        .currentStatus {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            margin-top: 10px;
-            text-align: center;
-            max-width: 600px;
-        }
+    .currentStatus {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin-top: 10px;
+      text-align: center;
+      max-width: 600px;
+    }
 
-        .currentSubscriptions {
-            font-size: 4rem;
-        }
+    .currentSubscriptions {
+      font-size: 4rem;
+    }
 
-        .container {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: 40px;
-        }
-    </style>
+    .container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 40px;
+    }
+  </style>
 
-    <div class="row orangeBackground">
+  <div class="row orangeBackground">
+    <div class="col-sm-offset-4 col-sm-4">
+      <form id="myForm">
+        <div class="currentStatus">
+          <h3 if.bind="serviceWorker">
+            Excellent your device supports notifications!
+          </h3>
+        </div>
+        <br />
+        <div class="currentStatus">
+          <div class="currentStatus" if.bind="serviceWorker">
+            <p style="text-align:justify">
+              These notifications are displayed by the browser and can appear
+              even when the LittleHeroes website is closed. With this enabled
+              you will receive an alert when points are awarded by another
+              guardian.
+            </p>
 
-        <div class="col-sm-offset-4 col-sm-4">
-            <form id="myForm">
-                <div class="currentStatus">
-                    <h3 if.bind="serviceWorker">Excellent your device supports notifications!</h3>
-                </div>
-                <br />
-                <div class="currentStatus">
-                    <div class="currentStatus" if.bind="serviceWorker">
-                        <p style="text-align:justify">
-                            These notifications are displayed by the browser and can appear even when the LittleHeroes
-                            website is closed. With this enabled you will receive an alert when points are awarded
-                            by another guardian.
-                        </p>
+            <div class="currentSubscriptions">
+              <h3>Current notification status:</h3>
+              ${isSubscribed ? 'Subscribed!' : 'No active subscription'}
+            </div>
+            <br />
 
-                        <div class="currentSubscriptions">
-                            <h3>Current notification status:</h3>
-                            ${isSubscribed ? 'Subscribed!' : 'No active subscription'}
-                        </div>
-                        <br />
+            <paper-button
+              raised
+              if.bind="!isSubscribed"
+              click.trigger="subscribe()"
+              >Enable notifications</paper-button
+            >
+            <paper-button
+              raised
+              if.bind="isSubscribed"
+              click.trigger="unsubscribe()"
+              >Disable notifications
+            </paper-button>
 
-                        <div class="btn btn-primary" if.bind="!isSubscribed" click.delegate="subscribe()">Enable notifications</div>
-                        <div class="btn btn-danger" if.bind="isSubscribed" click.delegate="unsubscribe()">Disable notifications</div>
+            <paper-button raised click.trigger="Home()"
+              >Back Home
+            </paper-button>
 
-                        <!--<br />
+            <!--<br />
                 <label for="friendlyname">Optional: enter a subscription name</label>
                 <input type="text" value.two-way="friendlyName" id="friendlyName" name="friendlyName" />-->
 
-                        <div class="endpoint currentStatus">
-                            <input type="hidden" id="endpoint" name="endpoint" value="${subscriptionJSONified}" />
-                        </div>
-
-                    </div>
-                    <div if.bind="!serviceWorker">
-                        <p>
-                            Unfortunately your browser does not currently support notifications.
-                            To receive notifications please switch to a supported browser such as Google Chrome.
-                        </p>
-                    </div>
-                </div>
-
-
-            </form>
+            <div class="endpoint currentStatus">
+              <input
+                type="hidden"
+                id="endpoint"
+                name="endpoint"
+                value="${subscriptionJSONified}"
+              />
+            </div>
+          </div>
+          <div if.bind="!serviceWorker">
+            <p>
+              Unfortunately your browser does not currently support
+              notifications. To receive notifications please switch to a
+              supported browser such as Google Chrome.
+            </p>
+          </div>
         </div>
+      </form>
     </div>
-
+  </div>
 </template>
-

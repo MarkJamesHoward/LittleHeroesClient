@@ -289,6 +289,7 @@
               >
                 Offline - click to try again
               </paper-button>
+              <h4 if.bind="OnlineCheckFailed">Still no luck afraid...</h4>
             </div>
           </div>
           <div show.bind="loading">
@@ -359,6 +360,29 @@
     </div>
 
     <div class="row" style="background-color:orange;padding-bottom: 2rem">
+      <div>
+        <div show.bind="(signedIn && !offline) || dev">
+          <paper-button
+            click.trigger="ManageHeroes()"
+            style="margin-top:1rem; background-color: blue; color: white"
+            class="btn btn-primary btn-lg"
+          >
+            Manage Heroes
+          </paper-button>
+        </div>
+      </div>
+
+      <div show.bind="(signedIn && !offline) || dev">
+          <paper-button
+            click.trigger="ManageNotifications()"
+            style="margin-top:1rem; background-color: blue; color: white"
+            class="btn btn-primary btn-lg"
+          >
+            Manage Notifications
+          </paper-button>
+        </div>
+      </div>
+
       <div class="col-md-12">
         <h1 style="text-align:center;margin-bottom:3rem">
           Let's get you up and running
@@ -425,18 +449,6 @@
       <h2>Oops something went wrong! ${errorMessage}</h2>
       <button class="btn btn-primary btn-lg " click.delegate="CloseError()">
         Close
-      </button>
-    </div>
-  </div>
-
-  <div show.bind="offline">
-    <div class="center">
-      <h2>Seems you are offline</h2>
-      <button
-        class="btn btn-primary btn-lg "
-        click.delegate="CheckOnlineOrNot()"
-      >
-        Attempt to connect
       </button>
     </div>
   </div>

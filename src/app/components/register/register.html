@@ -40,7 +40,7 @@
 
   <div class="container">
     <div class="data">
-      <h3>Already signed up?</h3>
+      <h3>Register</h3>
       <div class="inputgroup" style="grid-area: username">
         <label for="username">Username</label>
         <input
@@ -64,14 +64,20 @@
       </div>
 
       <div>
-        <paper-button click.trigger="Login()" raised>Login</paper-button>
-        <paper-checkbox value.bind="rememberMe">Remember me</paper-checkbox>
+        <paper-button click.trigger="Register()" raised>Register</paper-button>
+      </div>
+      <div>
+        <paper-button click.trigger="Home()" raised>Return Home</paper-button>
       </div>
 
-      <h3 id="RegisterTitle">First time here?</h3>
-      <paper-button id="RegisterButton" raised click.trigger="Register()"
-        >Register</paper-button
-      >
+      <div if.bind="addedNewUserOk">
+        Added new user ${usename} successfully
+      </div>
+     
+      <div if.bind="!addedNewUserOk && attemptedAddNewUser">
+        Sorry failed to add ${usename}
+      </div>
+
     </div>
   </div>
 </template>
