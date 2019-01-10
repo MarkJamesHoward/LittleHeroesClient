@@ -1,10 +1,10 @@
 <template>
   <style></style>
 
-  <div style="display:flex;justify-content:center;margin-top:1vmin">
-    <div style="height:70vh;width: 100vw;">
+  <div
+    style="display:flex;justify-content:center; flex-direction: column; height: 97vh;"
+  >
       <monster-creator
-        style="height:100%"
         customize="Yes"
         selectedmouthindex.two-way="child.pet.mouth"
         selectedeyeindex.two-way="child.pet.eyes"
@@ -83,19 +83,16 @@
         <img slot="MouthSlot2" src="../../../../images/mouths/mouth2.png" />
         <img slot="MouthSlot3" src="../../../../images/mouths/mouth3.png" />
       </monster-creator>
-    </div>
-  </div>
 
-  <div
-    style="display:flex;margin-top:1rem;justify-content:center;flex-direction:column;align-items:center"
-  >
+
     <!-- <h1 style="margin-top:0">${child.childName}</h1> -->
-    <img
-      src="../../../../images/createyourmonster.png"
-      width="50%"
-      alt="Create your monster"
-    />
-  </div>
+    <div style="display: flex;justify-content: center;flex-grow:0;">
+      <img
+        src="../../../../images/createyourmonster.png"
+        style="object-fit:contain;width: 50vw"
+        alt="Create your monster"
+      />
+    </div>
 
   <div style="display:flex;justify-content:center;margin-bottom: 1rem">
     <paper-button

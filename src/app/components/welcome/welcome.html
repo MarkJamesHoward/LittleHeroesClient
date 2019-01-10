@@ -4,37 +4,6 @@
       width: 200px;
     }
 
-    :host {
-      --app-drawer-width: 256px;
-      display: block;
-
-      --app-primary-color: #e91e63;
-      --app-secondary-color: #293237;
-      --app-dark-text-color: var(--app-secondary-color);
-      --app-light-text-color: white;
-      --app-section-even-color: #f7f7f7;
-      --app-section-odd-color: white;
-
-      --app-header-background-color: white;
-      --app-header-text-color: var(--app-dark-text-color);
-      --app-header-selected-color: var(--app-primary-color);
-
-      --app-drawer-background-color: var(--app-secondary-color);
-      --app-drawer-text-color: var(--app-light-text-color);
-      --app-drawer-selected-color: #78909c;
-    }
-
-    app-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      background-color: var(--app-header-background-color);
-      color: var(--app-header-text-color);
-      border-bottom: 1px solid #eee;
-    }
-
     .toolbar-top {
       background-color: var(--app-header-background-color);
     }
@@ -47,6 +16,12 @@
         drawer button, and the text looks not centered. Add a padding to
         match that button */
       padding-right: 44px;
+    }
+
+    html,
+    body {
+      padding: 0;
+      margin: 0;
     }
 
     .toolbar-list {
@@ -224,7 +199,7 @@
     </div>
   </nav> -->
 
-  <div>
+
     <div class="row" style="background-color:orange">
       <div class="col-md-6">
         <div style="display:flex;justify-content:center;margin-top:2rem">
@@ -235,8 +210,8 @@
           />
         </div>
       </div>
-      <div class="col-md-5 col-lg-4">
-        <div style="text-align:center;margin-bottom:2rem">
+      <div>
+        <div style="text-align:center;padding: 0 2rem 0 2rem">
           <h1 style="margin-top:2rem">Welcome to LittleHeroes</h1>
 
           <p style="text-align:center">
@@ -274,7 +249,7 @@
               </div>
               <paper-button
                 click.trigger="ViewHeroTastic()"
-                style="margin-top:1rem; background-color: blue; color: white"
+                style="margin-top:1rem;margin-bottom: 2rem; background-color: blue; color: white"
                 class="btn btn-primary btn-lg"
               >
                 View Heroes
@@ -308,8 +283,8 @@
       </div>
     </div>
 
-    <div class="row" style="background-color:white;margin-top:5rem;">
-      <div class="col-md-6" style="margin-bottom:2rem;text-align:center">
+    <div style="background-color:white;padding: 2rem 2rem 0 2rem;">
+      <div style="margin-bottom:2rem;text-align:center">
         <p style="text-align:center">
           Each time 100 points is reached the reward is activated and can be
           redeemed. Multiple rewards can be built up and used in combination if
@@ -373,64 +348,13 @@
       </div>
 
       <div show.bind="(signedIn && !offline) || dev">
-          <paper-button
-            click.trigger="ManageNotifications()"
-            style="margin-top:1rem; background-color: blue; color: white"
-            class="btn btn-primary btn-lg"
-          >
-            Manage Notifications
-          </paper-button>
-        </div>
-      </div>
-
-      <div class="col-md-12">
-        <h1 style="text-align:center;margin-bottom:3rem">
-          Let's get you up and running
-        </h1>
-
-        <div style="text-align:center">
-          <div style="display:flex;justify-content:center">
-            <h3>Step 1: Click the signup button</h3>
-          </div>
-          <p>
-            We'll just need an email address and password to get you up an
-            running. Or you can simply use your existing Google/Facebook/Twitter
-            account. Super easy!
-          </p>
-
-          <button click.delegate="Signup()" class="btn btn-primary btn-lg">
-            Signup
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="row" style="background-color:orange;padding-bottom:2rem">
-      <div class="col-md-12">
-        <div style="text-align:center">
-          <h3>Step 2: Add heroes</h3>
-          <p>
-            By default two heroes will be created and you can edit their names
-            and rewards in place on the heroes page.
-          </p>
-          <p>
-            If you need to add or remove heroes this can be performed on the
-            <a href="/Setup">Admin</a> page.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div class="row" style="background-color:orange;padding-bottom:2rem">
-      <div class="col-md-12">
-        <div style="text-align:center">
-          <h3>Step 3: Select Avatar</h3>
-          <p>Choose an avatar (optional)</p>
-          <p>
-            From the <a href="/Setup">Select Avatar</a> page each hero can
-            choose their avatar
-          </p>
-        </div>
+        <paper-button
+          click.trigger="ManageNotifications()"
+          style="margin-top:1rem; background-color: blue; color: white"
+          class="btn btn-primary btn-lg"
+        >
+          Manage Notifications
+        </paper-button>
       </div>
     </div>
   </div>
