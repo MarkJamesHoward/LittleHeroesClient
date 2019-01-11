@@ -1,5 +1,5 @@
-//let DNS: string = "https://dojopoints.azurewebsites.net";
-let DNS: string = "http://localhost:53067";
+let DNS: string = "https://dojopoints.azurewebsites.net";
+//let DNS: string = "http://localhost:53067";
 let dev: boolean = false;
 
 interface LoadData {

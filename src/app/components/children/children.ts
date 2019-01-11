@@ -1,6 +1,7 @@
 import { HttpClient } from "aurelia-fetch-client";
 import { inject, child } from "aurelia-framework";
 import { Router } from "aurelia-router";
+import { LitElement } from "@Polymer/lit-element";
 import "@polymer/paper-icon-button";
 import "@polymer/iron-icons/iron-icons.js";
 import "@polymer/paper-button";
