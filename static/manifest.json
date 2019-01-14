@@ -23,7 +23,7 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "https://www.littleheroes.online/",
+  "start_url": "https://www.littleheroes.azurewebsites.net/",
   "background_color": "#FF9600",
   "display": "standalone",
   "theme_color": "#FF9600"
