@@ -21,6 +21,10 @@ export class login {
     this.router.navigate("register");
   }
 
+  Home() {
+    this.router.navigate("welcome");
+  }
+
   Login() {
     // console.log(`username: ${this.myusername}`)
     // console.log(`password: ${this.mypassword}`)

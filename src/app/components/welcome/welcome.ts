@@ -3,11 +3,8 @@ import { inject } from "aurelia-framework";
 import { Router } from "aurelia-router";
 import { SignedIn, Parent } from "../../library/interfaces";
 import "@polymer/paper-button";
-import "@polymer/app-layout/app-layout.js";
 import "@polymer/paper-icon-button";
 import "@polymer/iron-icons/iron-icons.js";
-import "@polymer/paper-toolbar";
-import { AsyncParallelBailHook } from "tapable";
 import { DNS, dev, FirstLoadOData } from "../global";
 
 @inject(HttpClient, Router)

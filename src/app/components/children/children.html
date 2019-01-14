@@ -213,7 +213,7 @@
     .nameTitle {
       /*max-width: 68vw;*/
       text-align: center;
-      font-size: 3rem;
+      font-size: 4rem;
       margin-bottom: 0;
       margin-top: 0;
       font-family: "Permanent Marker";
@@ -341,10 +341,14 @@
                 <div id="Level">
                   <div
                     style="display:flex;justify-content:center;
+                                          background-color:red;
+                                          color: white;
+                                          font-size: 2rem;
+                                          margin: 1rem;
                                          align-items:center;
                                          flex-direction: column;
-                                         height:15vmin;border-radius: 50%;
-                                         width:15vmin;
+                                         height:20vmin;border-radius: 50%;
+                                         width:20vmin;
                                          border: 3px dashed black;"
                   >
                     <div>Level</div>
@@ -353,7 +357,7 @@
                 </div>
                 <!-- End Circle with Level (dashed)-->
 
-                <div style="display:flex; flex-direction: column">
+                <div style="display:flex; flex-direction: column;margin: 2rem;">
                   <div if.bind="!editingChildName" click.trigger="EditMode()">
                     <span class="nameTitle">${child.childName}</span>
                   </div>

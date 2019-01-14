@@ -3,6 +3,6 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "html.suggest.angular1": false,
   "html.suggest.ionic": false,
-  "appService.defaultWebAppToDeploy": "/subscriptions/ce2b00d4-956a-406a-9cb5-79a8ccec30f9/resourceGroups/appsvc_rg_linux_centralus/providers/Microsoft.Web/sites/LH2",
-  "appService.deploySubpath": ""
+  "appService.deploySubpath": "dist",
+  "appService.defaultWebAppToDeploy": "/subscriptions/ce2b00d4-956a-406a-9cb5-79a8ccec30f9/resourceGroups/MyFreeSites/providers/Microsoft.Web/sites/LittleHeroes"
 }

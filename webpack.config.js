@@ -22,7 +22,7 @@ const when = (condition, config, negativeConfig) =>
   condition ? ensureArray(config) : ensureArray(negativeConfig);
 
 // primary config:
-const title = "Aurelia Navigation Skeleton";
+const title = "Little Heroes";
 const outDir = path.resolve(__dirname, project.platform.output);
 const srcDir = path.resolve(__dirname, "src");
 const nodeModulesDir = path.resolve(__dirname, "node_modules");
@@ -75,10 +75,10 @@ module.exports = ({
       hidePathInfo: true, // prevents the path from being used in the filename when using maxSize
       chunks: "initial",
       // sizes are compared against source before minification
-      maxInitialRequests: Infinity, // Default is 3, make this unlimited if using HTTP/2
-      maxAsyncRequests: Infinity, // Default is 5, make this unlimited if using HTTP/2
-      minSize: 10000, // chunk is only created if it would be bigger than minSize, adjust as required
-      maxSize: 40000, // splits chunks if bigger than 40k, adjust as required (maxSize added in webpack v4.15)
+      maxInitialRequests: 3, // Default is 3, make this unlimited if using HTTP/2
+      maxAsyncRequests: 5, // Default is 5, make this unlimited if using HTTP/2
+      minSize: 100000, // chunk is only created if it would be bigger than minSize, adjust as required
+      maxSize: 400000, // splits chunks if bigger than 40k, adjust as required (maxSize added in webpack v4.15)
       cacheGroups: {
         default: false, // Disable the built-in groups default & vendors (vendors is redefined below)
         // You can insert additional cacheGroup entries here if you want to split out specific modules
@@ -209,7 +209,7 @@ module.exports = ({
       },
       // embed small images and fonts as Data Urls and larger ones as files:
       {
-        test: /\.(png|gif|jpg|cur)$/i,
+        test: /\.(png|webp|gif|jpg|cur)$/i,
         loader: "url-loader",
         options: { limit: 8192, publicPath: "../" }
       },

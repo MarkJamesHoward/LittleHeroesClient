@@ -4,8 +4,11 @@ if (workbox) {
   console.log(`Boo! Workbox didn't load 😬`);
 }
 
+workbox.skipWaiting();
+workbox.clientsClaim();
+
 self.addEventListener("push", function(event) {
-  console.log("[Service Worker] Push Received.");
+  console.log("[Service Worker] Push Received2.");
   console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
 
   const title = "LittleHeroes";
