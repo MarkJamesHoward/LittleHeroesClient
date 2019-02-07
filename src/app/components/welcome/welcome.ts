@@ -68,6 +68,10 @@ export class Welcome {
     this.router.navigate("notifications");
   }
 
+  QuickStart() {
+    this.router.navigate("QuickStart");
+  }
+
   // public async GetParentDetails() {
   //   var result = await this.http.fetch(
   //     `${DNS}/api/Parents/GetParentDetails`,

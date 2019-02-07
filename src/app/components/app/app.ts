@@ -124,6 +124,14 @@ export class App {
         moduleId: PLATFORM.moduleName("../register/register"),
         nav: true,
         title: "Register"
+      },
+      {
+        route: ["quickstart"],
+        name: "quickstart",
+        settings: { icon: "" },
+        moduleId: PLATFORM.moduleName("../quickstart/quickstart"),
+        nav: true,
+        title: "QuickStart"
       }
     ]);
 

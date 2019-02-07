@@ -1,3 +1,4 @@
+import { json } from 'aurelia-fetch-client';
 import "@polymer/paper-button";
 import "@polymer/paper-input/paper-input.js";
 import "@polymer/paper-icon-button";
@@ -12,9 +13,11 @@ export class login {
   private myusername: string;
   private mypassword: string;
   private router: Router;
+  private loginFailed: boolean;
 
   constructor(Router: Router) {
     this.router = Router;
+    this.loginFailed = false;
   }
 
   Register() {
@@ -43,12 +46,18 @@ export class login {
           console.log(response);
           //Now let's navigate to the view of hereos
           this.router.navigate("children");
+          this.loginFailed = false;
         } else {
+          this.loginFailed = true;
+          setTimeout(() => {
+            this.loginFailed = false;
+          }, 3000)
           console.log("response was not ok");
         }
       })
       .catch(e => {
         console.log("failed to login");
+        this.loginFailed = true;
       });
   }
 }

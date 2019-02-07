@@ -21,7 +21,7 @@
     "aurelia-fetch-client": "^1.7.0",
     "aurelia-polyfills": "^1.3.0",
     "flubber": "^0.4.2",
-    "lit-element": "^2.0.0-rc.2",
+    "lit-element": "^2.0.1",
     "popmotion": "^8.4.0"
   },
   "peerDependencies": {},

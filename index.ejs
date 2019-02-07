@@ -4,19 +4,24 @@
     <meta charset="utf-8" />
     <title><%- htmlWebpackPlugin.options.metadata.title %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#317EFB" />
+    <meta
+      name="Description"
+      content="Manage rewards for your kids based on their good behaviour"
+    />
     <base href="<%- htmlWebpackPlugin.options.metadata.baseUrl2 %>" />
-    <link rel="manifest" href="manifest.json" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Fredoka+One"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Gochi+Hand"
+      rel="stylesheet"
+    />
+    <link rel="manifest" href="/manifest.json" />
     <!-- imported CSS are concatenated and added automatically -->
   </head>
   <body aurelia-app="main"></body>
-
-  <script>
-    function test() {
-      var node = document.querySelector("#papertest");
-      console.log(node.value);
-      console.log(node);
-    }
-  </script>
 
   <script>
     if ("serviceWorker" in navigator) {

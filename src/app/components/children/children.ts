@@ -2,6 +2,8 @@ import { LitElement, html, property, customElement } from "lit-element";
 import { GestureEventListeners } from "@polymer/polymer/lib/mixins/gesture-event-listeners";
 import * as Gestures from "@polymer/polymer/lib/utils/gestures";
 import { tween, styler, easing } from "popmotion";
+
+//@ts-ignore
 import { interpolate } from "flubber";
 
 import { HttpClient } from "aurelia-fetch-client";
@@ -49,6 +51,13 @@ export class Home {
   public syncPending: boolean = false;
   public offline: boolean = false;
   public usingRewardInProgress: boolean = false;
+  private shakePoints: boolean = false;
+  private showBonusBall: boolean = false;
+  private showBonusSquare: boolean = false;
+  private bonusSquareClicked: boolean = false;
+  private bonusBallClicked: boolean = false;
+  private showBonusTimeIntro: boolean = false;
+  private BonusCountdown: number = 5;
 
   Home() {
     console.log("home");
@@ -440,7 +449,53 @@ export class Home {
     this.combineAdds(child, 10);
   }
 
+  public async AddBonusPointBall(child: BrowniePoints, amount: number) {
+    this.bonusBallClicked = true;
+    console.log("test");
+    this.combineAdds(child, amount);
+  }
+  public async AddBonusPointSquare(child: BrowniePoints, amount: number) {
+    this.bonusSquareClicked = true;
+    console.log("test");
+    this.combineAdds(child, amount);
+  }
+
   public combineAdds(child: BrowniePoints, amount: number) {
+    console.log("do the shakey thing!");
+    this.shakePoints = true;
+    setTimeout(() => {
+      this.shakePoints = false;
+    }, 2000);
+
+    if (
+      !this.showBonusTimeIntro &&
+      !(this.showBonusBall || this.showBonusSquare) &&
+      child.pendingAdds >= 10
+    ) {
+      this.showBonusTimeIntro = true;
+      let countdown = setInterval(() => {
+        console.log("decrement timer");
+        this.BonusCountdown--;
+        if (this.BonusCountdown === 0) {
+          console.log("clearing timer");
+          clearInterval(countdown);
+          this.BonusCountdown = 5;
+          this.showBonusTimeIntro = false;
+        }
+      }, 1000);
+
+      if (!(this.showBonusBall || this.showBonusSquare)) {
+        console.log("show ball and square");
+        this.showBonusBall = true;
+        this.showBonusSquare = true;
+
+        setTimeout(() => {
+          this.showBonusBall = false;
+          this.showBonusSquare = false;
+        }, 11000);
+      }
+    }
+
     if (amount < 0 && child.points + amount < 0) {
       console.log("Would be less than zero!");
       return;
@@ -454,7 +509,6 @@ export class Home {
     this.CheckIfLevelCompleted(child);
 
     if (child.pendingAdds == 0) {
-      console.log("starting timer");
       setTimeout(() => {
         console.log(
           "making call to server to update with points " + child.pendingAdds

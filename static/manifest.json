@@ -1,5 +1,5 @@
 {
-  "short_name": "Little Heroes",
+  "short_name": "LHeroes",
   "name": "Little Heroes ",
   "icons": [
     {
@@ -23,7 +23,7 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "https://www.littleheroes.azurewebsites.net/",
+  "start_url": "https://littleheroes.azurewebsites.net/",
   "background_color": "#FF9600",
   "display": "standalone",
   "theme_color": "#FF9600"

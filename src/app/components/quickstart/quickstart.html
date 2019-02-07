@@ -1,0 +1,104 @@
+<template>
+  <style>
+    .NameAndDeleteButton {
+      display: flex;
+      width: 50vw;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.3rem;
+    }
+
+    .Myflex {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    input {
+      font-size: 3rem;
+    }
+
+    paper-button {
+      font-size: 2rem;
+      margin-top: 1rem;
+    }
+
+    .DeleteBtn {
+      font-size: 1.5rem;
+    }
+
+    .KidsFlex {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-size: 3rem;
+      margin-top: 5rem;
+    }
+
+    h3 {
+      text-align: center;
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 3rem;
+
+      font-size: 4rem;
+      font-family: "Fredoka One", cursive;
+    }
+
+    .WhiteText {
+      color: black;
+    }
+  </style>
+
+  <!--Error occurred-->
+  <div show.bind="displayError">
+    <div class="center">
+      <h2>${errorMessage}</h2>
+      <paper-button
+        class="btn btn-primary btn-lg "
+        click.trigger="CloseError()"
+      >
+        Close
+      </paper-button>
+    </div>
+  </div>
+
+  <div
+    class="Myflex orangeBackground WhiteText"
+    show.bind="!addingChildActivated"
+  >
+    <h1 class="title">You're all set</h1>
+    <h3>We've created two child accounts to get you started</h3>
+    <paper-button
+      style="background-color: blue; color: white"
+      raised
+      click.trigger="Start()"
+      >Let's Go!</paper-button
+    >
+    <h3>
+      You can edit their names right from the application page which we'll take
+      you to now:
+    </h3>
+
+    <h3>
+      If you need to add or remove a child then head over to the admin page
+      below at any time
+    </h3>
+
+    <paper-button raised click.trigger="AddRemove()">Add/Remove</paper-button>
+
+    <h3>Errm not sure why I'm here...</h3>
+    <paper-button raised click.trigger="Home()">Take me Home</paper-button>
+
+    <div show.bind="loading">
+      <span>Putting things together... just a moment ..</span>
+      <span class="glyphicon glyphicon-refresh wait"> </span>
+    </div>
+  </div>
+</template>

@@ -1,5 +1,13 @@
 <template>
+  <require from="../app/shake.css"></require>
   <style>
+
+    p, h1,h2,h3 {
+      max-width: 60ch;
+      text-align: center;
+      margin: auto;
+      user-select: none;
+    }
 
     paper-button {
       padding: 1rem;
@@ -102,129 +110,61 @@
       text-align: center;
     }
 
-    /* Wide layout: when the viewport width is bigger than 460px, layout
-      changes to a wide layout. */
-    @media (min-width: 460px) {
-      .toolbar-list {
-        display: block;
-      }
+    .container {
+      background-color: orange;
+      display: grid;
+      grid-template-areas:
+        "image"
+        "welcome"
+        "details"
+        "buttons";
+    }
 
-      .menu-btn {
-        display: none;
-      }
+    .image {
+      grid-area: image;
+      height: 40vh;
+      display: flex;
+      justify-content: center;
+    }
 
-      .main-content {
-        padding-top: 107px;
-      }
+    .whiteBackgroundArea {
+      background-color: white;
+      padding: 2rem 2rem 0 2rem;
+      grid-area: details;
+    }
 
-      /* The drawer button isn't shown in the wide layout, so we don't
-        need to offset the title */
-      [main-title] {
-        padding-right: 0px;
-      }
+    .welcomeTitle {
+      grid-area: welcome;
+    }
+
+    .buttons {
+      grid-area: buttons;
     }
   </style>
 
-  <!-- <paper-toolbar>
-    <paper-icon-button
-      slot="top"
-      icon="menu"
-      on-tap="(menuAction)"
-    ></paper-icon-button>
-    <div slot="top" class="title">Little Heroes</div>
-    <paper-icon-button
-      slot="top"
-      icon="more-vert"
-      on-tap="(moreAction)"
-    ></paper-icon-button>
-  </paper-toolbar> -->
-
-  <!-- <nav id="MainNav" class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <div class="navbar-brand">
-      <div
-        style="display:flex;justify-content:center;align-items:center;color:orange"
-      >
-        <a class="nav-link" href="/" style="text-decoration:none">
-          <img
-            src="../../../../images/superhero.png"
-            style="width:30px;"
-            alt="Alternate Text"
-          />
-        </a>
-      </div>
+  <div class="container">
+    <div class="image">
+      <img
+        height="100%"
+        style="object-fit: contain"
+        src="../../../../images/superhero.png"
+        alt="Alt Text!"
+      />
     </div>
 
-    <!-- Toggler/collapsibe Button -->
-  <!-- <div class="collapse navbar-collapse" id="collapsibleNavbar">
-      <div class="navbar-nav">
-        <a class="nav-link nav-item" href="/Welcome">Home4</a>
-        <a class="nav-link nav-item" href="/Children">Heroes</a>
+    <div class="welcomeTitle">
+      <div style="text-align:center;padding: 0 2rem 0 2rem">
+        <h1 style="margin-top:1rem">Welcome to LittleHeroes</h1>
 
-        <div class="nav-item dropdown">
-          <a
-            href="#"
-            class="nav-link dropdown-toggle"
-            id="navbardrop"
-            data-toggle="dropdown"
-            >Admin<span class="caret"></span
-          ></a>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="/Notifications"
-              >Enable Notifications</a
-            >
-            <a class="dropdown-item" href="/ManageParents">Manage Parents</a>
-            <a class="dropdown-item" href="/ManageHeroes">Manage Heroes</a>
-          </div>
-        </div>
-      </div>
+        <p style="text-align:center">
+          Start rewarding your kids for good behaviour today! Keep them engaged
+          with customizable avatars and monster pets. Invite Grandparents and
+          other carers so they can award points. Receive updates when points are
+          awarded by any members of the family.
+        </p>
 
-      <div class="navbar-nav ml-auto navbar-text" style="margin-right:10px">
-        <div
-          if.bind="signedIn"
-          style="display:flex;flex-direction:column;align-items:flex-end;justify-content:center"
-        >
-          <span style="font-size:0.6rem">Welcome back! ${signedInAs}</span>
-          <button
-            style="margin-left:1rem;font-size: 0.7rem"
-            class="btn btn-sm btn-outline-secondary"
-            click.delegate="Logout()"
-          >
-            Logout
-          </button>
-        </div>
-        <div if.bind="!signedIn">
-          <button
-            style="font-size:0.6rem"
-            class="btn btn-sm btn-outline-secondary"
-            click.delegate="Login()"
-          >
-            Login
-          </button>
-        </div>
-      </div>
-    </div>
-  </nav> -->
-
-
-    <div class="row" style="background-color:orange">
-      <div class="col-md-6">
-        <div style="display:flex;justify-content:center;margin-top:2rem">
-            <img src="../../../../images/superhero.png" alt="Alt Text!">
-        </div>
-      </div>
-      <div>
-        <div style="text-align:center;padding: 0 2rem 0 2rem">
-          <h1 style="margin-top:2rem">Welcome to LittleHeroes</h1>
-
-          <p style="text-align:center">
-            Start rewarding your kids for good behaviour today! Keep them
-            engaged with customizable avatars and monster pets. Invite
-            Grandparents and other carers so they can award points. Receive
-            updates when points are awarded by any members of the family.
-          </p>
-
-          <div show.bind="!loading">
-            <!-- <div show.bind="!signedIn && !offline">
+        <div show.bind="!loading">
+          <!-- <div show.bind="!signedIn && !offline">
               <paper-button
                 style="margin-top:1rem"
                 click.delegate="Signup()"
@@ -234,58 +174,65 @@
               </paper-button>
             </div> -->
 
-            <div show.bind="(!signedIn && !offline) || dev">
-              <paper-button
-                style="margin-top:1rem;background-color:blue; color: white"
-                click.trigger="Login()"
-                class="btn btn-primary btn-lg"
-              >
-                Let's Start!
-              </paper-button>
-            </div>
-
-            <div show.bind="(signedIn && !offline) || dev">
-              <div style="margin-bottom: 1rem;position:absolute; top:0;">
-                <div>Welcome back</div>
-                <span style="color:red">${username}</span>
-              </div>
-              <paper-button
-                click.trigger="ViewHeroTastic()"
-                style="margin-top:1rem;margin-bottom: 2rem; background-color: blue; color: white"
-                class="btn btn-primary btn-lg"
-              >
-                View Heroes
-              </paper-button>
-            </div>
-
-            <div show.bind="offline">
-              <paper-button
-                click.trigger="CheckOnlineOrNot()"
-                style="margin-top:1rem"
-                class="btn btn-primary btn-lg"
-              >
-                Offline - click to try again
-              </paper-button>
-              <h4 if.bind="OnlineCheckFailed">Still no luck afraid...</h4>
-            </div>
-          </div>
-          <div show.bind="loading">
-            <div
-              class="GlobalButtonTextSize"
-              style="display:flex;justify-content:center;align-items:center"
+          <div show.bind="(!signedIn && !offline) || dev">
+            <paper-button
+              style="margin-top:1rem;background-color:blue; color: white"
+              click.trigger="Login()"
             >
-              <span
-                style="margin-right:0.5rem;"
-                class="glyphicon glyphicon-refresh wait"
-              ></span>
-              <span>Connecting...</span>
+              Login or Register
+            </paper-button>
+          </div>
+
+          <div show.bind="(!signedIn && !offline) || dev">
+            <paper-button
+              style="margin-top:1rem;background-color:blue; color: white"
+              click.trigger="QuickStart()"
+            >
+              QuickStart Option
+            </paper-button>
+          </div>
+
+          <div show.bind="(signedIn && !offline) || dev">
+            <div style="margin-bottom: 1rem;position:absolute; top:0;">
+              <div>Welcome back</div>
+              <span style="color:red">${username}</span>
             </div>
+            <paper-button
+              click.trigger="ViewHeroTastic()"
+              style="margin-top:1rem;margin-bottom: 2rem; background-color: blue; color: white"
+              class="btn btn-primary btn-lg"
+            >
+              View Heroes
+            </paper-button>
+          </div>
+
+          <div show.bind="offline">
+            <paper-button
+              click.trigger="CheckOnlineOrNot()"
+              style="margin-top:1rem"
+              class="btn btn-primary btn-lg"
+            >
+              Offline - click to try again
+            </paper-button>
+            <h4 if.bind="OnlineCheckFailed">Still no luck afraid...</h4>
+          </div>
+        </div>
+        <div show.bind="loading">
+          <div
+            class="GlobalButtonTextSize"
+            style="display:flex;justify-content:center;align-items:center"
+          >
+            <span
+              style="margin-right:0.5rem;"
+              class="glyphicon glyphicon-refresh wait"
+            ></span>
+            <span>Connecting...</span>
           </div>
         </div>
       </div>
     </div>
 
-    <div style="background-color:white;padding: 2rem 2rem 0 2rem;">
+    <div class="whiteBackgroundArea">
       <div style="margin-bottom:2rem;text-align:center">
         <p style="text-align:center">
           Each time 100 points is reached the reward is activated and can be
@@ -336,7 +283,7 @@
       </div>
     </div>
 
-    <div class="row" style="background-color:orange;padding-bottom: 2rem">
+    <div class="buttons">
       <div>
         <div show.bind="(signedIn && !offline) || dev">
           <paper-button
