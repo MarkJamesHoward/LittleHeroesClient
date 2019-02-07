@@ -1,4 +1,0 @@
-DojoPoints:ClientId 		14f53bbf-9a7c-429f-9585-25761a1c5dd4
-DojoPoints:ClientSecret 	+iRY9UmzbSYZWkgOHDMswCOtEjQ0rvRNS82bSbTpxVs=
-DojoPoints:SecretUri 		https://dojopointskeyvault.vault.azure.net/
-SendGridAPIKey			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
