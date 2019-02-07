@@ -27,6 +27,7 @@ Thumbs.db
 # Dependencies
 node_modules
 dist
+backup
 
 # Compiled files
 /scripts
