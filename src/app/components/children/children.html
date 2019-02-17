@@ -7,8 +7,8 @@
   <style>
 
     .BonusOverlayActive{
-      background-color: purple;
-      opacity: 0.5;
+      background-color: orange;
+      opacity: 0.9;
       z-index: 1000;
     }
 
@@ -28,7 +28,7 @@
       font-family: "Fredoka One", cursive;
     }
 
-    .ball {
+    .ball, .ball2 {
       width: 5rem;
       height: 5rem;
       position: absolute;
@@ -46,6 +46,11 @@
       z-index: 1000;
       user-select: none;
       border: 0.2rem solid black;
+    }
+
+    .ball2 {
+      animation: AnimateBall2 4s 1;
+      animation-delay: 5s;
     }
 
     .square {
@@ -67,9 +72,32 @@
       border: 0.2rem solid black;
     }
 
+    @keyframes AnimateBall2 {
+      5% {
+        opacity: 0.8;
+        transform: rotate(359deg) scale(1.5);
+      }
+      29% {
+        opacity: 1;
+      }
+      30% {
+        transform:  translateX(40vw) scale(1) rotate(5deg);
+        }
+        70% {
+          transform: translateY(40vh) scale(1) rotate(-5deg);
+        }
+        90%{
+          opacity: 1;
+          transform: scale(1) rotate(10deg);
+        }
+        100% {
+          opacity: 0.2;
+          transform: scale(0.2) rotate(359deg);
+        }
+    }
     @keyframes AnimateBall {
       5% {
-        opacity: 0.2;
+        opacity: 0.8;
         transform: rotate(359deg) scale(1.5);
       }
       29% {
@@ -93,7 +121,7 @@
 
     @keyframes AnimateSquare {
       5% {
-        opacity: 0.2;
+        opacity: 0.8;
         transform: rotate(359deg) scale(1.5);
       }
       30% {
@@ -371,7 +399,7 @@
   </style>
 
   <div show.bind="errorHadOccurred">
-    <div class="center">
+    <div class="center" style="height: 100vh; width: 100vw">
       <h2>Oops something went wrong! ${errorMessage}</h2>
       <paper-button click.trigger="CloseError()">Close</paper-button>
     </div>
@@ -468,9 +496,6 @@
               <div class="BonusPointsTime" if.bind="showBonusTimeIntro">
                 <div>Bonus Time in</div> 
                 <div>${BonusCountdown}</div>
-                <paper-button raised>
-                  I'm ready now!
-                </paper-button>
               </div>
 
                 <div click.trigger="AddBonusPointBall(child, 1)" if.bind="showBonusBall" class="${showBonusBall == true ? 'ball' : ''}">
@@ -479,6 +504,10 @@
     
                 <div style="font-family: Gochi Hand; font-size: 3rem;" click.trigger="AddBonusPointSquare(child, 2)" if.bind="showBonusSquare" class="${showBonusSquare == true ? 'square' : ''}">
                   <span style="font-family: Gochi Hand; font-size: 3rem;">2</span>
+                </div>   
+
+                <div style="font-family: Gochi Hand; font-size: 3rem;" click.trigger="AddBonusPointBall2(child, 1)" if.bind="showBonusBall2" class="${showBonusBall2 == true ? 'ball2' : ''}">
+                  <span style="font-family: Gochi Hand; font-size: 3rem;">1</span>
                 </div>   
 
             </div>
@@ -754,6 +783,7 @@
                         <img draggable="false" class="EmojiButtons" style="width:3rem; height:3rem" click.trigger="incrementCounter(child)" src="../../../../images/1.png" alt="">
                         <img draggable="false" class="EmojiButtons" style="width:3rem; height:3rem" click.trigger="DeductCounter(child)" src="../../../../images/negative.png" alt="">
                         <img draggable="false" class="EmojiButtons" style="width:3rem; height:3rem"  click.trigger="ViewPet(child)" src="../../../../images/pet.png" alt="">
+                        <img alt="Achievements" draggable="false" class="EmojiButtons" style="width:3rem; height:3rem"  click.trigger="ViewAchievements(child)" src="../../../../images/pet.png" alt="">
                         <img draggable="false" if.bind="!showingAvailableRewards && child.availableRewards.length > 0" class="EmojiButtons" style="width:3rem; height:3rem" click.trigger="ViewAvailableRewards()" src="../../../../images/rewards.png" alt="">
                       
                         <!-- <paper-icon-button

@@ -15,6 +15,7 @@
     "@polymer/paper-checkbox": "^3.1.0",
     "@polymer/paper-icon-button": "^3.0.1",
     "@polymer/paper-input": "^3.0.1",
+    "@polymer/paper-progress": "^3.0.1",
     "@polymer/paper-toolbar": "^3.0.1",
     "aurelia-animator-css": "^1.0.4",
     "aurelia-bootstrapper": "^2.3.0",

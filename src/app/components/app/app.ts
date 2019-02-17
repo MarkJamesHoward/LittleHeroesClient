@@ -1,6 +1,7 @@
 import { Aurelia, PLATFORM, inject } from "aurelia-framework";
 import { Router, RouterConfiguration } from "aurelia-router";
 import { HttpClient } from "aurelia-fetch-client";
+import {dev, DNS} from '../global';
 
 interface SignedIn {
   signedIn: boolean;
@@ -13,13 +14,12 @@ export class App {
   public signedIn: boolean = false;
   public signedInAs: string;
   http: HttpClient;
-  public dev: boolean = false;
-  private DNS: string = "https://dojopoints.azurewebsites.net";
+
 
   constructor(http: HttpClient) {
     this.http = http;
 
-    if (this.dev) {
+    if (dev) {
       this.signedIn = true;
     } else {
       // http
@@ -132,6 +132,14 @@ export class App {
         moduleId: PLATFORM.moduleName("../quickstart/quickstart"),
         nav: true,
         title: "QuickStart"
+      },
+      {
+        route: ["achievements/:id"],
+        name: "achievements",
+        settings: { icon: "" },
+        moduleId: PLATFORM.moduleName("../achievements/achievements"),
+        nav: false,
+        title: "Achievements"
       }
     ]);
 

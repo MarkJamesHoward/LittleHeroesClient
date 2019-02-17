@@ -23,7 +23,7 @@ import "monster-creator";
 import "./circle.scss";
 import "./pulse.scss";
 import { setTimeout } from "timers";
-import { DNS, dev } from "../global";
+import { DNS, dev, SetBrowniePoints } from "../global";
 
 @inject(HttpClient, Router)
 export class Home {
@@ -52,10 +52,12 @@ export class Home {
   public offline: boolean = false;
   public usingRewardInProgress: boolean = false;
   private shakePoints: boolean = false;
-  private showBonusBall: boolean = false;
   private showBonusSquare: boolean = false;
+  private showBonusBall: boolean = false;
+  private showBonusBall2: boolean = false;
   private bonusSquareClicked: boolean = false;
   private bonusBallClicked: boolean = false;
+  private bonusBall2Clicked: boolean = false;
   private showBonusTimeIntro: boolean = false;
   private BonusCountdown: number = 5;
 
@@ -337,6 +339,8 @@ export class Home {
       console.log(myimport);
       this.browniePoints = myimport.data;
       this.currentCount = 3; //myimport.length;
+      this.loading = false;
+      SetBrowniePoints(this.browniePoints);
     } else {
       var res2 = await this.http.fetch(`${DNS}/api/Children/all`, {
         method: "get",
@@ -345,6 +349,10 @@ export class Home {
 
       if (res2.ok) {
         this.browniePoints = await res2.json();
+        SetBrowniePoints(this.browniePoints);
+        console.log("set globalbrownie points");
+        console.log(this.browniePoints);
+
         this.currentCount = Object.keys(this.browniePoints).length;
       } else {
         this.DisplayError("Unable to retrieve children");
@@ -363,6 +371,7 @@ export class Home {
   public CheckIfLevelCompleted(child) {
     if (child.points >= child.pointsNeeded) {
       this.levelledUp = true;
+      ++child.level;
       let excess = child.points - child.pointsNeeded;
 
       console.log("leveledup");
@@ -396,6 +405,10 @@ export class Home {
   public ViewAvailableRewards() {
     console.log("show rewards");
     this.showingAvailableRewards = true;
+  }
+
+  public ViewAchievements(child: BrowniePoints) {
+    this.router.navigate(`achievements/${child.id}`);
   }
 
   private ConfigureDisplay(data: BrowniePoints[]) {
@@ -453,11 +466,19 @@ export class Home {
     this.bonusBallClicked = true;
     console.log("test");
     this.combineAdds(child, amount);
+    this.showBonusBall = false;
+  }
+  public async AddBonusPointBall2(child: BrowniePoints, amount: number) {
+    this.bonusBall2Clicked = true;
+    console.log("bonus ball2 clicked");
+    this.combineAdds(child, amount);
+    this.showBonusBall2 = false;
   }
   public async AddBonusPointSquare(child: BrowniePoints, amount: number) {
     this.bonusSquareClicked = true;
     console.log("test");
     this.combineAdds(child, amount);
+    this.showBonusSquare = false;
   }
 
   public combineAdds(child: BrowniePoints, amount: number) {
@@ -467,9 +488,11 @@ export class Home {
       this.shakePoints = false;
     }, 2000);
 
+    this.CheckIfAchievementGained(child, amount);
+
     if (
       !this.showBonusTimeIntro &&
-      !(this.showBonusBall || this.showBonusSquare) &&
+      !(this.showBonusBall || this.showBonusSquare || this.showBonusBall2) &&
       child.pendingAdds >= 10
     ) {
       this.showBonusTimeIntro = true;
@@ -484,14 +507,18 @@ export class Home {
         }
       }, 1000);
 
-      if (!(this.showBonusBall || this.showBonusSquare)) {
+      if (
+        !(this.showBonusBall || this.showBonusSquare || this.showBonusBall2)
+      ) {
         console.log("show ball and square");
         this.showBonusBall = true;
         this.showBonusSquare = true;
+        this.showBonusBall2 = true;
 
         setTimeout(() => {
           this.showBonusBall = false;
           this.showBonusSquare = false;
+          this.showBonusBall2 = false;
         }, 11000);
       }
     }
@@ -524,6 +551,17 @@ export class Home {
     child.pendingAdds += amount;
   }
 
+  CheckIfAchievementGained(child: BrowniePoints, amount: number) {
+
+    // Check for Super Swat completion
+    if (child.pendingAdds >= 30) {
+      let achievement = child.achievements.find(item => item.achievementID === 1)
+      achievement.progress = 100;
+      child.achievementsTotal = 1;
+      console.log('Super Swat achievement earned!')
+    }
+
+  }
   public async incrementCounterInternal(child: BrowniePoints, amount: number) {
     try {
       //this.DisplayWaitingIcon();

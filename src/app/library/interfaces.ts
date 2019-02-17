@@ -22,6 +22,19 @@ export interface SignedIn {
   signedInAs: string;
 }
 
+export interface IMyAchievements {
+  achievementID: number;
+  ID: number;
+  progress: number;
+}
+
+export interface IAchievements {
+  ID: number; 
+  title: string;
+  description: string;
+  progress: number;
+}
+
 export interface BrowniePoints {
   id: number;
   childName: string;
@@ -35,6 +48,8 @@ export interface BrowniePoints {
   pet: Pet;
   avatar: string;
   removeForAnimation: boolean;
+  achievements: Array<IMyAchievements>;
+  achievementsTotal: number;
 }
 
 export interface Parent {

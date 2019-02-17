@@ -56,8 +56,11 @@ export class login {
         }
       })
       .catch(e => {
-        console.log("failed to login");
+        console.log("failed to login - no connection");
         this.loginFailed = true;
+        setTimeout(() => {
+          this.loginFailed = false;
+        }, 3000)
       });
   }
 }

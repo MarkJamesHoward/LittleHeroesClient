@@ -7,7 +7,7 @@ export let data = [
     removeForAnimation: false,
     avatar: "dist/53222aba52433ceaa5bb0e26aa761a82.png",
     parentID: "028a6755-d35a-43d6-915a-a873bb04649e",
-    childName: "bubby",
+    childName: "test bubby",
     points: 50,
     pendingAdds: 0,
     level: 23,
@@ -31,13 +31,18 @@ export let data = [
       selectedeyey: 27,
       selectedmouthx: 47,
       selectedmouthy: 82
-    }
+    },
+    achievements: [
+      {ID: 1, achievementID: 1, progress: 10},
+      {ID: 2, achievementID: 2, progress: 100}
+    ],
+    achievementsTotal: 3
   },
   {
     id: 4,
     avatar: "dist/5c4353e48edaac49b36256c6211b8f7a.png",
     parentID: "028a6755-d35a-43d6-915a-a873bb04649e",
-    childName: "Sophia",
+    childName: "test Phia",
     signedIn: true,
     signedInAs: "test",
     presenting: false,
@@ -79,7 +84,11 @@ export let data = [
       selectedeyey: 48,
       selectedmouthx: 50,
       selectedmouthy: 77
-    }
+    },
+    achievements: [
+      {ID: 1, achievementID: 1, progress: 10}
+    ],
+    achievementsTotal: 2,
   },
   {
     id: 52,
@@ -127,6 +136,10 @@ export let data = [
       selectedeyey: 0,
       selectedmouthx: 0,
       selectedmouthy: 0
-    }
+    },
+    achievements: [
+      {ID: 1, achievementID: 1, progress: 10}
+    ],
+    achievementsTotal: 2
   }
 ];

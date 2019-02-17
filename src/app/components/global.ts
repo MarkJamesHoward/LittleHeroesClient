@@ -1,6 +1,7 @@
-let DNS: string = "https://dojopoints.azurewebsites.net";
-//let DNS: string = "http://localhost:53067";
-let dev: boolean = false;
+import { BrowniePoints } from './../library/interfaces';
+//let DNS: string = "https://dojopoints.azurewebsites.net";
+let DNS: string = "http://localhost:53067";
+let dev: boolean = true;
 
 interface LoadData {
   firstLoad;
@@ -8,4 +9,15 @@ interface LoadData {
 
 let FirstLoadOData: LoadData = { firstLoad: true };
 
-export { DNS, dev, FirstLoadOData };
+let globalBrowniePoints:  Array<BrowniePoints>;
+
+function GetBrowniePoints() {
+  return globalBrowniePoints;
+}
+
+function 
+SetBrowniePoints(bp) {
+  globalBrowniePoints = bp;  
+}
+
+export { DNS, dev, FirstLoadOData , GetBrowniePoints, SetBrowniePoints};

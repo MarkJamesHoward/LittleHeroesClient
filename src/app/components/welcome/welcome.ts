@@ -24,7 +24,14 @@ export class Welcome {
   public errorHadOccurred: boolean = false;
 
   public async AmISignedIn() {
-    if (dev) return true;
+    if (dev) {
+        this.signedIn = true;
+        this.signedInAs = 'DEV'
+        this.username = 'DEV'
+        this.offline = false;
+        this.loading = false;
+        return true;
+      }
 
     fetch(`${DNS}/api/children/all`, {
       method: "get",

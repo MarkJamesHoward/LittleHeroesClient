@@ -4,7 +4,8 @@ import { HttpClient } from "aurelia-fetch-client";
 import {
   Parent,
   BrowniePoints,
-  IAvailableRewards
+  IAvailableRewards,
+  IMyAchievements
 } from "../../library/interfaces";
 import { Router } from "aurelia-router";
 import "@polymer/paper-button";
@@ -36,6 +37,10 @@ export class Pet {
         level: 23,
         pointsNeeded: 100,
         reward: "Forever computers",
+        achievements: [
+          {ID: 1, achievementID: 1, progress: 10}
+        ],
+        achievementsTotal: 2,
         availableRewards: [
           {
             id: 223,
