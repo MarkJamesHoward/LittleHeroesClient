@@ -30,7 +30,7 @@ export let data = [
       selectedeyex: 47,
       selectedeyey: 27,
       selectedmouthx: 47,
-      selectedmouthy: 82
+      selectedmouthy: 39
     },
     achievements: [
       {ID: 1, achievementID: 1, progress: 10},
@@ -77,16 +77,17 @@ export let data = [
     ],
     pet: {
       id: 2,
-      eyes: 1,
-      mouth: 1,
+      eyes: 3,
+      mouth: 2,
       silhouette: 2,
-      selectedeyex: 44,
-      selectedeyey: 48,
-      selectedmouthx: 50,
-      selectedmouthy: 77
+      selectedeyex: 47,
+      selectedeyey: 27,
+      selectedmouthx: 47,
+      selectedmouthy: 43
     },
     achievements: [
-      {ID: 1, achievementID: 1, progress: 10}
+      {ID: 1, achievementID: 1, progress: 10},
+      {ID: 2, achievementID: 2, progress: 100}
     ],
     achievementsTotal: 2,
   },
@@ -131,11 +132,11 @@ export let data = [
       id: 4,
       eyes: 3,
       mouth: 2,
-      silhouette: 4,
-      selectedeyex: 0,
-      selectedeyey: 0,
-      selectedmouthx: 0,
-      selectedmouthy: 0
+      silhouette: 1,
+      selectedeyex: 47,
+      selectedeyey: 27,
+      selectedmouthx: 47,
+      selectedmouthy: 43
     },
     achievements: [
       {ID: 1, achievementID: 1, progress: 10}

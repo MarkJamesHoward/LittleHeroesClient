@@ -64,7 +64,10 @@
       </div>
 
       <div>
-        <paper-button click.trigger="Register()" raised>Register</paper-button>
+        <paper-button click.trigger="Register()" raised>
+          <span if.bind="!error">Register</span>
+          <span style="color: red;" if.bind="error">Failed to add user</span>
+        </paper-button>
       </div>
       <div>
         <paper-button click.trigger="Home()" raised>Return Home</paper-button>

@@ -1,5 +1,5 @@
 import { BrowniePoints } from './../library/interfaces';
-//let DNS: string = "https://dojopoints.azurewebsites.net";
+//let DNS: string = "https://dojopointstest.azurewebsites.net";
 let DNS: string = "http://localhost:53067";
 let dev: boolean = true;
 

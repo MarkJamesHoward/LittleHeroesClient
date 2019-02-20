@@ -10,7 +10,7 @@ import {
 import { Router } from "aurelia-router";
 import "@polymer/paper-button";
 import "monster-creator";
-import { DNS, dev } from "../global";
+import { DNS, dev, GetBrowniePoints, SetBrowniePoints } from "../global";
 
 @inject(HttpClient, Router)
 export class Pet {
@@ -18,6 +18,7 @@ export class Pet {
   http: HttpClient;
   child: BrowniePoints;
   childID: number;
+  browniePoints: Array<BrowniePoints>;
 
   HandledCharacterChange(e: any) {
     console.log("handled" + e.detail.kicked);
@@ -26,41 +27,9 @@ export class Pet {
   async GetChild(childID: number) {
     console.log(`${DNS}/api/Children/GetChild/${childID}`);
     if (dev) {
-      this.child = {
-        id: 3,
-        presenting: false,
-        removeForAnimation: false,
-        avatar: "53222aba52433ceaa5bb0e26aa761a82.png",
-        childName: "bubby",
-        points: 50,
-        pendingAdds: 0,
-        level: 23,
-        pointsNeeded: 100,
-        reward: "Forever computers",
-        achievements: [
-          {ID: 1, achievementID: 1, progress: 10}
-        ],
-        achievementsTotal: 2,
-        availableRewards: [
-          {
-            id: 223,
-            browniePointsID: 3,
-            reward: "Forever computers",
-            used: false,
-            beingConsumed: false
-          }
-        ],
-        pet: {
-          id: 1,
-          eyes: 2,
-          mouth: 2,
-          silhouette: 3,
-          selectedeyex: 47,
-          selectedeyey: 27,
-          selectedmouthx: 47,
-          selectedmouthy: 82
-        }
-      };
+      this.browniePoints = GetBrowniePoints();
+      this.child = this.browniePoints.find(item => item.id === childID)
+      console.log(`Child is now ${this.child}`)
     } else {
       var result = await this.http.fetch(
         `${DNS}/api/Children/GetChild/${childID}`,
@@ -93,6 +62,8 @@ export class Pet {
       this.child.pet.selectedmouthy = selectedmouthy;
       this.child.pet.selectedeyex = selectedeyex;
       this.child.pet.selectedeyey = selectedeyey;
+      SetBrowniePoints(this.browniePoints);
+
     } else {
       console.log(
         `${DNS}/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}`
@@ -110,8 +81,13 @@ export class Pet {
 
   activate(params: any) {
     console.log(`loading pet for ${params.id}`);
-    this.childID = params.id;
-    this.GetChild(this.childID);
+    console.log(params.id)
+    //this.childID = params.id;
+    //this.GetChild(this.childID);
+    this.browniePoints = GetBrowniePoints();
+    console.log(this.browniePoints)
+    this.child = this.browniePoints.find(item => item.id == params.id);
+    console.log(this.child)
   }
 
   constructor(http: any, Router: Router) {

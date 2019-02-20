@@ -12,6 +12,7 @@ export class Register {
   router: Router;
   addedNewUserOk: boolean = false;
   attemptedAddNewUser: boolean = false;
+  error: boolean = false;
   private myusername: string;
   private mypassword: string;
 
@@ -27,6 +28,8 @@ export class Register {
     let details = { email: this.myusername, password: this.mypassword };
     this.attemptedAddNewUser = false;
 
+    console.log(DNS);
+
     fetch(`${DNS}/api/auth/register`, {
       method: "post",
       headers: new Headers({
@@ -41,9 +44,19 @@ export class Register {
           this.addedNewUserOk = true;
           this.attemptedAddNewUser = false;
         }
+        else {
+          this.error = true;
+          setTimeout(() => { 
+            this.error = false;
+          }, 3000)
+        }
       })
       .catch(e => {
         this.attemptedAddNewUser = true;
+        this.error = true;
+        setTimeout(() => { 
+          this.error = false;
+        }, 3000)
         console.log("error adding new user");
       });
   }

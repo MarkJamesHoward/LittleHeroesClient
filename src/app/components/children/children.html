@@ -6,6 +6,12 @@
   
   <style>
 
+    .RewardItem {
+      background: brown;
+      border-radius: 1rem;
+      font-family: "Fredoka One", cursive;
+    }
+
     .BonusOverlayActive{
       background-color: orange;
       opacity: 0.9;
@@ -289,7 +295,7 @@
     }
 
     .back {
-      --background-color: darkorange;
+      background-color: darkorange;
       transform: rotateY(180deg);
       border-radius: 1rem;
     }
@@ -650,7 +656,7 @@
                     style="display:flex; flex-direction: column;margin: 1rem;align-items:flex-end"
                   >
                     <div if.bind="!editingChildName" click.trigger="EditMode()">
-                      <span style="user-select: none;" class="nameTitle">${child.childName}
+                      <span style="user-select: none;" class="nameTitle">${child.childName}</span>
                     </div>
                     <div class="points">
                       <div  class="${shakePoints == true ? 'shakeItem' : 'nothing'}">
@@ -711,12 +717,14 @@
                         repeat.for="availableReward of child.availableRewards"
                       >
                         <div
+                        class="RewardItem"
                           style="overflow: hidden;font-size:1.5rem;display:flex;justify-content:space-around;margin-top:0.6rem;"
                         >
                           <div class="availableRewardName" >
                             <span style="user-select: none">${availableReward.reward}</span>
                           </div>
                           <paper-button
+                          raised
                             style="font-size:1.5rem; user-select:none"
                             click.trigger="Use(availableReward, child)"
                           >
@@ -783,31 +791,9 @@
                         <img draggable="false" class="EmojiButtons" style="width:3rem; height:3rem" click.trigger="incrementCounter(child)" src="../../../../images/1.png" alt="">
                         <img draggable="false" class="EmojiButtons" style="width:3rem; height:3rem" click.trigger="DeductCounter(child)" src="../../../../images/negative.png" alt="">
                         <img draggable="false" class="EmojiButtons" style="width:3rem; height:3rem"  click.trigger="ViewPet(child)" src="../../../../images/pet.png" alt="">
-                        <img alt="Achievements" draggable="false" class="EmojiButtons" style="width:3rem; height:3rem"  click.trigger="ViewAchievements(child)" src="../../../../images/pet.png" alt="">
-                        <img draggable="false" if.bind="!showingAvailableRewards && child.availableRewards.length > 0" class="EmojiButtons" style="width:3rem; height:3rem" click.trigger="ViewAvailableRewards()" src="../../../../images/rewards.png" alt="">
+                        <img alt="Achievements" draggable="false" class="EmojiButtons" style="width:3rem; height:3rem"  click.trigger="ViewAchievements(child)" src="../../../../images/trophy.png" alt="">
+                        <img draggable="false" if.bind="child.availableRewards.length > 0" class="EmojiButtons" style="width:3rem; height:3rem" click.trigger="ViewAvailableRewards()" src="../../../../images/rewards.png" alt="">
                       
-                        <!-- <paper-icon-button
-                          click.trigger="ViewAvailableRewards()"
-                          title="Rewards"
-                          icon="shopping-cart"
-                          if.bind="!showingAvailableRewards && child.availableRewards.length > 0"
-                        >
-                        </paper-icon-button> -->
-
-                        <!-- <paper-icon-button
-                          icon="autorenew"
-                          class="DojoButton"
-                          click.trigger="CheckOnlineOrNot()"
-                        >
-                        </paper-icon-button> -->
-
-                        <!-- <paper-icon-button
-                          icon=""
-                          class="DojoButton"
-                          click.trigger="ViewPet(child)"
-                        >
-                        Pet
-                        </paper-icon-button> -->
                       </div>
                     </div>
                   </div>

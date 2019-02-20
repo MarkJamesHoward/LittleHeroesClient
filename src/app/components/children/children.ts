@@ -1,3 +1,4 @@
+import { AvailableRewards } from './../availableRewards/availableRewards';
 import { LitElement, html, property, customElement } from "lit-element";
 import { GestureEventListeners } from "@polymer/polymer/lib/mixins/gesture-event-listeners";
 import * as Gestures from "@polymer/polymer/lib/utils/gestures";
@@ -68,6 +69,7 @@ export class Home {
 
   ViewPet(child: BrowniePoints) {
     console.log("display pet " + child.childName);
+    SetBrowniePoints(this.browniePoints);
     this.router.navigate(`pet/${child.id}`);
   }
 
@@ -360,6 +362,10 @@ export class Home {
     }
   }
 
+  public CloseRewards() {
+    this.showingAvailableRewards = false;
+  }
+
   public CloseLevelUp() {
     this.levelledUp = false;
   }
@@ -403,8 +409,7 @@ export class Home {
   }
 
   public ViewAvailableRewards() {
-    console.log("show rewards");
-    this.showingAvailableRewards = true;
+    this.showingAvailableRewards = !this.showingAvailableRewards;
   }
 
   public ViewAchievements(child: BrowniePoints) {
@@ -430,6 +435,10 @@ export class Home {
       if (child.availableRewards[i].id === availableReward.id) {
         child.availableRewards.splice(i, 1);
         console.log(`removed ${i}`);
+      }
+
+      if (child.availableRewards.length == 0) {
+        this.showingAvailableRewards = false;
       }
     }
     this.http
