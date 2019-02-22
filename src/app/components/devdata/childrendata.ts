@@ -1,3 +1,20 @@
+
+export let achievements = [
+  {
+    ID: 1,
+    title: "Super Swat",
+    description: "Earn points on 5 consecutive days",
+    progress: 0
+  },
+  {
+    ID: 2,
+    title: "Mega Points",
+    description: "Earn 50 points in one day",
+    progress: 0
+  }
+  ];
+
+
 export let data = [
   {
     id: 3,
@@ -25,7 +42,7 @@ export let data = [
     pet: {
       id: 1,
       eyes: 2,
-      mouth: 2,
+      mouth: 1,
       silhouette: 3,
       selectedeyex: 47,
       selectedeyey: 27,
@@ -33,8 +50,8 @@ export let data = [
       selectedmouthy: 39
     },
     achievements: [
-      {ID: 1, achievementID: 1, progress: 10},
-      {ID: 2, achievementID: 2, progress: 100}
+      {ID: 1, achievementID: 1, progress: 0},
+      {ID: 2, achievementID: 2, progress: 50}
     ],
     achievementsTotal: 3
   },

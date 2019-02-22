@@ -1,5 +1,10 @@
 <template>
   <style>
+    paper-button  {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+
+    }
     * {
       padding: 0;
       margin: 0;
@@ -96,38 +101,27 @@
           src="../../../../images/eyes/eyes3.png"
         />
 
-        <img slot="MouthSlot1" src="../../../../images/mouths/mouth1.png" />
         <img slot="MouthSlot2" src="../../../../images/mouths/mouth2.png" />
         <img slot="MouthSlot3" src="../../../../images/mouths/mouth3.png" />
+        <img slot="MouthSlot1" src="../../../../images/mouths/mouth1.png" />
+
       </monster-creator>
     </div>
 
-    <div style="grid-area: main">
-      <!-- <h1 style="margin-top:0">${child.childName}</h1> -->
-      <div style="display: flex;justify-content: center;flex-grow:0;">
-        <img
-          src="../../../../images/createyourmonster.png"
-          style="object-fit:contain;width: 50vw"
-          alt="Create your monster"
-        />
-      </div>
-
-      <div style="display:flex;justify-content:center;margin-bottom: 1rem">
+    <div style="grid-area: main; height:97vh;">
+      
+      <div style="display:flex;height: 100%;flex-direction:row;justify-content:center; align-items: flex-end;margin-bottom: 1rem">
         <paper-button
           raised
-          style="margin-top:2rem;"
-          class="btn btn-primary"
-          click.trigger="SavePet(childID,child.pet.eyes, child.pet.mouth, child.pet.silhouette, child.pet.selectedmouthx, child.pet.selectedmouthy,child.pet.selectedeyex, child.pet.selectedeyey)"
+          click.trigger="SavePet(child.id,child.pet.eyes, child.pet.mouth, child.pet.silhouette, child.pet.selectedmouthx, child.pet.selectedmouthy,child.pet.selectedeyex, child.pet.selectedeyey)"
         >
-          Done
+          Accept
         </paper-button>
-        <!-- <paper-button
-          style="margin-top:2rem;margin-left:2rem"
-          <!-- class="btn btn-primary" 
+        <paper-button raised
           click.trigger="Back()"
         >
-          Back
-        </paper-button> -->
+          Cancel
+        </paper-button>
       </div>
     </div>
   </div>

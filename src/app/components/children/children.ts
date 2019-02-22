@@ -18,13 +18,15 @@ import { CssAnimator } from "aurelia-animator-css";
 import {
   SignedIn,
   BrowniePoints,
-  IAvailableRewards
+  IAvailableRewards,
+  IAchievements
 } from "../../library/interfaces";
 import "monster-creator";
 import "./circle.scss";
 import "./pulse.scss";
 import { setTimeout } from "timers";
 import { DNS, dev, SetBrowniePoints } from "../global";
+import { runInThisContext } from 'vm';
 
 @inject(HttpClient, Router)
 export class Home {
@@ -61,6 +63,7 @@ export class Home {
   private bonusBall2Clicked: boolean = false;
   private showBonusTimeIntro: boolean = false;
   private BonusCountdown: number = 5;
+  private achievements: IAchievements[];
 
   Home() {
     console.log("home");
@@ -340,6 +343,7 @@ export class Home {
       let myimport = await import("../devdata/childrendata");
       console.log(myimport);
       this.browniePoints = myimport.data;
+      this.achievements = myimport.achievements;
       this.currentCount = 3; //myimport.length;
       this.loading = false;
       SetBrowniePoints(this.browniePoints);
@@ -359,6 +363,51 @@ export class Home {
       } else {
         this.DisplayError("Unable to retrieve children");
       }
+    }
+  }
+
+  private async GetAchievementsList() {
+    if (dev) {
+      let myimport = await import("../devdata/childrendata");
+      this.achievements = myimport.achievements;
+    } 
+    else {
+    let result = await this.http
+        .fetch(`${DNS}/api/Achievements/`, {
+          method: "get",
+          credentials: "include"
+        })
+    let data = await result.json() as IAchievements[];
+    this.achievements = data;
+      }
+  }
+
+  async CheckForSuperSwat(child: BrowniePoints, amount: number) {
+
+    if (!this.achievements) {
+      await this.GetAchievementsList();
+   }
+
+    // Check for Super Swat completion - TODO
+    if (child.pendingAdds >= 300) {
+      let achievement = child.achievements.find(item => item.achievementID === 1)
+      achievement.progress = 100;
+      child.achievementsTotal = 1;
+      console.log('Super Swat achievement earned!')
+    }
+
+  }
+  
+  public async CheckForMegaPoints(child: BrowniePoints) {
+
+    if (!this.achievements) {
+       await this.GetAchievementsList();
+    }
+    
+    if (child.pendingAdds >= 50) {
+      let mega = this.achievements.find(item =>item.title === 'Mega Points');
+      let streak = child.achievements.find(item => item.ID === mega.ID);
+      streak.progress = 100;
     }
   }
 
@@ -497,8 +546,6 @@ export class Home {
       this.shakePoints = false;
     }, 2000);
 
-    this.CheckIfAchievementGained(child, amount);
-
     if (
       !this.showBonusTimeIntro &&
       !(this.showBonusBall || this.showBonusSquare || this.showBonusBall2) &&
@@ -543,6 +590,9 @@ export class Home {
     console.log("child points " + child.points);
 
     this.CheckIfLevelCompleted(child);
+    this.CheckForMegaPoints(child);
+    this.CheckForSuperSwat(child, amount);
+
 
     if (child.pendingAdds == 0) {
       setTimeout(() => {
@@ -560,17 +610,7 @@ export class Home {
     child.pendingAdds += amount;
   }
 
-  CheckIfAchievementGained(child: BrowniePoints, amount: number) {
-
-    // Check for Super Swat completion
-    if (child.pendingAdds >= 30) {
-      let achievement = child.achievements.find(item => item.achievementID === 1)
-      achievement.progress = 100;
-      child.achievementsTotal = 1;
-      console.log('Super Swat achievement earned!')
-    }
-
-  }
+ 
   public async incrementCounterInternal(child: BrowniePoints, amount: number) {
     try {
       //this.DisplayWaitingIcon();
