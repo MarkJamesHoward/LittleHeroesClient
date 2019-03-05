@@ -1,8 +1,10 @@
 <template>
   <require from="../app/shake.css"></require>
   <style>
-
-    p, h1,h2,h3 {
+    p,
+    h1,
+    h2,
+    h3 {
       max-width: 60ch;
       text-align: center;
       margin: auto;
@@ -284,36 +286,34 @@
     </div>
 
     <div class="buttons">
-      <div>
+      <div style="display:flex;justify-content: space-around">
         <div show.bind="(signedIn && !offline) || dev">
           <paper-button
             click.trigger="ManageHeroes()"
             style="margin-top:1rem; background-color: blue; color: white"
-            class="btn btn-primary btn-lg"
           >
             Manage Heroes
           </paper-button>
         </div>
-      </div>
 
-      <div show.bind="(signedIn && !offline) || dev">
-        <paper-button
-          click.trigger="ManageNotifications()"
-          style="margin-top:1rem; background-color: blue; color: white"
-          class="btn btn-primary btn-lg"
-        >
-          Manage Notifications
-        </paper-button>
+        <div show.bind="(signedIn && !offline) || dev">
+          <paper-button
+            click.trigger="ManageNotifications()"
+            style="margin-top:1rem; background-color: blue; color: white"
+          >
+            Manage Notifications
+          </paper-button>
+        </div>
+
+        <div if.bind="signedIn">
+          <paper-button
+            style="margin-top:1rem; background-color: blue; color: white"
+            click.trigger="Logout()"
+            >Logout</paper-button
+          >
+        </div>
       </div>
     </div>
-  </div>
-
-  <div
-    if.bind="signedIn"
-    raised
-    style="background-color: blue;color: white; text-align: center"
-  >
-    <paper-button click.trigger="Logout()">Logout</paper-button>
   </div>
 
   <!--Error occurred-->

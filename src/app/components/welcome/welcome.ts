@@ -121,9 +121,22 @@ export class Welcome {
   //   this.loading = false;
   // }
 
+  offlineHandler() {
+    console.log('offline now!')
+    this.offline = true;
+  }
+  onlineHandler() {
+    console.log('online now!')
+    this.offline = false;
+  }
+
   constructor(http: HttpClient, router: Router) {
     this.http = http;
     this.router = router;
+
+    
+    window.addEventListener('offline', this.offlineHandler.bind(this))
+    window.addEventListener('online', this.onlineHandler.bind(this))
 
     this.AmISignedIn()
       .then(() => {

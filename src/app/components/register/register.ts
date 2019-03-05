@@ -1,3 +1,4 @@
+import { HttpClient } from 'aurelia-fetch-client';
 import "@polymer/paper-button";
 import "@polymer/paper-input/paper-input.js";
 import "@polymer/paper-icon-button";
@@ -7,17 +8,19 @@ import { inject } from "aurelia-framework";
 import { Router } from "aurelia-router";
 import { DNS, dev } from "../global";
 
-@inject(Router)
+@inject(Router, HttpClient)
 export class Register {
   router: Router;
   addedNewUserOk: boolean = false;
   attemptedAddNewUser: boolean = false;
   error: boolean = false;
+  http: HttpClient;
   private myusername: string;
   private mypassword: string;
 
-  constructor(router: Router) {
+  constructor(router: Router, http: HttpClient) {
     this.router = router;
+    this.http = http;
   }
 
   Home() {
