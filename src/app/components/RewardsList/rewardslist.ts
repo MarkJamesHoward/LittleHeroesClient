@@ -2,21 +2,21 @@ import { Router } from 'aurelia-router';
 import { inject } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-fetch-client';
 
-export interface Parent {
+ interface Parent {
     ID: number,
     email: string,
     firstName: string,
     surname: string
 }
 
-export interface Rewards {
+ interface Rewards {
     id: number;
     level: number;
     reward: string;
     editing: boolean;
 }
 
-export interface BrowniePoints {
+ interface BrowniePoints {
     id: number;
     childName: string;
     points: number;

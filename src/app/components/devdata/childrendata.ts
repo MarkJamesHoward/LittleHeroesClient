@@ -27,7 +27,7 @@ export let data = [
     childName: "test bubby",
     points: 50,
     pendingAdds: 0,
-    level: 23,
+    level: 1,
     pointsNeeded: 100,
     reward: "Forever computers",
     availableRewards: [

@@ -1,4 +1,3 @@
-import { AvailableRewards } from './../availableRewards/availableRewards';
 import { LitElement, html, property, customElement } from "lit-element";
 import { GestureEventListeners } from "@polymer/polymer/lib/mixins/gesture-event-listeners";
 import * as Gestures from "@polymer/polymer/lib/utils/gestures";
@@ -26,7 +25,7 @@ import "./circle.scss";
 import "./pulse.scss";
 import { setTimeout } from "timers";
 import { DNS, dev, SetBrowniePoints } from "../global";
-import { runInThisContext } from 'vm';
+import { runInThisContext } from "vm";
 
 @inject(HttpClient, Router)
 export class Home {
@@ -370,42 +369,39 @@ export class Home {
     if (dev) {
       let myimport = await import("../devdata/childrendata");
       this.achievements = myimport.achievements;
-    } 
-    else {
-    let result = await this.http
-        .fetch(`${DNS}/api/Achievements/`, {
-          method: "get",
-          credentials: "include"
-        })
-    let data = await result.json() as IAchievements[];
-    this.achievements = data;
-      }
+    } else {
+      let result = await this.http.fetch(`${DNS}/api/Achievements/`, {
+        method: "get",
+        credentials: "include"
+      });
+      let data = (await result.json()) as IAchievements[];
+      this.achievements = data;
+    }
   }
 
   async CheckForSuperSwat(child: BrowniePoints, amount: number) {
-
     if (!this.achievements) {
       await this.GetAchievementsList();
-   }
+    }
 
     // Check for Super Swat completion - TODO
     if (child.pendingAdds >= 300) {
-      let achievement = child.achievements.find(item => item.achievementID === 1)
+      let achievement = child.achievements.find(
+        item => item.achievementID === 1
+      );
       achievement.progress = 100;
       child.achievementsTotal = 1;
-      console.log('Super Swat achievement earned!')
+      console.log("Super Swat achievement earned!");
     }
-
   }
-  
-  public async CheckForMegaPoints(child: BrowniePoints) {
 
+  public async CheckForMegaPoints(child: BrowniePoints) {
     if (!this.achievements) {
-       await this.GetAchievementsList();
+      await this.GetAchievementsList();
     }
-    
+
     if (child.pendingAdds >= 50) {
-      let mega = this.achievements.find(item =>item.title === 'Mega Points');
+      let mega = this.achievements.find(item => item.title === "Mega Points");
       let streak = child.achievements.find(item => item.ID === mega.ID);
       streak.progress = 100;
     }
@@ -423,7 +419,7 @@ export class Home {
     this.errorHadOccurred = false;
   }
 
-  public CheckIfLevelCompleted(child) {
+  public CheckIfLevelCompleted(child: BrowniePoints) {
     if (child.points >= child.pointsNeeded) {
       this.levelledUp = true;
       ++child.level;
@@ -431,21 +427,27 @@ export class Home {
 
       console.log("leveledup");
 
-      this.http
-        .fetch(`${DNS}/api/PointsData/LevelUp/${child.childName}`, {
-          method: "Get",
-          credentials: "include"
-        })
-        .then(result => result.json() as Promise<BrowniePoints[]>)
-        .then(data => {
-          for (var i = 0; i < data.length; i++) {
-            if (data[i].id === child.id) {
-              console.log(`updating ${data[i].childName}`);
-              child.points = excess;
-              child.availableRewards = data[i].availableRewards;
+      if (dev) {
+        child.points = excess;
+        let reward: IAvailableRewards = { id: 1, reward: child.reward, used: false, beingConsumed: false, browniePointsID: child.id}
+        child.availableRewards.push(reward);
+      } else {
+        this.http
+          .fetch(`${DNS}/api/PointsData/LevelUp/${child.childName}`, {
+            method: "Get",
+            credentials: "include"
+          })
+          .then(result => result.json() as Promise<BrowniePoints[]>)
+          .then(data => {
+            for (var i = 0; i < data.length; i++) {
+              if (data[i].id === child.id) {
+                console.log(`updating ${data[i].childName}`);
+                child.points = excess;
+                child.availableRewards = data[i].availableRewards;
+              }
             }
-          }
-        });
+          });
+      }
     }
   }
 
@@ -539,17 +541,20 @@ export class Home {
     this.showBonusSquare = false;
   }
 
-  public combineAdds(child: BrowniePoints, amount: number) {
+  private ShakeyPoints() {
     console.log("do the shakey thing!");
     this.shakePoints = true;
     setTimeout(() => {
       this.shakePoints = false;
     }, 2000);
+  }
 
+  private showBonusTime(child: BrowniePoints) {
     if (
       !this.showBonusTimeIntro &&
       !(this.showBonusBall || this.showBonusSquare || this.showBonusBall2) &&
-      child.pendingAdds >= 10
+      child.pendingAdds >= 20 &&
+      Math.floor(Math.random() * 100 + 1) > 97
     ) {
       this.showBonusTimeIntro = true;
       let countdown = setInterval(() => {
@@ -578,11 +583,16 @@ export class Home {
         }, 11000);
       }
     }
+  }
 
+  public combineAdds(child: BrowniePoints, amount: number) {
     if (amount < 0 && child.points + amount < 0) {
       console.log("Would be less than zero!");
       return;
     }
+
+    this.ShakeyPoints();
+    this.showBonusTime(child);
 
     this.syncPending = true;
 
@@ -593,8 +603,7 @@ export class Home {
     this.CheckForMegaPoints(child);
     this.CheckForSuperSwat(child, amount);
 
-
-    if (child.pendingAdds == 0) {
+    if (child.pendingAdds === 0) {
       setTimeout(() => {
         console.log(
           "making call to server to update with points " + child.pendingAdds
@@ -610,8 +619,11 @@ export class Home {
     child.pendingAdds += amount;
   }
 
- 
   public async incrementCounterInternal(child: BrowniePoints, amount: number) {
+    if (dev) {
+      return Promise.resolve();
+    }
+
     try {
       //this.DisplayWaitingIcon();
 
