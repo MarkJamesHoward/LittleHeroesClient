@@ -27,7 +27,7 @@ export let data = [
     childName: "test bubby",
     points: 50,
     pendingAdds: 0,
-    level: 1,
+    level: 10,
     pointsNeeded: 100,
     reward: "Forever computers",
     availableRewards: [
@@ -43,7 +43,7 @@ export let data = [
       id: 1,
       eyes: 2,
       mouth: 1,
-      silhouette: 3,
+      silhouette: 1,
       selectedeyex: 47,
       selectedeyey: 27,
       selectedmouthx: 47,
