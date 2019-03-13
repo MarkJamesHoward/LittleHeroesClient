@@ -140,6 +140,14 @@ export class App {
         moduleId: PLATFORM.moduleName("../achievements/achievements"),
         nav: false,
         title: "Achievements"
+      },
+      {
+        route: ["unlock/:level"],
+        name: "unlock",
+        settings: { icon: "" },
+        moduleId: PLATFORM.moduleName("../unlock/unlock"),
+        nav: false,
+        title: "Unlock"
       }
     ]);
 

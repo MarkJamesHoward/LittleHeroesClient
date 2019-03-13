@@ -423,8 +423,9 @@ export class Home {
     this.showingAvailableRewards = false;
   }
 
-  public CloseLevelUp() {
+  public CloseLevelUp(child: BrowniePoints) {
     this.levelledUp = false;
+    this.router.navigate(`unlock/${child.level}`);
   }
 
   public CloseError() {
@@ -433,6 +434,7 @@ export class Home {
 
   public CheckIfLevelCompleted(child: BrowniePoints) {
     if (child.points >= child.pointsNeeded) {
+
       this.levelledUp = true;
       ++child.level;
       let excess = child.points - child.pointsNeeded;

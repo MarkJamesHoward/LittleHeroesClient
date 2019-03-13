@@ -25,7 +25,7 @@ export class ManageHeroes {
   errorMessage: string;
 
   Home() {
-    this.router.navigate("welcome/childrenpage");
+    this.router.navigate("/welcome");
   }
 
   async RemoveChild(child: BrowniePoints) {
