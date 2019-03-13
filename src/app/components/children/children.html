@@ -701,6 +701,21 @@
                         >${child.childName}</span
                       >
                     </div>
+                    <div if.bind="editingChildName">
+                      <div class="nameTitle"
+                        style="display:flex;justify-content:center;align-items:center"
+                      >
+                        <input
+                          type="text"
+                          maxlength="20"
+                          name="childName"
+                          class="inline-edit"
+                          style="max-width: 60vw"
+                          value.bind="child.childName"
+                          keypress.delegate="IfEnterKeySaveChanges($event, child, child.childName, child.reward)"
+                        />
+                      </div>
+                    </div>
                     <div class="points">
                       <div
                         class="${shakePoints == true ? 'shakeItem' : 'nothing'}"
@@ -713,21 +728,7 @@
                     </div>
                   </div>
 
-                  <div if.bind="editingChildName">
-                    <div
-                      style="display:flex;justify-content:center;align-items:center"
-                    >
-                      <input
-                        type="text"
-                        maxlength="20"
-                        name="childName"
-                        class="inline-edit"
-                        style="max-width: 60vw"
-                        value.bind="child.childName"
-                        keypress.delegate="IfEnterKeySaveChanges($event, child, child.childName, child.reward)"
-                      />
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
 
