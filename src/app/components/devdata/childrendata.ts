@@ -27,7 +27,7 @@ export let data = [
     childName: "test bubby",
     points: 50,
     pendingAdds: 0,
-    level: 10,
+    level: 2,
     pointsNeeded: 100,
     reward: "Forever computers",
     availableRewards: [
@@ -43,11 +43,14 @@ export let data = [
       id: 1,
       eyes: 2,
       mouth: 1,
+      legs: 1,
       silhouette: 1,
       selectedeyex: 47,
       selectedeyey: 27,
       selectedmouthx: 47,
-      selectedmouthy: 39
+      selectedmouthy: 39,
+      selectedlegsx: 47,
+      selectedlegsy: 49
     },
     achievements: [
       {ID: 1, achievementID: 1, progress: 0},
@@ -94,13 +97,16 @@ export let data = [
     ],
     pet: {
       id: 2,
-      eyes: 3,
-      mouth: 2,
-      silhouette: 2,
+      eyes: 2,
+      mouth: 1,
+      legs: 1,
+      silhouette: 1,
       selectedeyex: 47,
       selectedeyey: 27,
       selectedmouthx: 47,
-      selectedmouthy: 43
+      selectedmouthy: 39,
+      selectedlegsx: 47,
+      selectedlegsy: 49
     },
     achievements: [
       {ID: 1, achievementID: 1, progress: 10},
@@ -147,13 +153,16 @@ export let data = [
     ],
     pet: {
       id: 4,
-      eyes: 3,
-      mouth: 2,
+      eyes: 2,
+      mouth: 1,
+      legs: 1,
       silhouette: 1,
       selectedeyex: 47,
       selectedeyey: 27,
       selectedmouthx: 47,
-      selectedmouthy: 43
+      selectedmouthy: 39,
+      selectedlegsx: 47,
+      selectedlegsy: 49
     },
     achievements: [
       {ID: 1, achievementID: 1, progress: 10}

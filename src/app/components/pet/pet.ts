@@ -44,31 +44,47 @@ export class Pet {
     }
   }
 
+  Reset() {
+    let node = document.querySelector("monster-creator");
+    //@ts-ignore
+    node.Reset();
+  }
+
+  Cancel() {
+    this.router.navigate("children");
+  }
+
   async SavePet(
     childID: number,
     eyes: number,
     mouth: number,
+    legs: number,
     silhouette: number,
     selectedmouthx: number,
     selectedmouthy: number,
     selectedeyex: number,
-    selectedeyey: number
+    selectedeyey: number,
+    selectedlegsx: number,
+    selectedlegsy: number
   ) {
     if (dev) {
       this.child.pet.eyes = eyes;
       this.child.pet.mouth = mouth;
+      this.child.pet.legs = legs;
       this.child.pet.silhouette = silhouette;
       this.child.pet.selectedmouthx = selectedmouthx;
       this.child.pet.selectedmouthy = selectedmouthy;
       this.child.pet.selectedeyex = selectedeyex;
       this.child.pet.selectedeyey = selectedeyey;
+      this.child.pet.selectedlegsx = selectedlegsx;
+      this.child.pet.selectedlegsy = selectedlegsy;
       SetBrowniePoints(this.browniePoints);
     } else {
       console.log(
-        `${DNS}/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}`
+        `${DNS}/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${legs}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}/${selectedlegsx}/${selectedlegsy}`
       );
       var result = await this.http.fetch(
-        `${DNS}/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}`,
+        `${DNS}/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${legs}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}/${selectedlegsx}/${selectedlegsy}`,
         { method: "put", credentials: "include" }
       );
       var data = await result.json();

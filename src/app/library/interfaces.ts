@@ -14,6 +14,9 @@ export interface Pet {
   mouth: number;
   selectedmouthx: number;
   selectedmouthy: number;
+  legs: number;
+  selectedlegsx: number;
+  selectedlegsy: number;
   silhouette: number;
 }
 

@@ -134,8 +134,10 @@ export class Home {
     this.editingChildName = false;
     this.editingReward = false;
 
-    await this.saveChildName(child, childName);
-    await this.SaveReward(child, childreward);
+    let nameUpdate = this.saveChildName(child, childName);
+    let rewardUpdate = this.SaveReward(child, childreward);
+
+    await Promise.all([nameUpdate, rewardUpdate])
   }
 
   async saveChildName(child: BrowniePoints, newName: string) {
@@ -169,7 +171,7 @@ export class Home {
     try {
       var result = await this.http.fetch(
         `${DNS}/api/Children/EditReward/${
-          child.childName
+          child.id
         }/${rewardDescription}`,
         { method: "put", credentials: "include" }
       );
