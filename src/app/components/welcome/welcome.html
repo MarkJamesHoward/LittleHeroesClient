@@ -1,5 +1,6 @@
 <template>
   <require from="../app/shake.css"></require>
+  <require from="../../library/spinner/spinner.css"></require>
   <style>
     p,
     h1,
@@ -165,6 +166,7 @@
           awarded by any members of the family.
         </p>
 
+
         <div show.bind="!loading">
           <!-- <div show.bind="!signedIn && !offline">
               <paper-button
@@ -224,10 +226,7 @@
             class="GlobalButtonTextSize"
             style="display:flex;justify-content:center;align-items:center"
           >
-            <span
-              style="margin-right:0.5rem;"
-              class="glyphicon glyphicon-refresh wait"
-            ></span>
+            <div class="spinner"></div>
             <span>Connecting...</span>
           </div>
         </div>

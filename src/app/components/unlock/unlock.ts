@@ -44,7 +44,7 @@ export class Unlock {
   level: number = 0;
 
   Continue() {
-    this.router.navigate("/children");
+    this.router.navigate("/children/0");
   }
 
   activate(params: any) {

@@ -1,4 +1,3 @@
-import { json } from 'aurelia-fetch-client';
 import "@polymer/paper-button";
 import "@polymer/paper-input/paper-input.js";
 import "@polymer/paper-icon-button";
@@ -14,10 +13,12 @@ export class login {
   private mypassword: string;
   private router: Router;
   private loginFailed: boolean;
+  attemptingLogin: boolean = false;
 
   constructor(Router: Router) {
     this.router = Router;
     this.loginFailed = false;
+    this.attemptingLogin = false;
   }
 
   Register() {
@@ -28,10 +29,14 @@ export class login {
     this.router.navigate("welcome");
   }
 
+
   Login() {
     // console.log(`username: ${this.myusername}`)
     // console.log(`password: ${this.mypassword}`)
     let details = { email: this.myusername, password: this.mypassword };
+
+    this.attemptingLogin = true;
+
     fetch(`${DNS}/api/auth/login`, {
       method: "post",
       headers: new Headers({
@@ -42,6 +47,7 @@ export class login {
     })
       .then(response => {
         if (response.ok) {
+          this.attemptingLogin = false;
           console.log(`login succeeded! - should have a cookie now:`);
           console.log(response);
           //Now let's navigate to the view of hereos
@@ -58,6 +64,7 @@ export class login {
       .catch(e => {
         console.log("failed to login - no connection");
         this.loginFailed = true;
+        this.attemptingLogin = false;
         setTimeout(() => {
           this.loginFailed = false;
         }, 3000)

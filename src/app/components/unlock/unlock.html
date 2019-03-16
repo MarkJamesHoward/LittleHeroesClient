@@ -10,7 +10,7 @@
       display: none;
     }
 
-
+    
     .title {
       grid-area: title;
       margin-top: 1rem;
@@ -18,78 +18,86 @@
       font-size: 1.3rem;
     }
   </style>
-  <h3 style="text-align: center;font-size: 3.5rem;font-family: 'Fredoka One', cursive;">
-    Nice work!
-  </h3>
-  <h4 style="text-align: center;font-size: 2rem;font-family: 'Fredoka One', cursive;">
-    You have unlocked a new Monster part
-  </h3>
+  
 
-  <div>
-    <img
-      class="${UnlockEyes1Visible ? '' : 'hidden'}"
-      ID="EyesID1"
-      src="../../../../images/eyes/eyes1.png"
-    />
-    <img
-      class="${UnlockEyes2Visible ? '' : 'hidden'}"
-      ID="EyesID2"
-      src="../../../../images/eyes/eyes2.png"
-    />
-    <img
-      class="${UnlockEyes3Visible  ? '' : 'hidden'}"
-      ID="EyesID3"
-      src="../../../../images/eyes/eyes3.png"
-    />
-    <img
-      class="${UnlockEyes4Visible  ? '' : 'hidden'}"
-      ID="EyesID4"
-      src="../../../../images/eyes/eyes4.png"
-    />
+  <div class="VerticalList">
 
-    <img
-      class="${UnlockMouth1Visible ? '' : 'hidden'}"
-      ID="MouthID1"
-      src="../../../../images/mouths/mouth1.png"
-    />
-    <img
-      class="${UnlockMouth2Visible ? '' : 'hidden'}"
-      ID="MouthID2"
-      src="../../../../images/mouths/mouth2.png"
-    />
-    <img
-      class="${UnlockMouth3Visible ? '' : 'hidden'}"
-      ID="MouthID3"
-      src="../../../../images/mouths/mouth3.png"
-    />
-    <img
-      class="${UnlockMouth4Visible ? '' : 'hidden'}"
-      ID="MouthID1"
-      src="../../../../images/mouths/mouth1.png"
-    />
+    <div>
+        <h3 style="text-align: center;font-size: 3.5rem;font-family: 'Fredoka One', cursive;">
+            Nice work!
+          </h3>
+          <h4 style="text-align: center;font-size: 2rem;font-family: 'Fredoka One', cursive;">
+            You have unlocked a new Monster part
+          </h3>
+    </div>
 
-    <img
-      class="${UnlockLegs1Visible ? '' : 'hidden'}"
-      ID="LegsID1"
-      src="../../../../images/legs/Legs1.png"
-    />
-    <img
-      class="${UnlockLegs2Visible  ? '' : 'hidden'}"
-      ID="LegsID2"
-      src="../../../../images/legs/Legs2.png"
-    />
-    <img
-      class="${UnlockLegs3Visible  ? '' : 'hidden'}"
-      ID="LegsID2"
-      src="../../../../images/legs/Legs3.png"
-    />
-    <img
-      class="${UnlockLegs4Visible ? '' : 'hidden'}"
-      ID="LegsID3"
-      src="../../../../images/legs/Legs4.png"
-    />
-
-    <paper-button style="font-size: 2.5rem; margin-top: 2rem" raised click.trigger="Continue()">
+    <div style="flex-grow:2;display:flex;justify-content:center; align-items: center;">
+      <img
+        class="${UnlockEyes1Visible ? '' : 'hidden'}"
+        ID="EyesID1"
+        src="../../../../images/eyes/eyes1.png"
+      />
+      <img
+        class="${UnlockEyes2Visible ? '' : 'hidden'}"
+        ID="EyesID2"
+        src="../../../../images/eyes/eyes2.png"
+      />
+      <img
+        class="${UnlockEyes3Visible  ? '' : 'hidden'}"
+        ID="EyesID3"
+        src="../../../../images/eyes/eyes3.png"
+      />
+      <img
+        class="${UnlockEyes4Visible  ? '' : 'hidden'}"
+        ID="EyesID4"
+        src="../../../../images/eyes/eyes4.png"
+      />
+  
+      <img
+        class="${UnlockMouth1Visible ? '' : 'hidden'}"
+        ID="MouthID1"
+        src="../../../../images/mouths/mouth1.png"
+      />
+      <img
+        class="${UnlockMouth2Visible ? '' : 'hidden'}"
+        ID="MouthID2"
+        src="../../../../images/mouths/mouth2.png"
+      />
+      <img
+        class="${UnlockMouth3Visible ? '' : 'hidden'}"
+        ID="MouthID3"
+        src="../../../../images/mouths/mouth3.png"
+      />
+      <img
+        class="${UnlockMouth4Visible ? '' : 'hidden'}"
+        ID="MouthID1"
+        src="../../../../images/mouths/mouth1.png"
+      />
+  
+      <img
+        class="${UnlockLegs1Visible ? '' : 'hidden'}"
+        ID="LegsID1"
+        src="../../../../images/legs/Legs1.png"
+      />
+      <img
+        class="${UnlockLegs2Visible  ? '' : 'hidden'}"
+        ID="LegsID2"
+        src="../../../../images/legs/Legs2.png"
+      />
+      <img
+        class="${UnlockLegs3Visible  ? '' : 'hidden'}"
+        ID="LegsID2"
+        src="../../../../images/legs/Legs3.png"
+      />
+      <img
+        class="${UnlockLegs4Visible ? '' : 'hidden'}"
+        ID="LegsID3"
+        src="../../../../images/legs/Legs4.png"
+      />
+  
+    </div>
+  
+    <paper-button class="Continue" raised click.trigger="Continue()">
       Continue
     </paper-button>
   </div>

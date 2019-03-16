@@ -24,7 +24,7 @@ import "monster-creator";
 import "./circle.scss";
 import "./pulse.scss";
 import { setTimeout } from "timers";
-import { DNS, dev, SetBrowniePoints } from "../global";
+import { DNS, dev, SetBrowniePoints, GetBrowniePoints } from "../global";
 import { runInThisContext } from "vm";
 
 @inject(HttpClient, Router)
@@ -84,13 +84,10 @@ export class Home {
     let img = event.srcElement.src.split("/");
     img = img[img.length - 1];
     console.log(img);
-    var result = await this.http.fetch(
-      `${DNS}/api/Avatar/${child.childName}/${img}`,
-      {
-        method: "put",
-        credentials: "include"
-      }
-    );
+    var result = await this.http.fetch(`${DNS}/api/Avatar/${child.childName}/${img}`, {
+      method: "put",
+      credentials: "include"
+    });
     var data = await result.json();
     child.avatar = img;
     this.editingAvatar = false;
@@ -110,12 +107,7 @@ export class Home {
     this.editing = true;
   }
 
-  IfEnterKeySaveChanges(
-    $event: any,
-    child: BrowniePoints,
-    childName: string,
-    childreward: string
-  ) {
+  IfEnterKeySaveChanges($event: any, child: BrowniePoints, childName: string, childreward: string) {
     if ($event.key == "Enter") {
       this.SaveChanges(child, childName, childreward);
       console.log($event);
@@ -124,11 +116,7 @@ export class Home {
     return true;
   }
 
-  async SaveChanges(
-    child: BrowniePoints,
-    childName: string,
-    childreward: string
-  ) {
+  async SaveChanges(child: BrowniePoints, childName: string, childreward: string) {
     console.log("save changes");
     this.editing = false;
     this.editingChildName = false;
@@ -159,9 +147,7 @@ export class Home {
           this.editing = false;
           //this.ConfigureDisplay(data);
         } else {
-          this.DisplayError(
-            "Failed to update childName - notFound returned from server"
-          );
+          this.DisplayError("Failed to update childName - notFound returned from server");
         }
       } catch (err) {
         this.editingChildName = false;
@@ -191,9 +177,7 @@ export class Home {
           this.editing = false;
           //this.ConfigureDisplay(data);
         } else {
-          this.DisplayError(
-            "Failed to update reward - notFound returned from server"
-          );
+          this.DisplayError("Failed to update reward - notFound returned from server");
         }
       } catch (err) {
         this.editingChildName = false;
@@ -269,28 +253,38 @@ export class Home {
   //   this.router.navigate(child);
   // }
 
+  activate(params) {
+    console.log("children activated called!!!");
+    if (params.id === "0") {
+      let data = GetBrowniePoints();
+      if (data) {
+        this.browniePoints = data;
+      }
+    } else {
+      this.InitialLoad()
+        .then(() => {
+          console.log("finished constructor");
+          this.loading = false;
+        })
+        .catch(err => {
+          if (err == "TypeError: Failed to fetch") {
+            console.log("Offline " + err);
+            this.offline = true;
+            this.loading = false;
+          } else {
+            console.log("Some error " + err);
+            this.errorHadOccurred = true;
+            this.errorMessage = err;
+            this.loading = false;
+            this.offline = false;
+          }
+        });
+    }
+  }
+
   constructor(http: any, Router: Router) {
     this.http = http;
     this.router = Router;
-
-    this.InitialLoad()
-      .then(() => {
-        console.log("finished constructor");
-        this.loading = false;
-      })
-      .catch(err => {
-        if (err == "TypeError: Failed to fetch") {
-          console.log("Offline " + err);
-          this.offline = true;
-          this.loading = false;
-        } else {
-          console.log("Some error " + err);
-          this.errorHadOccurred = true;
-          this.errorMessage = err;
-          this.loading = false;
-          this.offline = false;
-        }
-      });
   }
 
   public async AmISignedIn() {
@@ -398,9 +392,7 @@ export class Home {
 
     // Check for Super Swat completion - TODO
     if (child.pendingAdds >= 300) {
-      let achievement = child.achievements.find(
-        item => item.achievementID === 1
-      );
+      let achievement = child.achievements.find(item => item.achievementID === 1);
       achievement.progress = 100;
       child.achievementsTotal = 1;
       console.log("Super Swat achievement earned!");
@@ -423,18 +415,12 @@ export class Home {
     this.showingAvailableRewards = false;
   }
 
-  public CloseLevelUp(child: BrowniePoints) {
-    this.levelledUp = false;
-    this.router.navigate(`unlock/${child.level}`);
-  }
-
   public CloseError() {
     this.errorHadOccurred = false;
   }
 
   public CheckIfLevelCompleted(child: BrowniePoints) {
     if (child.points >= child.pointsNeeded) {
-
       this.levelledUp = true;
       ++child.level;
       let excess = child.points - child.pointsNeeded;
@@ -468,6 +454,7 @@ export class Home {
             }
           });
       }
+      this.router.navigate(`/levelup/${child.id}`);
     }
   }
 
@@ -502,10 +489,10 @@ export class Home {
     //console.log("use");
     availableReward.beingConsumed = true;
     for (var i = 0; i < child.availableRewards.length; i++) {
-     // console.log(`checking ${i}`);
+      // console.log(`checking ${i}`);
       if (child.availableRewards[i].id === availableReward.id) {
         child.availableRewards.splice(i, 1);
-       // console.log(`removed ${i}`);
+        // console.log(`removed ${i}`);
       }
 
       if (child.availableRewards.length == 0) {
@@ -513,13 +500,10 @@ export class Home {
       }
     }
     this.http
-      .fetch(
-        `${DNS}/api/AvailableRewards/SetRewardToUsed/${availableReward.id}`,
-        {
-          method: "put",
-          credentials: "include"
-        }
-      )
+      .fetch(`${DNS}/api/AvailableRewards/SetRewardToUsed/${availableReward.id}`, {
+        method: "put",
+        credentials: "include"
+      })
       .then(result => result.json() as Promise<BrowniePoints[]>)
       .then(data => {
         console.log(data);
@@ -588,9 +572,7 @@ export class Home {
         }
       }, 1000);
 
-      if (
-        !(this.showBonusBall || this.showBonusSquare || this.showBonusBall2)
-      ) {
+      if (!(this.showBonusBall || this.showBonusSquare || this.showBonusBall2)) {
         console.log("show ball and square");
         this.showBonusBall = true;
         this.showBonusSquare = true;
@@ -625,9 +607,7 @@ export class Home {
 
     if (child.pendingAdds === 0) {
       setTimeout(() => {
-        console.log(
-          "making call to server to update with points " + child.pendingAdds
-        );
+        console.log("making call to server to update with points " + child.pendingAdds);
         // perform the add now
         this.incrementCounterInternal(child, child.pendingAdds);
         child.pendingAdds = 0;
@@ -655,12 +635,11 @@ export class Home {
       //swReg.sync.register(UpdateScoreDataString);
 
       var result = await this.http.fetch(
-        `${DNS}/api/PointsData/AddBrowniePointExtra/${
-          child.childName
-        }/${amount}`,
+        `${DNS}/api/PointsData/AddBrowniePointExtra/${child.id}/${amount}`,
         { method: "Get", credentials: "include" }
       );
       if (result.ok) {
+        console.log("successfully added");
         //this.ConfigureDisplay(data);
       } else {
         this.DisplayError("Error adding points! " + result.status);

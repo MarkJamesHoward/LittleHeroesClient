@@ -18,7 +18,7 @@ export class Achievements {
   private TotalAchievementCount: number;
 
   Back() {
-    this.router.navigate("/children");
+    this.router.navigate("/children/0");
   }
 
   async activate(params: any) {

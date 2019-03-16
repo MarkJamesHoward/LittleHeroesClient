@@ -1,10 +1,16 @@
 <template>
+    <require from="../../library/Spinner/spinner.css"></require>
+
   <style>
     html,
     body {
       padding: 0;
       margin: 0;
       box-sizing: border-box;
+    }
+
+    .hidden {
+      display: none;
     }
 
     .loginFailed {
@@ -53,6 +59,8 @@
   </style>
 
 
+
+
     <div class="data">
       <div style="grid-area: signin">
         <div class="horizontalcenter">
@@ -79,15 +87,17 @@
             </input>
           </div>
           <div>
-            <paper-button style="min-width: 150px;" click.trigger="Login()" raised>
-              <span show.bind="!loginFailed">Login</span>
+            <paper-button style="min-width: 150px;font-size: 2rem" click.trigger="Login()" raised>
+              <div class="${attemptingLogin ? 'spinner' : 'hidden'}"></div>
+              <span show.bind="attemptingLogin">Attempting Login...</span>
+              <span show.bind="!loginFailed && !attemptingLogin">Login</span>
               <span show.bind="loginFailed" class="${loginFailed == true ? 'loginFailed' : '' }">
                 Login failed
               </span>
-            </paper-button>
-            <paper-checkbox value.bind="rememberMe">Remember me</paper-checkbox>
-            
+            </paper-button>            
           </div>
+          <paper-checkbox style="margin-top: 1rem;" value.bind="rememberMe">Remember me</paper-checkbox>
+
         </div>
       </div>
 
@@ -110,4 +120,5 @@
       </div>
     </div>
 
+ 
 </template>

@@ -78,11 +78,11 @@ export class App {
         title: "Welcome"
       },
       {
-        route: ["children"],
+        route: ["children/:id"],
         name: "children",
         settings: { icon: "" },
         moduleId: PLATFORM.moduleName("../children/children"),
-        nav: true,
+        nav: false,
         title: "Heroes"
       },
       {
@@ -148,6 +148,14 @@ export class App {
         moduleId: PLATFORM.moduleName("../unlock/unlock"),
         nav: false,
         title: "Unlock"
+      },
+      {
+        route: ["levelup/:id"],
+        name: "levelup",
+        settings: { icon: "" },
+        moduleId: PLATFORM.moduleName("../levelup/levelup"),
+        nav: false,
+        title: "LevelUp"
       }
     ]);
 

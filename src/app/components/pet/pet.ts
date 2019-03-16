@@ -54,7 +54,7 @@ export class Pet {
     this.router.navigate("children");
   }
 
-  async SavePet(
+  SavePet(
     childID: number,
     eyes: number,
     mouth: number,
@@ -67,7 +67,7 @@ export class Pet {
     selectedlegsx: number,
     selectedlegsy: number
   ) {
-    if (dev) {
+
       this.child.pet.eyes = eyes;
       this.child.pet.mouth = mouth;
       this.child.pet.legs = legs;
@@ -79,19 +79,18 @@ export class Pet {
       this.child.pet.selectedlegsx = selectedlegsx;
       this.child.pet.selectedlegsy = selectedlegsy;
       SetBrowniePoints(this.browniePoints);
-    } else {
-      console.log(
-        `${DNS}/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${legs}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}/${selectedlegsx}/${selectedlegsy}`
-      );
-      var result = await this.http.fetch(
+      // console.log(
+      //   `${DNS}/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${legs}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}/${selectedlegsx}/${selectedlegsy}`
+      // );
+      //var result = await 
+      this.http.fetch(
         `${DNS}/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${legs}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}/${selectedlegsx}/${selectedlegsy}`,
         { method: "put", credentials: "include" }
       );
-      var data = await result.json();
-      console.log(data);
-    }
+      //var data = await result.json();
+      //console.log(data);
 
-    this.router.navigate("children");
+    this.router.navigate(`children/0`);
   }
 
   activate(params: any) {

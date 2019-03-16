@@ -46,7 +46,7 @@ export class Welcome {
           console.log(response);
           //Now let's navigate to the view of hereos
           if (this.proceedToChildrenScreen) {
-            this.router.navigate("children");
+            this.router.navigate("children/1");
           } else {
             this.GetUsername();
           }
@@ -181,7 +181,7 @@ export class Welcome {
   }
 
   ViewHeroTastic() {
-    this.router.navigate("children");
+    this.router.navigate("children/1");
   }
 
   Login() {

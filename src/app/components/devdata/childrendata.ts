@@ -29,21 +29,21 @@ export let data = [
     pendingAdds: 0,
     level: 0,
     pointsNeeded: 100,
-    reward: "Forever computers",
+    reward: "10 mins free play",
     availableRewards: [
       {
         id: 223,
         browniePointsID: 3,
-        reward: "Forever computers",
+        reward: "10 mins free play",
         used: false,
         beingConsumed: false
       }
     ],
     pet: {
       id: 1,
-      eyes: 2,
-      mouth: 1,
-      legs: 1,
+      eyes: 0,
+      mouth: 0,
+      legs: 0,
       silhouette: 1,
       selectedeyex: 47,
       selectedeyey: 27,

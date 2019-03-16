@@ -1,6 +1,6 @@
 <template>
   <require from="./children.css"></require>
-  <require from="./levelup.css"></require>
+  <!-- <require from="./levelup.css"></require> -->
   <require from="../app/shake.css"></require>
   <require from="../app/levelrotate.css"></require>
 
@@ -411,9 +411,7 @@
   <div class="OfflineDialog" show.bind="offline">
     <div class="center">
       <h2>Seems you are offline</h2>
-      <paper-button click.trigger="CheckOnlineOrNot()"
-        >Attempt to reconnect</paper-button
-      >
+      <paper-button click.trigger="CheckOnlineOrNot()">Attempt to reconnect</paper-button>
     </div>
   </div>
 
@@ -435,69 +433,7 @@
             </div>
           </div>
 
-          <!--Levelled up-->
-          <div
-            show.bind="levelledUp"
-            class="pyro"
-            style="overflow: hidden;position:relative;"
-          >
-            <div class="before"></div>
-            <div class="after"></div>
-            <div class="SpreadOutVertical">
-              <div>
-                <i style="margin-top:1rem" class="fa fa-gift fa-3x"></i>
-
-                <div style="text-align:center">
-                  <h4 style="user-select: none">
-                    You have added the below reward to your inventory:
-                    <Strong>
-                      ${child.reward == 'Enter reward here!' ? '' :
-                      child.reward}</Strong
-                    >
-                  </h4>
-                </div>
-              </div>
-
-              <div class="LeveUpContainer">
-                <div class="LinesTop">
-                  <h5 style="user-select: none">
-                    Congratulations ${child.childName}
-                  </h5>
-                </div>
-                <h3 style="user-select: none;" class="TransformedLevelUp">
-                  YOU LEVELED UP
-                </h3>
-                <div class="LinesTop">
-                  <div>
-                    <div
-                      class="LevelUpScreenCircle"
-                      style="display:flex;justify-content:center;
-                                                background-color:red;
-                                                color: white;
-                                                font-size: 2rem;
-                                                margin-top: 2rem;
-                                               align-items:center;
-                                               flex-direction: column;
-                                               height:30vmin;border-radius: 50%;
-                                               width:30vmin;
-                                               border: 3px dashed black;"
-                    >
-                      <span style="user-select: none;">Level</span>
-                      <span style="user-select: none">${child.level}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <paper-button
-                raised
-                style="margin-top:5rem"
-                class="btn btn-primary btn-lg "
-                click.trigger="CloseLevelUp(child)"
-                >Continue</paper-button
-              >
-            </div>
-          </div>
+          <!--Levelled up - moved to its own page!-->
 
           <div draggable="false;" class="MasterContainer">
             <div
@@ -615,43 +551,15 @@
                   />
                 </svg>
 
-                <img
-                  class="EyeSlot"
-                  slot="EyesSlot1"
-                  src="../../../../images/eyes/eyes1.png"
-                />
-                <img
-                  class="EyeSlot"
-                  slot="EyesSlot2"
-                  src="../../../../images/eyes/eyes2.png"
-                />
-                <img
-                  class="EyeSlot"
-                  slot="EyesSlot3"
-                  src="../../../../images/eyes/eyes3.png"
-                />
-                <img
-                  class="EyeSlot"
-                  slot="EyesSlot4"
-                  src="../../../../images/eyes/eyes4.png"
-                />
+                <img class="EyeSlot" slot="EyesSlot1" src="../../../../images/eyes/eyes1.png" />
+                <img class="EyeSlot" slot="EyesSlot2" src="../../../../images/eyes/eyes2.png" />
+                <img class="EyeSlot" slot="EyesSlot3" src="../../../../images/eyes/eyes3.png" />
+                <img class="EyeSlot" slot="EyesSlot4" src="../../../../images/eyes/eyes4.png" />
 
-                <img
-                  slot="MouthSlot1"
-                  src="../../../../images/mouths/mouth1.png"
-                />
-                <img
-                  slot="MouthSlot2"
-                  src="../../../../images/mouths/mouth2.png"
-                />
-                <img
-                  slot="MouthSlot3"
-                  src="../../../../images/mouths/mouth3.png"
-                />
-                <img
-                  slot="MouthSlot4"
-                  src="../../../../images/mouths/mouth4.png"
-                />
+                <img slot="MouthSlot1" src="../../../../images/mouths/mouth1.png" />
+                <img slot="MouthSlot2" src="../../../../images/mouths/mouth2.png" />
+                <img slot="MouthSlot3" src="../../../../images/mouths/mouth3.png" />
+                <img slot="MouthSlot4" src="../../../../images/mouths/mouth4.png" />
 
                 <img slot="LegsSlot1" src="../../../../images/legs/Legs1.png" />
                 <img slot="LegsSlot2" src="../../../../images/legs/Legs2.png" />
@@ -667,9 +575,7 @@
             >
               <!--Name and Points-->
               <div>
-                <div
-                  style="display:flex;justify-content:space-between;flex-direction:row;"
-                >
+                <div style="display:flex;justify-content:space-between;flex-direction:row;">
                   <!-- Circle with Level (dashed)-->
                   <div id="Level">
                     <div
@@ -694,12 +600,11 @@
                     style="display:flex; flex-direction: column;margin: 1rem;align-items:flex-end"
                   >
                     <div if.bind="!editingChildName" click.trigger="EditMode()">
-                      <span style="user-select: none;" class="nameTitle"
-                        >${child.childName}</span
-                      >
+                      <span style="user-select: none;" class="nameTitle">${child.childName}</span>
                     </div>
                     <div if.bind="editingChildName">
-                      <div class="nameTitle"
+                      <div
+                        class="nameTitle"
                         style="display:flex;justify-content:center;align-items:center"
                       >
                         <input
@@ -714,9 +619,7 @@
                       </div>
                     </div>
                     <div class="points">
-                      <div
-                        class="${shakePoints == true ? 'shakeItem' : 'nothing'}"
-                      >
+                      <div class="${shakePoints == true ? 'shakeItem' : 'nothing'}">
                         <span style="user-select: none"
                           >${child.points}
                           <span style="font-size: 1rem">pts</span>
@@ -724,8 +627,6 @@
                       </div>
                     </div>
                   </div>
-
-                  
                 </div>
               </div>
 
@@ -736,14 +637,8 @@
                 class="avatar avatarAnimation au-animate"
                 style="grid-area:Avatar"
               >
-                <div
-                  id="card"
-                  class="${showingAvailableRewards == true ? 'rotate' : ''}"
-                >
-                  <div
-                    class="front"
-                    style="display:flex;justify-content:space-around"
-                  >
+                <div id="card" class="${showingAvailableRewards == true ? 'rotate' : ''}">
+                  <div class="front" style="display:flex;justify-content:space-around">
                     <!-- Monster was here.... -->
                   </div>
 
@@ -752,9 +647,7 @@
                       class="au-stagger rewardsAnimations"
                       style="height: 95%;padding-left:1rem;padding-right: 1rem;max-height: 30vh;overflow-y:scroll"
                     >
-                      <h2
-                        style="text-align: center;margin-bottom:2rem; user-select:none"
-                      >
+                      <h2 style="text-align: center;margin-bottom:2rem; user-select:none">
                         Rewards available
                       </h2>
 
@@ -767,9 +660,7 @@
                           style="overflow: hidden;font-size:1.5rem;display:flex;justify-content:space-around;margin-top:0.6rem;"
                         >
                           <div class="availableRewardName">
-                            <span style="user-select: none"
-                              >${availableReward.reward}</span
-                            >
+                            <span style="user-select: none">${availableReward.reward}</span>
                           </div>
                           <paper-button
                             raised
@@ -795,18 +686,14 @@
                   <div style="user-select: none;">Next Reward at 100 pts is:</div>
 
                   <div if.bind="!editingReward">
-                    <div
-                      style="display:flex;justify-content:center;align-items:center"
-                    >
+                    <div style="display:flex;justify-content:center;align-items:center">
                       <div click.trigger="EditMode()">
                         <span style="user-select:none">${child.reward}</span>
                       </div>
                     </div>
                   </div>
                   <div if.bind="editingReward">
-                    <div
-                      style="display:flex;justify-content:center;align-items:center"
-                    >
+                    <div style="display:flex;justify-content:center;align-items:center">
                       <input
                         type="text"
                         maxlength="20"
@@ -832,16 +719,8 @@
                   draggable="false"
                   style="user-select:none;display:flex;flex-direction: column; align-items:center;"
                 >
-                  <div
-                    style="user-select:none"
-                    draggable="false"
-                    class="ControlPanelWrapper"
-                  >
-                    <div
-                      style="user-select:none"
-                      draggable="false"
-                      class="ControlPanel"
-                    >
+                  <div style="user-select:none" draggable="false" class="ControlPanelWrapper">
+                    <div style="user-select:none" draggable="false" class="ControlPanel">
                       <div
                         draggable="false"
                         style="user-select:none;display:flex;flex-direction:row;flex-wrap: wrap;"

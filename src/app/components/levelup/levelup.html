@@ -1,0 +1,61 @@
+<template>
+  <require from="./Levelup.css"></require>
+
+  <style>
+    .container {
+      display: grid;
+      grid-template-areas: main;
+    }
+  </style>
+  <div class="pyro" style="overflow: hidden;position:relative;">
+    <div class="before"></div>
+    <div class="after"></div>
+    <div></div>
+    <div class="VerticalList">
+      <div style="display:flex;flex-direction: column;justify-content:center; align-items:center;">
+          <h2 style="user-select: none;margin-bottom: 5rem;">
+            Congratulations ${child.childName}
+          </h5>
+
+        <h3 style="user-select: none;" class="TransformedLevelUp">
+          YOU LEVELED UP
+        </h3>
+        <div class="LinesTop">
+          <div>
+            <div
+              class="LevelUpScreenCircle"
+              style="display:flex;justify-content:center;
+                                                  background-color:red;
+                                                  color: white;
+                                                  font-size: 2rem;
+                                                  margin-top: 2rem;
+                                                 align-items:center;
+                                                 flex-direction: column;
+                                                 height:30vmin;border-radius: 50%;
+                                                 width:30vmin;
+                                                 border: 3px dashed black;"
+            >
+              <span style="user-select: none;">Level</span>
+              <span style="user-select: none">${child.level}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="text-align:center">
+          <h3 style="user-select: none">
+            You have added the below reward to your inventory:
+          </h3>
+          <h2>
+            <Strong> ${child.reward == 'Enter reward here!' ? '' : child.reward}</Strong>
+          </h2>
+        </div>
+      </div>
+
+      <paper-button raised class="Continue" click.trigger="CloseLevelUp(child)"
+        >Continue</paper-button
+      >
+    </div>
+  </div>
+</template>
