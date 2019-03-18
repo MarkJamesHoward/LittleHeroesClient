@@ -54,10 +54,11 @@ export class Achievements {
   UpdateScreen() {
     this.child.achievementsTotal =0;
     
-    if (this.child.achievements) {
+    if (this.child.myAchievements) {
       for (let i = 0; i < this.achievements.length; i++) {
-        let achieve = this.child.achievements.find(
-          item => item.achievementID === this.achievements[i].ID
+        let achieve = this.child.myAchievements.find(
+          //@ts-ignore
+          item => item.achievementsID === this.achievements[i].id
         );
         if (achieve) {
           console.log("setting progress " + achieve.progress);

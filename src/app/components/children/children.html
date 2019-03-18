@@ -401,7 +401,7 @@
     }
   </style>
 
-  <div show.bind="errorHadOccurred">
+    <div show.bind="errorHadOccurred">
     <div class="center" style="height: 100vh; width: 100vw">
       <h2>Oops something went wrong! ${errorMessage}</h2>
       <paper-button click.trigger="CloseError()">Close</paper-button>
@@ -422,6 +422,7 @@
         class="SwitchChild SnapChild"
         repeat.for="child of browniePoints"
       >
+
         <div>
           <!--Error occurred-->
           <div show.bind="errorHadOccurred">

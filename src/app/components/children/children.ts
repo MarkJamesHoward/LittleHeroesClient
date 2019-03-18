@@ -1,7 +1,10 @@
+import { achievements } from './../devdata/childrendata';
+import { IMyAchievements, IAchievements } from './../../library/interfaces';
 import { LitElement, html, property, customElement } from "lit-element";
 import { GestureEventListeners } from "@polymer/polymer/lib/mixins/gesture-event-listeners";
 import * as Gestures from "@polymer/polymer/lib/utils/gestures";
 import { tween, styler, easing } from "popmotion";
+import * as moment from "moment";
 
 //@ts-ignore
 import { interpolate } from "flubber";
@@ -18,7 +21,7 @@ import {
   SignedIn,
   BrowniePoints,
   IAvailableRewards,
-  IAchievements
+  ISuperSwat
 } from "../../library/interfaces";
 import "monster-creator";
 import "./circle.scss";
@@ -26,6 +29,7 @@ import "./pulse.scss";
 import { setTimeout } from "timers";
 import { DNS, dev, SetBrowniePoints, GetBrowniePoints } from "../global";
 import { runInThisContext } from "vm";
+import { number } from "style-value-types";
 
 @inject(HttpClient, Router)
 export class Home {
@@ -253,7 +257,13 @@ export class Home {
   //   this.router.navigate(child);
   // }
 
-  activate(params) {
+  async activate(params) {
+
+    if (!this.achievements) {
+      // Not awaited so just happends in the background
+      this.GetAchievementsList();
+    }
+
     console.log("children activated called!!!");
     if (params.id === "0") {
       let data = GetBrowniePoints();
@@ -385,29 +395,126 @@ export class Home {
     }
   }
 
-  async CheckForSuperSwat(child: BrowniePoints, amount: number) {
-    if (!this.achievements) {
-      await this.GetAchievementsList();
-    }
+  SetLevelMapProgressLocal(child: BrowniePoints, progress: number) {
 
-    // Check for Super Swat completion - TODO
-    if (child.pendingAdds >= 300) {
-      let achievement = child.achievements.find(item => item.achievementID === 1);
-      achievement.progress = 100;
-      child.achievementsTotal = 1;
+    let levelMad = this.achievements.find(item => item.title === "Level Mad");
+    //@ts-ignore
+    let MyLeveMAdAch: IMyAchievements = child.myAchievements.find(item => item.achievementsID === levelMad.id);
+
+    if (MyLeveMAdAch) {
+      MyLeveMAdAch.progress = progress;
       console.log("Super Swat achievement earned!");
     }
   }
 
-  public async CheckForMegaPoints(child: BrowniePoints) {
-    if (!this.achievements) {
-      await this.GetAchievementsList();
-    }
+  SetSuperSwatProgressLocal(child: BrowniePoints, progress: number) {
 
+    let levelMad = this.achievements.find(item => item.title === "Level Mad");
+    //@ts-ignore
+    let MyLeveMAdAch: IMyAchievements = child.myAchievements.find(item => item.achievementsID === levelMad.id);
+
+    if (MyLeveMAdAch) {
+      MyLeveMAdAch.progress = progress;
+      if (progress === 100) {
+        child.achievementsTotal++;
+      }
+      console.log("Super Swat achievement earned!");
+    }
+  }
+
+  async CheckForSuperSwat(child: BrowniePoints) {
+    let completedDays: number = 0;
+
+    console.log("making call");
+    let result2 = await this.http.fetch(
+      `${DNS}/api/Achievements/GetSuperSwatAddDaySuccess/${child.id}`,
+      {
+        method: "get",
+        credentials: "include"
+      }
+    );
+    let data2 = (await result2.json()) as ISuperSwat;
+    console.log(data2);
+
+    let now = moment();
+
+    if (data2.Day1Date) {
+      completedDays++;
+
+      if (data2.Day2Date) {
+        completedDays++;
+
+        if (data2.Day3Date) {
+          completedDays++;
+
+          if (data2.Day4Date) {
+            completedDays++;
+
+            // Now if today is no older than a day from day then COMPLETED!!! well done
+            if (this.IsDateDiffLessThanADay(data2.Day4Date)) {
+              // Set achievement to completed!!!!!
+              this.SetSuperSwatProgressLocal(child, 100)
+            }
+          } else {
+            if (this.IsDateDiffLessThanADay(data2.Day3Date)) {
+              await this.AddSuperSwatSuccesServer(child, 4, now.toString());
+              this.SetSuperSwatProgressLocal(child, 80)
+            }
+          }
+        } else {
+          if (this.IsDateDiffLessThanADay(data2.Day2Date)) {
+            await this.AddSuperSwatSuccesServer(child, 3, now.toString());
+            this.SetSuperSwatProgressLocal(child, 60)
+          }
+        }
+      } else {
+        if (this.IsDateDiffLessThanADay(data2.Day1Date)) {
+          await this.AddSuperSwatSuccesServer(child, 2, now.toString());
+          this.SetSuperSwatProgressLocal(child, 40)
+        }
+      }
+    } else {
+      await this.AddSuperSwatSuccesServer(child, 1, now.toString());
+      this.SetSuperSwatProgressLocal(child, 20)
+    }
+  }
+
+  IsDateDiffLessThanADay(LastLevelUpDate: string) {
+    let now = moment();
+    var a = moment(LastLevelUpDate);
+    let diff = a.diff(now, "days");
+    if (diff < 1) return true;
+    else return false;
+  }
+
+  async AddSuperSwatSuccesServer(child: BrowniePoints, day: number, date: string) {
+    console.log("making call to add a new success day");
+    let result = await this.http.fetch(
+      `${DNS}/api/Achievements/SuperSwatAddDaySuccess/${child.id}/${day}/20170101`,
+      {
+        method: "get",
+        credentials: "include"
+      }
+    );
+  }
+
+  public async CheckForMegaPoints(child: BrowniePoints) {
+    
     if (child.pendingAdds >= 50) {
       let mega = this.achievements.find(item => item.title === "Mega Points");
-      let streak = child.achievements.find(item => item.ID === mega.ID);
+      //@ts-ignore
+      let streak: IMyAchievements = child.myAchievements.find(item => item.achievementsID === mega.id);
       streak.progress = 100;
+
+      SetBrowniePoints(this.browniePoints);
+
+      let result = await this.http.fetch(
+        `${DNS}/api/Achievements/SetAchivementProgress/${child.id}/${streak.achievementsID}/100`,
+        {
+          method: "get",
+          credentials: "include"
+        }
+      );
     }
   }
 
@@ -594,22 +701,23 @@ export class Home {
     }
 
     this.ShakeyPoints();
-    this.showBonusTime(child);
+    //this.showBonusTime(child);
+    this.CheckForMegaPoints(child);
+    //this.CheckForSuperSwat(child);
 
     this.syncPending = true;
 
     child.points += amount;
     console.log("child points " + child.points);
-
+    
     this.CheckIfLevelCompleted(child);
-    this.CheckForMegaPoints(child);
-    this.CheckForSuperSwat(child, amount);
 
     if (child.pendingAdds === 0) {
       setTimeout(() => {
         console.log("making call to server to update with points " + child.pendingAdds);
         // perform the add now
         this.incrementCounterInternal(child, child.pendingAdds);
+
         child.pendingAdds = 0;
         this.syncPending = false;
       }, 5000);

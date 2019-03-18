@@ -6,6 +6,17 @@
   browniePointsID: number;
 }
 
+export interface ISuperSwat {
+  ID: number;
+  browniePointsID: number;
+  Day1Date: string;
+  Day2Date: string;
+  Day3Date: string;
+  Day4Date: string;
+  Day5Date: string;
+  CompletedDays: number;
+}
+
 export interface Pet {
   id: number;
   eyes: number;
@@ -26,13 +37,13 @@ export interface SignedIn {
 }
 
 export interface IMyAchievements {
-  achievementID: number;
+  achievementsID: number;
   ID: number;
   progress: number;
 }
 
 export interface IAchievements {
-  ID: number; 
+  ID: number;
   title: string;
   description: string;
   progress: number;
@@ -51,7 +62,7 @@ export interface BrowniePoints {
   pet: Pet;
   avatar: string;
   removeForAnimation: boolean;
-  achievements: Array<IMyAchievements>;
+  myAchievements: Array<IMyAchievements>;
   achievementsTotal: number;
 }
 

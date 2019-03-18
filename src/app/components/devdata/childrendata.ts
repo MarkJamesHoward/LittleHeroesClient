@@ -11,6 +11,12 @@ export let achievements = [
     title: "Mega Points",
     description: "Earn 50 points in one day",
     progress: 0
+  },
+  {
+    ID: 3,
+    title: "Level Mad",
+    description: "Level up twice in one day",
+    progress: 0
   }
   ];
 
@@ -52,9 +58,9 @@ export let data = [
       selectedlegsx: 47,
       selectedlegsy: 49
     },
-    achievements: [
-      {ID: 1, achievementID: 1, progress: 0},
-      {ID: 2, achievementID: 2, progress: 50}
+    myAchievements: [
+      {ID: 1, achievementsID: 1, progress: 0},
+      {ID: 2, achievementsID: 2, progress: 50}
     ],
     achievementsTotal: 3
   },
@@ -108,9 +114,9 @@ export let data = [
       selectedlegsx: 47,
       selectedlegsy: 49
     },
-    achievements: [
-      {ID: 1, achievementID: 1, progress: 10},
-      {ID: 2, achievementID: 2, progress: 100}
+    myAchievements: [
+      {ID: 1, achievementsID: 1, progress: 10},
+      {ID: 2, achievementsID: 2, progress: 100}
     ],
     achievementsTotal: 2,
   },
@@ -164,8 +170,8 @@ export let data = [
       selectedlegsx: 47,
       selectedlegsy: 49
     },
-    achievements: [
-      {ID: 1, achievementID: 1, progress: 10}
+    myAchievements: [
+      {ID: 1, achievementsID: 1, progress: 10}
     ],
     achievementsTotal: 2
   }
