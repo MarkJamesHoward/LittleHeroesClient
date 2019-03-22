@@ -5,10 +5,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin");
 const project = require("./aurelia_project/aurelia.json");
-const {
-  AureliaPlugin,
-  ModuleDependenciesPlugin
-} = require("aurelia-webpack-plugin");
+const { AureliaPlugin, ModuleDependenciesPlugin } = require("aurelia-webpack-plugin");
 const { ProvidePlugin } = require("webpack");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
@@ -16,8 +13,7 @@ const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const WorkboxPlugin = require("workbox-webpack-plugin");
 
 // config helpers:
-const ensureArray = config =>
-  (config && (Array.isArray(config) ? config : [config])) || [];
+const ensureArray = config => (config && (Array.isArray(config) ? config : [config])) || [];
 const when = (condition, config, negativeConfig) =>
   condition ? ensureArray(config) : ensureArray(negativeConfig);
 
@@ -30,14 +26,7 @@ const baseUrl = "/";
 
 const cssRules = [{ loader: "css-loader" }];
 
-module.exports = ({
-  production,
-  server,
-  extractCss,
-  coverage,
-  analyze,
-  karma
-} = {}) => ({
+module.exports = ({ production, server, extractCss, coverage, analyze, karma } = {}) => ({
   resolve: {
     extensions: [".ts", ".js"],
     modules: [srcDir, nodeModulesDir],
@@ -54,15 +43,9 @@ module.exports = ({
   output: {
     path: outDir,
     publicPath: baseUrl,
-    filename: production
-      ? "[name].[chunkhash].bundle.js"
-      : "[name].[hash].bundle.js",
-    sourceMapFilename: production
-      ? "[name].[chunkhash].bundle.map"
-      : "[name].[hash].bundle.map",
-    chunkFilename: production
-      ? "[name].[chunkhash].chunk.js"
-      : "[name].[hash].chunk.js"
+    filename: production ? "[name].[chunkhash].bundle.js" : "[name].[hash].bundle.js",
+    sourceMapFilename: production ? "[name].[chunkhash].bundle.map" : "[name].[hash].bundle.map",
+    chunkFilename: production ? "[name].[chunkhash].chunk.js" : "[name].[hash].chunk.js"
   },
   optimization: {
     runtimeChunk: true, // separates the runtime chunk, required for long term cacheability
@@ -104,9 +87,7 @@ module.exports = ({
           test: /[\\/]node_modules[\\/]/,
           name(module) {
             // Extract the name of the package from the path segment after node_modules
-            const packageName = module.context.match(
-              /[\\/]node_modules[\\/](.*?)([\\/]|$)/
-            )[1];
+            const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
             return `vendor.${packageName.replace("@", "")}`;
           },
           priority: 20
@@ -124,9 +105,7 @@ module.exports = ({
           test: /[\\/]node_modules[\\/]/,
           name(module) {
             // Extract the name of the package from the path segment after node_modules
-            const packageName = module.context.match(
-              /[\\/]node_modules[\\/](.*?)([\\/]|$)/
-            )[1];
+            const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
             return `vendor.async.${packageName.replace("@", "")}`;
           },
           chunks: "async",
@@ -228,7 +207,7 @@ module.exports = ({
       },
       // load these fonts normally, as files:
       {
-        test: /\.(ttf|eot|svg|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
+        test: /\.(ttf|eot|svg|otf|mp3)(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
         loader: "file-loader"
       },
       ...when(coverage, {

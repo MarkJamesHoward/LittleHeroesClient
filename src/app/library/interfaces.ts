@@ -9,11 +9,11 @@
 export interface ISuperSwat {
   ID: number;
   browniePointsID: number;
-  Day1Date: string;
-  Day2Date: string;
-  Day3Date: string;
-  Day4Date: string;
-  Day5Date: string;
+  day1Date: string;
+  day2Date: string;
+  day3Date: string;
+  day4Date: string;
+  day5Date: string;
   CompletedDays: number;
 }
 

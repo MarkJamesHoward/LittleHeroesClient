@@ -76,6 +76,9 @@ export class Home {
   ViewPet(child: BrowniePoints) {
     console.log("display pet " + child.childName);
     SetBrowniePoints(this.browniePoints);
+    const sound = new Audio();
+    sound.src = require('../../sounds/click.mp3');
+    sound.play();
     this.router.navigate(`pet/${child.id}`);
   }
 
@@ -438,37 +441,37 @@ export class Home {
 
     let now = moment();
 
-    if (data2.Day1Date) {
+    if (data2.day1Date) {
       completedDays++;
 
-      if (data2.Day2Date) {
+      if (data2.day2Date) {
         completedDays++;
 
-        if (data2.Day3Date) {
+        if (data2.day3Date) {
           completedDays++;
 
-          if (data2.Day4Date) {
+          if (data2.day4Date) {
             completedDays++;
 
             // Now if today is no older than a day from day then COMPLETED!!! well done
-            if (this.IsDateDiffLessThanADay(data2.Day4Date)) {
+            if (this.IsDateDiffOneDay(data2.day4Date)) {
               // Set achievement to completed!!!!!
               this.SetSuperSwatProgressLocal(child, 100)
             }
           } else {
-            if (this.IsDateDiffLessThanADay(data2.Day3Date)) {
+            if (this.IsDateDiffOneDay(data2.day3Date)) {
               await this.AddSuperSwatSuccesServer(child, 4, now.toString());
               this.SetSuperSwatProgressLocal(child, 80)
             }
           }
         } else {
-          if (this.IsDateDiffLessThanADay(data2.Day2Date)) {
+          if (this.IsDateDiffOneDay(data2.day2Date)) {
             await this.AddSuperSwatSuccesServer(child, 3, now.toString());
             this.SetSuperSwatProgressLocal(child, 60)
           }
         }
       } else {
-        if (this.IsDateDiffLessThanADay(data2.Day1Date)) {
+        if (this.IsDateDiffOneDay(data2.day1Date)) {
           await this.AddSuperSwatSuccesServer(child, 2, now.toString());
           this.SetSuperSwatProgressLocal(child, 40)
         }
@@ -479,11 +482,19 @@ export class Home {
     }
   }
 
-  IsDateDiffLessThanADay(LastLevelUpDate: string) {
+  IsDateSet(date: string) {
+    let _date = moment(date);
+    if (_date.diff(moment()) < 10) {
+      return true
+    }
+    else return false;
+  }
+
+  IsDateDiffOneDay(LastLevelUpDate: string) {
     let now = moment();
     var a = moment(LastLevelUpDate);
     let diff = a.diff(now, "days");
-    if (diff < 1) return true;
+    if (diff === 1) return true;
     else return false;
   }
 
@@ -575,10 +586,16 @@ export class Home {
 
   public ViewAvailableRewards() {
     this.showingAvailableRewards = !this.showingAvailableRewards;
+    const sound = new Audio();
+    sound.src = require('../../sounds/click.mp3');
+    sound.play();
   }
 
   public ViewAchievements(child: BrowniePoints) {
     this.router.navigate(`achievements/${child.id}`);
+    const sound = new Audio();
+    sound.src = require('../../sounds/click.mp3');
+    sound.play();
   }
 
   // private ConfigureDisplay(data: BrowniePoints[]) {
@@ -619,18 +636,30 @@ export class Home {
 
   public ViewPoints() {
     this.showingAvailableRewards = false;
+    const sound = new Audio();
+    sound.src = require('../../sounds/click.mp3');
+    sound.play();
   }
 
   public async incrementCounter(child: BrowniePoints) {
     this.combineAdds(child, 1);
+    const sound = new Audio();
+    sound.src = require('../../sounds/bell.mp3');
+    sound.play();
   }
 
   public async DeductCounter(child: BrowniePoints) {
     this.combineAdds(child, -1);
+    const sound = new Audio();
+    sound.src = require('../../sounds/fail.mp3');
+    sound.play();
   }
 
   public async incrementCounterExtra(child: BrowniePoints) {
     this.combineAdds(child, 10);
+    const sound = new Audio();
+    sound.src = require('../../sounds/whistle.mp3');
+    sound.play();
   }
 
   public async AddBonusPointBall(child: BrowniePoints, amount: number) {
@@ -703,7 +732,7 @@ export class Home {
     this.ShakeyPoints();
     //this.showBonusTime(child);
     this.CheckForMegaPoints(child);
-    //this.CheckForSuperSwat(child);
+    this.CheckForSuperSwat(child);
 
     this.syncPending = true;
 

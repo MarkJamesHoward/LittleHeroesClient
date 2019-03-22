@@ -55,6 +55,7 @@ export class login {
           this.loginFailed = false;
         } else {
           this.loginFailed = true;
+          this.attemptingLogin = false;
           setTimeout(() => {
             this.loginFailed = false;
           }, 3000)
