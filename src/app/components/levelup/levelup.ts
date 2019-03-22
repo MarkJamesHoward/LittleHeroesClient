@@ -27,6 +27,9 @@ export class LevelUp {
 
     this.child = this.browniePoints.find(item => item.id == params.id);
 
+    const sound = new Audio();
+    sound.src = require('../../sounds/clapping.mp3');
+    sound.play();
   }
 
   public CloseLevelUp() {
