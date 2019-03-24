@@ -80,6 +80,7 @@ export class Achievements {
 
     if (dev) {
       import("../devdata/childrendata").then(devdata => {
+        //@ts-ignore
         this.achievements = devdata.achievements;
         this.TotalAchievementCount = 0;
         if (this.achievements) {

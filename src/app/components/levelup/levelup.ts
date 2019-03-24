@@ -11,9 +11,11 @@ export class LevelUp {
   name: String;
   reward: String;
   child: BrowniePoints;
-  browniePoints: Array<BrowniePoints>
+  browniePoints: Array<BrowniePoints>;
+  sound = new Audio();
 
   Continue() {
+    this.sound.pause();
     this.router.navigate("/children/0");
   }
 
@@ -27,15 +29,21 @@ export class LevelUp {
 
     this.child = this.browniePoints.find(item => item.id == params.id);
 
-    const sound = new Audio();
-    sound.src = require('../../sounds/clapping.mp3');
-    sound.play();
+    this.sound.src = require("../../sounds/clapping.mp3");
+    this.sound
+      .play()
+      .then(() => {
+        console.log("completed sounds");
+      })
+      .catch(e => {
+        console.log("error playing sound " + e);
+      });
   }
 
   public CloseLevelUp() {
+    this.sound.pause();
     this.router.navigate(`unlock/${this.child.level}`);
   }
-
 
   constructor(router: Router) {
     this.router = router;

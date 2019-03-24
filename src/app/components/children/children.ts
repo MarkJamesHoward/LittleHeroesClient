@@ -1,5 +1,6 @@
-import { achievements } from './../devdata/childrendata';
-import { IMyAchievements, IAchievements } from './../../library/interfaces';
+import { PLATFORM } from "aurelia-pal";
+import { achievements } from "./../devdata/childrendata";
+import { IMyAchievements, IAchievements } from "./../../library/interfaces";
 import { LitElement, html, property, customElement } from "lit-element";
 import { GestureEventListeners } from "@polymer/polymer/lib/mixins/gesture-event-listeners";
 import * as Gestures from "@polymer/polymer/lib/utils/gestures";
@@ -17,12 +18,7 @@ import "@polymer/iron-icons/iron-icons.js";
 import "@polymer/paper-button";
 import { CssAnimator } from "aurelia-animator-css";
 
-import {
-  SignedIn,
-  BrowniePoints,
-  IAvailableRewards,
-  ISuperSwat
-} from "../../library/interfaces";
+import { SignedIn, BrowniePoints, IAvailableRewards, ISuperSwat } from "../../library/interfaces";
 import "monster-creator";
 import "./circle.scss";
 import "./pulse.scss";
@@ -77,7 +73,7 @@ export class Home {
     console.log("display pet " + child.childName);
     SetBrowniePoints(this.browniePoints);
     const sound = new Audio();
-    sound.src = require('../../sounds/click.mp3');
+    sound.src = require("../../sounds/click.mp3");
     sound.play();
     this.router.navigate(`pet/${child.id}`);
   }
@@ -261,7 +257,6 @@ export class Home {
   // }
 
   async activate(params) {
-
     if (!this.achievements) {
       // Not awaited so just happends in the background
       this.GetAchievementsList();
@@ -361,6 +356,7 @@ export class Home {
       let myimport = await import("../devdata/childrendata");
       //console.log(myimport);
       this.browniePoints = myimport.data;
+      //@ts-ignore
       this.achievements = myimport.achievements;
       this.currentCount = 3; //myimport.length;
       this.loading = false;
@@ -387,6 +383,7 @@ export class Home {
   private async GetAchievementsList() {
     if (dev) {
       let myimport = await import("../devdata/childrendata");
+      //@ts-ignore
       this.achievements = myimport.achievements;
     } else {
       let result = await this.http.fetch(`${DNS}/api/Achievements/`, {
@@ -398,11 +395,13 @@ export class Home {
     }
   }
 
-  SetLevelMapProgressLocal(child: BrowniePoints, progress: number) {
-
+  SetLevelMadProgressLocal(child: BrowniePoints, progress: number) {
     let levelMad = this.achievements.find(item => item.title === "Level Mad");
     //@ts-ignore
-    let MyLeveMAdAch: IMyAchievements = child.myAchievements.find(item => item.achievementsID === levelMad.id);
+    let MyLeveMAdAch: IMyAchievements = child.myAchievements.find(
+      //@ts-ignore
+      item => item.achievementsID === levelMad.id
+    );
 
     if (MyLeveMAdAch) {
       MyLeveMAdAch.progress = progress;
@@ -411,13 +410,15 @@ export class Home {
   }
 
   SetSuperSwatProgressLocal(child: BrowniePoints, progress: number) {
-
-    let levelMad = this.achievements.find(item => item.title === "Level Mad");
+    let SuperSwat = this.achievements.find(item => item.title === "Super Swat");
     //@ts-ignore
-    let MyLeveMAdAch: IMyAchievements = child.myAchievements.find(item => item.achievementsID === levelMad.id);
+    let MySuperSwat: IMyAchievements = child.myAchievements.find(
+      //@ts-ignore
+      item => item.achievementsID === SuperSwat.id
+    );
 
-    if (MyLeveMAdAch) {
-      MyLeveMAdAch.progress = progress;
+    if (MySuperSwat) {
+      MySuperSwat.progress = progress;
       if (progress === 100) {
         child.achievementsTotal++;
       }
@@ -427,81 +428,124 @@ export class Home {
 
   async CheckForSuperSwat(child: BrowniePoints) {
     let completedDays: number = 0;
+    let data2: ISuperSwat;
 
     console.log("making call");
-    let result2 = await this.http.fetch(
-      `${DNS}/api/Achievements/GetSuperSwatAddDaySuccess/${child.id}`,
-      {
-        method: "get",
-        credentials: "include"
+    try {
+      let result2 = await this.http.fetch(
+        `${DNS}/api/Achievements/GetSuperSwatAddDaySuccess/${child.id}`,
+        {
+          method: "get",
+          credentials: "include"
+        }
+      );
+      if (result2.ok) {
+        data2 = (await result2.json()) as ISuperSwat;
+        console.log(data2);
+      } else {
+        this.errorHadOccurred = true;
+        this.errorMessage = "Failed to retrieve SuperSwat progress from server";
       }
-    );
-    let data2 = (await result2.json()) as ISuperSwat;
-    console.log(data2);
+    } catch (e) {
+      this.errorHadOccurred = true;
+      this.errorMessage = e;
+      return;
+    }
 
     let now = moment();
 
-    if (data2.day1Date) {
+    if (this.IsDateSet(data2.day1Date)) {
       completedDays++;
 
-      if (data2.day2Date) {
+      if (this.IsDateSet(data2.day2Date)) {
         completedDays++;
 
-        if (data2.day3Date) {
+        if (this.IsDateSet(data2.day3Date)) {
           completedDays++;
 
-          if (data2.day4Date) {
+          if (this.IsDateSet(data2.day4Date)) {
             completedDays++;
 
             // Now if today is no older than a day from day then COMPLETED!!! well done
             if (this.IsDateDiffOneDay(data2.day4Date)) {
               // Set achievement to completed!!!!!
-              this.SetSuperSwatProgressLocal(child, 100)
+              this.SetSuperSwatProgressLocal(child, 100);
+            } else if (!this.IsSameDay(data2.day4Date)) {
+              this.SetSuperSwatProgressLocal(child, 0);
+              await this.ResetSuperSwatSuccesServer(child);
             }
           } else {
             if (this.IsDateDiffOneDay(data2.day3Date)) {
               await this.AddSuperSwatSuccesServer(child, 4, now.toString());
-              this.SetSuperSwatProgressLocal(child, 80)
+              this.SetSuperSwatProgressLocal(child, 80);
+            } else if (!this.IsSameDay(data2.day3Date)) {
+              this.SetSuperSwatProgressLocal(child, 0);
+              await this.ResetSuperSwatSuccesServer(child);
             }
           }
         } else {
           if (this.IsDateDiffOneDay(data2.day2Date)) {
             await this.AddSuperSwatSuccesServer(child, 3, now.toString());
-            this.SetSuperSwatProgressLocal(child, 60)
+            this.SetSuperSwatProgressLocal(child, 60);
+          } else if (!this.IsSameDay(data2.day2Date)) {
+            this.SetSuperSwatProgressLocal(child, 0);
+            await this.ResetSuperSwatSuccesServer(child);
           }
         }
       } else {
         if (this.IsDateDiffOneDay(data2.day1Date)) {
           await this.AddSuperSwatSuccesServer(child, 2, now.toString());
-          this.SetSuperSwatProgressLocal(child, 40)
+          this.SetSuperSwatProgressLocal(child, 40);
+        } else if (!this.IsSameDay(data2.day1Date)) {
+          this.SetSuperSwatProgressLocal(child, 0);
+          await this.ResetSuperSwatSuccesServer(child);
         }
       }
     } else {
       await this.AddSuperSwatSuccesServer(child, 1, now.toString());
-      this.SetSuperSwatProgressLocal(child, 20)
+      this.SetSuperSwatProgressLocal(child, 20);
     }
   }
 
-  IsDateSet(date: string) {
-    let _date = moment(date);
-    if (_date.diff(moment()) < 10) {
-      return true
+  IsDateSet(date: string): boolean {
+    if (date === null) {
+      return false;
     }
-    else return false;
+
+    let now = moment(date);
+    if (moment(date).isBefore("2010-01-01")) {
+      return false;
+    } else return true;
+  }
+
+  IsSameDay(date: string) {
+    let now = moment();
+    var a = moment(date);
+    let diff = a.diff(now, "days");
+    if (diff === 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   IsDateDiffOneDay(LastLevelUpDate: string) {
     let now = moment();
     var a = moment(LastLevelUpDate);
-    let diff = a.diff(now, "days");
+    let diff = now.diff(a, "days");
     if (diff === 1) return true;
-    else return false;
+    else {
+      //Reset the progress Afraid!
+
+      return false;
+    }
   }
 
   async AddSuperSwatSuccesServer(child: BrowniePoints, day: number, date: string) {
     console.log("making call to add a new success day");
+    let now = moment().format("YYYYMMDD");
     let result = await this.http.fetch(
-      `${DNS}/api/Achievements/SuperSwatAddDaySuccess/${child.id}/${day}/20170101`,
+      `${DNS}/api/Achievements/SuperSwatAddDaySuccess/${child.id}/${day}/${now}`,
       {
         method: "get",
         credentials: "include"
@@ -509,12 +553,34 @@ export class Home {
     );
   }
 
+  async ResetSuperSwatSuccesServer(child: BrowniePoints) {
+    console.log("making call to add a new success day");
+    try {
+      let result = await this.http.fetch(
+        `${DNS}/api/Achievements/ResetSuperSwatAddDaySuccess/${child.id}`,
+        {
+          method: "get",
+          credentials: "include"
+        }
+      );
+      if (!result.ok) {
+        this.errorHadOccurred = true;
+        this.errorMessage = "Failed to reset super swat progress";
+      }
+    } catch (e) {
+      this.errorHadOccurred = true;
+      this.errorMessage = e.message;
+    }
+  }
+
   public async CheckForMegaPoints(child: BrowniePoints) {
-    
     if (child.pendingAdds >= 50) {
       let mega = this.achievements.find(item => item.title === "Mega Points");
       //@ts-ignore
-      let streak: IMyAchievements = child.myAchievements.find(item => item.achievementsID === mega.id);
+      let streak: IMyAchievements = child.myAchievements.find(
+        //@ts-ignore
+        item => item.achievementsID === mega.id
+      );
       streak.progress = 100;
 
       SetBrowniePoints(this.browniePoints);
@@ -537,42 +603,43 @@ export class Home {
     this.errorHadOccurred = false;
   }
 
-  public CheckIfLevelCompleted(child: BrowniePoints) {
+  async CheckIfLevelCompleted(child: BrowniePoints) {
     if (child.points >= child.pointsNeeded) {
       this.levelledUp = true;
       ++child.level;
       let excess = child.points - child.pointsNeeded;
-
+      child.points = excess;
+      
       //console.log("leveledup");
+      let reward: IAvailableRewards = {
+        id: 1,
+        reward: child.reward,
+        used: false,
+        beingConsumed: false,
+        browniePointsID: child.id
+      };
 
       if (dev) {
-        child.points = excess;
-        let reward: IAvailableRewards = {
-          id: 1,
-          reward: child.reward,
-          used: false,
-          beingConsumed: false,
-          browniePointsID: child.id
-        };
         child.availableRewards.push(reward);
+        this.router.navigate(`/levelup/${child.id}`);
       } else {
-        this.http
-          .fetch(`${DNS}/api/PointsData/LevelUp/${child.childName}`, {
+        try {
+          let result = await this.http.fetch(`${DNS}/api/PointsData/LevelUp/${child.id}`, {
             method: "Get",
             credentials: "include"
-          })
-          .then(result => result.json() as Promise<BrowniePoints[]>)
-          .then(data => {
-            for (var i = 0; i < data.length; i++) {
-              if (data[i].id === child.id) {
-                //console.log(`updating ${data[i].childName}`);
-                child.points = excess;
-                child.availableRewards = data[i].availableRewards;
-              }
-            }
           });
+          if (result.ok) {
+            child.availableRewards.push(reward);
+            this.router.navigate(`/levelup/${child.id}`);
+          } else {
+            this.errorHadOccurred = true;
+            this.errorMessage = "Failed to update level to server..";
+          }
+        } catch (e) {
+          this.errorHadOccurred = true;
+          this.errorMessage = e;
+        }
       }
-      this.router.navigate(`/levelup/${child.id}`);
     }
   }
 
@@ -587,27 +654,30 @@ export class Home {
   public ViewAvailableRewards() {
     this.showingAvailableRewards = !this.showingAvailableRewards;
     const sound = new Audio();
-    sound.src = require('../../sounds/click.mp3');
-    sound.play();
+    sound.src = require("../../sounds/click.mp3");
+    sound
+      .play()
+      .then(() => {
+        console.log("sound played successfully");
+      })
+      .catch(e => {
+        console.log("error playing sound " + e.message);
+      });
   }
 
   public ViewAchievements(child: BrowniePoints) {
     this.router.navigate(`achievements/${child.id}`);
     const sound = new Audio();
-    sound.src = require('../../sounds/click.mp3');
-    sound.play();
+    sound.src = require("../../sounds/click.mp3");
+    sound
+      .play()
+      .then(_ => {
+        console.log("sound played");
+      })
+      .catch(e => {
+        console.log("");
+      });
   }
-
-  // private ConfigureDisplay(data: BrowniePoints[]) {
-  //   //console.log(this.index);
-  //   //this.browniePoints = data;
-  //   //this.currentCount = Object.keys(this.browniePoints).length;
-  //   // this.currentChildPresenting = this.browniePoints[this.index];
-  //   // this.showingChild = this.currentChildPresenting.childName;
-  //   // this.currentChildPresenting.presenting = true;
-  //   // this.showChildData = true;
-  //   this.HideWaitingIcon();
-  // }
 
   Use(availableReward: IAvailableRewards, child) {
     //console.log("use");
@@ -637,29 +707,55 @@ export class Home {
   public ViewPoints() {
     this.showingAvailableRewards = false;
     const sound = new Audio();
-    sound.src = require('../../sounds/click.mp3');
-    sound.play();
+    sound.src = require("../../sounds/click.mp3");
+    sound
+      .play()
+      .then(() => {
+        console.log("played sound successfully");
+      })
+      .catch(e => {
+        console.log("failed to play sound " + e);
+      });
   }
 
   public async incrementCounter(child: BrowniePoints) {
     this.combineAdds(child, 1);
     const sound = new Audio();
-    sound.src = require('../../sounds/bell.mp3');
-    sound.play();
+    sound.src = require("../../sounds/bell.mp3");
+    try {
+      let result = await sound.play();
+    } catch (e) {
+      console.log(e);
+      console.log(e.message);
+    }
   }
 
   public async DeductCounter(child: BrowniePoints) {
     this.combineAdds(child, -1);
     const sound = new Audio();
-    sound.src = require('../../sounds/fail.mp3');
-    sound.play();
+    sound.src = require("../../sounds/fail.mp3");
+    sound
+      .play()
+      .then(() => {
+        console.log("palyed sound");
+      })
+      .catch(e => {
+        console.log("failed to play " + e);
+      });
   }
 
   public async incrementCounterExtra(child: BrowniePoints) {
     this.combineAdds(child, 10);
     const sound = new Audio();
-    sound.src = require('../../sounds/whistle.mp3');
-    sound.play();
+    sound.src = require("../../sounds/whistle.mp3");
+    sound
+      .play()
+      .then(() => {
+        console.log("sound played successfully");
+      })
+      .catch(e => {
+        console.log("failed to play sound " + e);
+      });
   }
 
   public async AddBonusPointBall(child: BrowniePoints, amount: number) {
@@ -738,7 +834,7 @@ export class Home {
 
     child.points += amount;
     console.log("child points " + child.points);
-    
+
     this.CheckIfLevelCompleted(child);
 
     if (child.pendingAdds === 0) {
