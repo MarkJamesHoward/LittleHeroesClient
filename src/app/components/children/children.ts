@@ -1,6 +1,6 @@
 import { PLATFORM } from "aurelia-pal";
 import { achievements } from "./../devdata/childrendata";
-import { IMyAchievements, IAchievements } from "./../../library/interfaces";
+import { IMyAchievements, IAchievements, ILevelMadAchievement } from "./../../library/interfaces";
 import { LitElement, html, property, customElement } from "lit-element";
 import { GestureEventListeners } from "@polymer/polymer/lib/mixins/gesture-event-listeners";
 import * as Gestures from "@polymer/polymer/lib/utils/gestures";
@@ -395,20 +395,6 @@ export class Home {
     }
   }
 
-  SetLevelMadProgressLocal(child: BrowniePoints, progress: number) {
-    let levelMad = this.achievements.find(item => item.title === "Level Mad");
-    //@ts-ignore
-    let MyLeveMAdAch: IMyAchievements = child.myAchievements.find(
-      //@ts-ignore
-      item => item.achievementsID === levelMad.id
-    );
-
-    if (MyLeveMAdAch) {
-      MyLeveMAdAch.progress = progress;
-      console.log("Super Swat achievement earned!");
-    }
-  }
-
   SetSuperSwatProgressLocal(child: BrowniePoints, progress: number) {
     let SuperSwat = this.achievements.find(item => item.title === "Super Swat");
     //@ts-ignore
@@ -595,6 +581,27 @@ export class Home {
     }
   }
 
+  public async SetLevelMadMyAchievementsProgressServer(child: BrowniePoints, progress: number) {
+      let levelMad = this.achievements.find(item => item.title === "Level Mad");
+      //@ts-ignore
+      let myLevelMad: IMyAchievements = child.myAchievements.find(
+        //@ts-ignore
+        item => item.achievementsID === levelMad.id
+      );
+      myLevelMad.progress = progress;
+
+      SetBrowniePoints(this.browniePoints);
+
+      let result = await this.http.fetch(
+        `${DNS}/api/Achievements/SetAchivementProgress/${child.id}/${myLevelMad.achievementsID}/${progress}`,
+        {
+          method: "get",
+          credentials: "include"
+        }
+      );
+    }
+  
+
   public CloseRewards() {
     this.showingAvailableRewards = false;
   }
@@ -603,13 +610,88 @@ export class Home {
     this.errorHadOccurred = false;
   }
 
+  async SetLevelMadProgressServer(child: BrowniePoints) {
+    let now = moment().format("YYYYMMDD");
+
+    let result = await this.http.fetch(
+      `${DNS}/api/Achievements/SetLevelMadProgressServer/${child.id}/${now}`,
+      {
+        method: "Get",
+        credentials: "include"
+      }
+    );
+    if (result.ok) {
+      console.log("Set levelup for today- if we see another then complete this achievement");
+    } else {
+      this.errorHadOccurred = true;
+      this.errorMessage = "Failed to update level to server..";
+    }
+  }
+  catch(e) {
+    this.errorHadOccurred = true;
+    this.errorMessage = e;
+  }
+
+  async CheckLevelMadAchievement(child: BrowniePoints) {
+    console.log("called get level mad achievement");
+    try {
+      let result = await this.http.fetch(
+        `${DNS}/api/Achievements/GetLevelMadProgress/${child.id}`,
+        {
+          method: "Get",
+          credentials: "include"
+        }
+      );
+      if (result.ok) {
+        let achievement = this.achievements.find(item => item.title == "Level Mad");
+        //@ts-ignore
+        let item = child.myAchievements.find(item => item.achievementsID == achievement.id);
+
+        if (item) {
+          let data = (await result.json()) as ILevelMadAchievement;
+          if (data.dateOfLevelCompletion1 === null || data.dateOfLevelCompletion1 === undefined) {
+            this.SetLevelMadProgressServer(child);
+            this.SetLevelMadMyAchievementsProgressServer(child, 50)
+            item.progress = 50;
+          } else {
+            //Completed achievement!!!! ... if on the same day!
+            let lastLevelUp = moment(data.dateOfLevelCompletion1);
+            let now = moment();
+            if (now.diff(lastLevelUp, "days") === 0) {
+              item.progress = 100;
+              this.SetLevelMadMyAchievementsProgressServer(child, 100);
+              //TODO Store this on the serer also!!
+            } else {
+              //Reset progress to 0..
+              item.progress = 0;
+              this.SetLevelMadMyAchievementsProgressServer(child, 0)
+              //TODO update this on the server too!
+            }
+          }
+          console.log("printing Level Mad details");
+          console.log(data);
+        } else {
+          console.log("Warning - could not find levelMAd achievement to update");
+        }
+      } else {
+        this.errorHadOccurred = true;
+        this.errorMessage = "Failed to update level to server..";
+      }
+    } catch (e) {
+      this.errorHadOccurred = true;
+      this.errorMessage = e;
+    }
+  }
+
   async CheckIfLevelCompleted(child: BrowniePoints) {
     if (child.points >= child.pointsNeeded) {
+      this.CheckLevelMadAchievement(child);
+
       this.levelledUp = true;
       ++child.level;
       let excess = child.points - child.pointsNeeded;
       child.points = excess;
-      
+
       //console.log("leveledup");
       let reward: IAvailableRewards = {
         id: 1,

@@ -36,6 +36,12 @@ export interface SignedIn {
   signedInAs: string;
 }
 
+export interface ILevelMadAchievement {
+  id: number;
+  browniePointsID: number;
+  dateOfLevelCompletion1: string;
+}
+
 export interface IMyAchievements {
   achievementsID: number;
   ID: number;
@@ -43,7 +49,7 @@ export interface IMyAchievements {
 }
 
 export interface IAchievements {
-  y: number;
+  ID: number;
   title: string;
   description: string;
   progress: number;
