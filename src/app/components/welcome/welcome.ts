@@ -6,6 +6,7 @@ import "@polymer/paper-button";
 import "@polymer/paper-icon-button";
 import "@polymer/iron-icons/iron-icons.js";
 import { DNS, dev, FirstLoadOData } from "../global";
+import "LittleHeroesHomePageAnimation";
 
 @inject(HttpClient, Router)
 export class Welcome {
@@ -25,13 +26,13 @@ export class Welcome {
 
   public async AmISignedIn() {
     if (dev) {
-        this.signedIn = true;
-        this.signedInAs = 'DEV'
-        this.username = 'DEV'
-        this.offline = false;
-        this.loading = false;
-        return true;
-      }
+      this.signedIn = true;
+      this.signedInAs = "DEV";
+      this.username = "DEV";
+      this.offline = false;
+      this.loading = false;
+      return true;
+    }
 
     fetch(`${DNS}/api/children/all`, {
       method: "get",
@@ -51,9 +52,7 @@ export class Welcome {
             this.GetUsername();
           }
         } else {
-          console.log(
-            "Not logged in - should see a 401 not auth on the get children call"
-          );
+          console.log("Not logged in - should see a 401 not auth on the get children call");
           this.signedIn = false;
           this.offline = false;
           this.loading = false;
@@ -122,11 +121,11 @@ export class Welcome {
   // }
 
   offlineHandler() {
-    console.log('offline now!')
+    console.log("offline now!");
     this.offline = true;
   }
   onlineHandler() {
-    console.log('online now!')
+    console.log("online now!");
     this.offline = false;
   }
 
@@ -134,9 +133,8 @@ export class Welcome {
     this.http = http;
     this.router = router;
 
-    
-    window.addEventListener('offline', this.offlineHandler.bind(this))
-    window.addEventListener('online', this.onlineHandler.bind(this))
+    window.addEventListener("offline", this.offlineHandler.bind(this));
+    window.addEventListener("online", this.onlineHandler.bind(this));
 
     this.AmISignedIn()
       .then(() => {

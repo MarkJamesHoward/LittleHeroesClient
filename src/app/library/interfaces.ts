@@ -44,12 +44,12 @@ export interface ILevelMadAchievement {
 
 export interface IMyAchievements {
   achievementsID: number;
-  ID: number;
+  id: number;
   progress: number;
 }
 
 export interface IAchievements {
-  ID: number;
+  id: number;
   title: string;
   description: string;
   progress: number;

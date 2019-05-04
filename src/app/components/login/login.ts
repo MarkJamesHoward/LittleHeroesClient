@@ -51,7 +51,7 @@ export class login {
           console.log(`login succeeded! - should have a cookie now:`);
           console.log(response);
           //Now let's navigate to the view of hereos
-          this.router.navigate("children");
+          this.router.navigate("/children/1");
           this.loginFailed = false;
         } else {
           this.loginFailed = true;

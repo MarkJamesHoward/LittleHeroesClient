@@ -12,6 +12,17 @@
       user-select: none;
     }
 
+    .AnimationGrid {
+      margin-bottom: 1rem;
+      justify-content: space-around;
+      margin-top: 2rem;
+      max-width: 90vw;
+      flex-wrap: wrap;
+      display: flex;
+      font-family: "Gochi Hand", cursive;
+      font-size: 3rem;
+    }
+
     paper-button {
       padding: 1rem;
       margin: 1rem;
@@ -146,26 +157,15 @@
   </style>
 
   <div class="container">
-    <div class="image">
-      <img
-        height="100%"
-        style="object-fit: contain"
-        src="../../../../images/superhero.png"
-        alt="Alt Text!"
-      />
-    </div>
-
     <div class="welcomeTitle">
-      <div style="text-align:center;padding: 0 2rem 0 2rem">
+      <div style="text-align:center;padding: 0 2rem 0 2rem; margin-bottom: 1rem;">
         <h1 style="margin-top:1rem">Welcome to LittleHeroes</h1>
 
         <p style="text-align:center">
-          Start rewarding your kids for good behaviour today! Keep them engaged
-          with customizable avatars and monster pets. Invite Grandparents and
-          other carers so they can award points. Receive updates when points are
-          awarded by any members of the family.
+          Start rewarding your kids for good behaviour today! Keep them engaged with customizable
+          avatars and monster pets. Invite Grandparents and other carers so they can award points.
+          Receive updates when points are awarded by any members of the family.
         </p>
-
 
         <div show.bind="!loading">
           <!-- <div show.bind="!signedIn && !offline">
@@ -234,41 +234,59 @@
     </div>
 
     <div class="whiteBackgroundArea">
+      <div class="AnimationGrid">
+        <littleheroes-animation
+          style="width: 300px;height: 300px"
+          endPath="m 40.21297,26.86753 c -0.76518,-2.40347 -2.47439,-5.73264 -5.54355,-4.68771 -0.0928,0.0318 -0.14993,0.0935 -0.17957,0.16475 -0.0713,0.1277 -0.0617,0.29951 0.10054,0.3937 1.94522,1.12677 2.57493,3.96028 1.57234,5.80354 -1.00366,1.84433 -3.32141,2.83528 -5.31954,2.98168 -5.46911,0.40076 -3.79307,-7.69655 -3.23638,-10.73079 0.63394,-3.4604 1.35572,-6.92291 0.69073,-10.43728 C 27.74086,7.41466 25.9484,4.78682 23.69626,2.87617 19.12709,-0.99944 12.58553,-0.84069 7.86219,2.64475 1.72068,7.17759 2.48268,15.31018 3.48139,21.97874 c -1.03046,0.12488 -2.05352,0.37218 -3.04976,0.74365 -0.084,0.0243 -0.15628,0.0811 -0.19368,0.16969 -0.001,0.003 -0.001,0.007 -0.003,0.01 -0.0109,0.0282 -0.0226,0.0561 -0.025,0.0903 -0.46355,6.43396 -0.67768,14.66956 5.19748,18.8468 2.77671,1.97379 6.44842,2.1015 9.66294,1.42699 3.82622,-0.80257 8.04051,-4.79955 11.87167,-2.3742 1.19486,0.75636 2.1777,1.95756 3.54718,2.4317 1.57551,0.54504 3.10163,0.39864 4.68101,-0.0603 3.07411,-0.89288 5.38057,-2.71745 5.99863,-5.93125 0.65794,-3.42265 0.0889,-7.18221 -0.95602,-10.4641"
+          startPath="m 40.404899,24.877468 c -0.934154,-3.03566 -2.973213,-5.38692 -5.78485,-6.74758 1.636183,-0.0183 3.185583,0.33125 4.704294,1.0922 0.280456,0.14075 0.707316,-0.0935 0.578202,-0.4445 -0.864309,-2.35056 -2.601386,-4.10634 -4.874334,-4.93007 1.12889,-0.17004 2.241907,-0.0388 3.387021,0.40604 0.268817,0.10443 0.587727,-0.21625 0.484362,-0.48436 -1.400876,-3.62867 -5.066945,-4.2319197 -8.526637,-4.1426697 1.585386,-0.71508 3.249438,-1.0858502 5.056717,-1.1260702 0.311502,-0.007 0.563737,-0.44555 0.278696,-0.67204 -2.825046,-2.24366 -6.351767,-3.07022 -9.817807,-2.29376 0.664986,-0.86854 1.452738,-1.55469 2.448632,-2.13924 0.269166,-0.15769 0.258583,-0.66569 -0.09384,-0.71967 -2.611965,-0.39864 -5.083526,0.096 -7.271454,1.5053 -0.0141,-1.16487 0.33867,-2.20204 1.141589,-3.15947 0.21237,-0.25294997 0.08784,-0.67204997 -0.278339,-0.67168997 -2.89984,0.002 -5.38092,1.64076997 -6.54191,4.22556997 -1.37055,-1.64289 -3.13055,-2.55129 -5.26592,-2.7813 -0.3809997,-0.0409 -0.4674297,0.43991 -0.2786897,0.67204 1.1038397,1.35714 1.5345797,2.91818 1.3109197,4.57235 -0.80892,-0.88335 -1.8898297,-1.32009 -3.1792296,-1.2386 -0.34643,0.0219 -0.51612,0.41028 -0.27834,0.67204 0.14993,0.1651 0.30021,0.3302 0.45014,0.4953 -1.34373,0.0568 -2.52024,0.52987 -3.62303,1.42311 -0.30233,0.24447 -0.0159,0.6350002 0.27834,0.6720402 0.96626,0.12171 1.84256,0.38947 2.66312,0.81174 -1.89759,-0.0106 -3.66183,0.6406497 -5.19641,1.9293397 -0.28611,0.2406 -0.031,0.64982 0.27834,0.6724 1.22837,0.0893 2.35303,0.32173 3.46604,0.72143 -2.3622,0.65405 -4.27143,2.2419 -5.32482997,4.55859 -0.12418,0.27305 0.0854,0.72214 0.44449997,0.57856 1.08021,-0.43286 2.14701,-0.67875 3.25967,-0.75283 -2.62608,1.76777 -4.21498997,4.67501 -4.28166997,7.91951 -0.007,0.35524 0.42828,0.50482 0.67205,0.27834 0.58242997,-0.54222 1.18285997,-0.96026 1.83796997,-1.28658 -0.43498,0.70873 -0.7112,1.47249 -0.84808,2.3756 -0.0459,0.30304 0.26035,0.66465 0.5782,0.4445 0.74507,-0.51576 1.50354,-0.90099 2.31811,-1.16381 -2.28671,2.03553 -3.62479997,4.85422 -3.74332997,8.00559 -0.013,0.35454 0.43285997,0.50588 0.67203997,0.27799 1.54588,-1.47074 3.35174,-2.41583 5.38057,-2.82927 -0.73731,0.76234 -1.21003,1.70214 -1.39594,2.84373 -0.0579,0.3556 0.36724,0.70273 0.65793,0.38276 0.48048,-0.52881 0.97472,-0.94861 1.54093,-1.29399 -0.5969,1.41253 -0.83291,2.88432 -0.69603,4.47146 0.0317,0.36724 0.53093,0.56657 0.73378,0.19862 0.57891,-1.05163 1.2350699,-2.02918 1.9699099,-2.95768 -0.24518,1.73389 0.10936,3.44204 1.0459897,5.03413 0.17568,0.2988 0.62159,0.23002 0.71931,-0.0942 0.40675,-1.34797 1.07633,-2.45922 2.05211,-3.39055 0.13017,1.79176 0.6791,3.41065 1.69545,4.93395 0.17992,0.26988 0.635,0.25612 0.71967,-0.0938 0.23459,-0.97296 0.57538,-1.87078 1.03187,-2.73756 0.59055,1.43616 1.38077,2.7238 2.41229,3.9243 0.19015,0.2212 0.59655,0.10372 0.65793,-0.17391 0.11819,-0.5327 1.11972,-4.41749 2.352678,-3.44911 1.304925,1.02446 1.97485,2.61726 2.205567,4.21146 0.06103,0.42192 0.643467,0.32596 0.759178,0 0.615597,-1.73285 0.940858,-3.45758 1.010355,-5.27756 1.081971,1.28376 2.163937,2.56752 3.24626,3.85128 0.207436,0.24624 0.564798,0.0787 0.657934,-0.17357 0.660043,-1.79105 0.504468,-3.57152 -0.37465,-5.15232 0.441325,0.15875 0.867476,0.35137 1.289402,0.59373 0.312206,0.17956 0.649108,-0.11289 0.578199,-0.4445 -0.111474,-0.52176 -0.281162,-0.9525 -0.531283,-1.33809 1.87819,0.47519 3.56729,1.32892 5.087408,2.61197 0.2667,0.22507 0.649113,0.0776 0.672042,-0.27834 0.157694,-2.44405 -1.037868,-4.58964 -3.059991,-5.76051 1.701091,-0.15311 3.318931,0.55068 4.386789,2.01647 0.220136,0.30234 0.731311,0.22014 0.733777,-0.19861 0.0113,-2.12866 -0.777166,-4.01602 -2.222143,-5.4356 1.002943,0.30868 1.894414,0.82726 2.727677,1.5875 0.3048,0.27834 0.726723,8e-4 0.657929,-0.38276 -0.416629,-2.33398 -1.608667,-4.30072 -3.41489,-5.70724 1.063273,0.18344 2.023885,0.60925 2.953811,1.33526 0.284689,0.22261 0.785635,0.0321 0.657929,-0.38276"
+          color1="#0F0"
+          color2="#F0F"
+        >
+        </littleheroes-animation>
+        <div style="z-index:2;text-align: center">
+          <div>
+            Fully
+            Customizable
+            Monsters!
+          </div>
+        </div>
+      </div>
+
       <div style="margin-bottom:2rem;text-align:center">
         <p style="text-align:center">
-          Each time 100 points is reached the reward is activated and can be
-          redeemed. Multiple rewards can be built up and used in combination if
-          saving wants to be promoted. The rewards themselves can be entered by
-          the parent to ensure they are relevant. Each time the 100 points
-          barrier is reached the level for that child is bumped and allows
-          access to additional monster customisation
+          Each time 100 points is reached the reward is activated and can be redeemed. Multiple
+          rewards can be built up and used in combination if saving wants to be promoted. The
+          rewards themselves can be entered by the parent to ensure they are relevant. Each time the
+          100 points barrier is reached the level for that child is bumped and allows access to
+          additional monster customisation
         </p>
 
         <h2>Mobile First - Progressive Web Application (PWA)</h2>
         <p>
-          Little Heroes is a new kind of web page, designed to work across all
-          mobile phones. It has the feel of a native application, will work even
-          when you don't have a internet connection, can be installed and
-          removed from your home screen just like an app, and updates in the
-          background with a much smaller footprint than an equivalent native
+          Little Heroes is a new kind of web page, designed to work across all mobile phones. It has
+          the feel of a native application, will work even when you don't have a internet
+          connection, can be installed and removed from your home screen just like an app, and
+          updates in the background with a much smaller footprint than an equivalent native
           application.
         </p>
+        <br>
         <h3>Offline support*</h3>
         <p>
-          LittleHeroes will work even when you don't have a signal. Any points
-          awarded will be registered as soon as your device is back on line
+          LittleHeroes will work even when you don't have a signal. Any points awarded will be
+          registered as soon as your device is back on line
         </p>
+        <br>
         <h3>Notifications</h3>
         <p>
-          We can send you updates directly to your phone when a little hero is
-          awarded points. Simply opt into these on the
+          We can send you updates directly to your phone when a little hero is awarded points.
+          Simply opt into these on the
           <a href="/Notifications">Notifications page</a>
         </p>
+        <br>
         <h3>Fullscreen</h3>
         <p>
-          LittleHeroes uses all the real estate of your phone just like a native
-          application. There is no browser bar reducing the space available to
-          you.
+          LittleHeroes uses all the real estate of your phone just like a native application. There
+          is no browser bar reducing the space available to you.
         </p>
       </div>
       <div class="col-md-6">

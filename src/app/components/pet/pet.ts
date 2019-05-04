@@ -1,6 +1,7 @@
 import { data } from "./../devdata/childrendata";
 import { inject } from "aurelia-framework";
 import { HttpClient } from "aurelia-fetch-client";
+import {FindAchievement} from '../../library/AchievementsCommon'
 import {
   Parent,
   BrowniePoints,
@@ -102,12 +103,43 @@ export class Pet {
         SetBrowniePoints(data.data);
         this.browniePoints = GetBrowniePoints();
         this.child = this.browniePoints.find(item => item.id == params.id);
+        this.CheckForMakeAMonster();
       });
     } else {
       console.log(this.browniePoints);
       this.child = this.browniePoints.find(item => item.id == params.id);
       console.log(this.child);
+      this.CheckForMakeAMonster();
     }
+  }
+
+  async CheckForMakeAMonster() {
+    if (dev) {
+      let MonsterAchievement = await FindAchievement(this.child, "Make a Monster", dev, DNS)
+      MonsterAchievement.progress = 100;
+    }
+    else {
+     // Update the Make a Monster achievement to completed
+     try {
+      let result = await fetch(`${DNS}/api/achievements/CheckForMakeAMonster/${this.child.id}`, {
+        method: "Get",
+        credentials: "include"
+      });
+      if (result.ok) {
+        let MonsterAchievement = await FindAchievement(this.child, "Make a Monster", dev, DNS)
+        MonsterAchievement.progress = 100;
+        //TODO
+      } else {
+        //this.errorHadOccurred = true;
+        //this.errorMessage = "Failed to update level to server..";
+        //TODO
+      }
+    } catch (e) {
+      //TODO
+      //this.errorHadOccurred = true;
+      //this.errorMessage = e;
+    }
+  }
   }
 
   constructor(http: any, Router: Router) {

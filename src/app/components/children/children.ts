@@ -6,6 +6,7 @@ import { GestureEventListeners } from "@polymer/polymer/lib/mixins/gesture-event
 import * as Gestures from "@polymer/polymer/lib/utils/gestures";
 import { tween, styler, easing } from "popmotion";
 import * as moment from "moment";
+import { FindAchievement } from "../../library/AchievementsCommon";
 
 //@ts-ignore
 import { interpolate } from "flubber";
@@ -259,7 +260,7 @@ export class Home {
   async activate(params) {
     if (!this.achievements) {
       // Not awaited so just happends in the background
-      this.GetAchievementsList();
+      //this.achievements = GetAchievements();
     }
 
     console.log("children activated called!!!");
@@ -380,28 +381,8 @@ export class Home {
     }
   }
 
-  private async GetAchievementsList() {
-    if (dev) {
-      let myimport = await import("../devdata/childrendata");
-      //@ts-ignore
-      this.achievements = myimport.achievements;
-    } else {
-      let result = await this.http.fetch(`${DNS}/api/Achievements/`, {
-        method: "get",
-        credentials: "include"
-      });
-      let data = (await result.json()) as IAchievements[];
-      this.achievements = data;
-    }
-  }
-
-  SetSuperSwatProgressLocal(child: BrowniePoints, progress: number) {
-    let SuperSwat = this.achievements.find(item => item.title === "Super Swat");
-    //@ts-ignore
-    let MySuperSwat: IMyAchievements = child.myAchievements.find(
-      //@ts-ignore
-      item => item.achievementsID === SuperSwat.id
-    );
+  async SetSuperSwatProgressLocal(child: BrowniePoints, progress: number) {
+    let MySuperSwat = await FindAchievement(child, "Super Swat", dev, DNS);
 
     if (MySuperSwat) {
       MySuperSwat.progress = progress;
@@ -416,80 +397,85 @@ export class Home {
     let completedDays: number = 0;
     let data2: ISuperSwat;
 
-    console.log("making call");
-    try {
-      let result2 = await this.http.fetch(
-        `${DNS}/api/Achievements/GetSuperSwatAddDaySuccess/${child.id}`,
-        {
-          method: "get",
-          credentials: "include"
+    if (dev) {
+      let superswat = await FindAchievement(child, "Super Swat", dev, DNS);
+      superswat.progress = 100;
+    } else {
+      console.log("making call");
+      try {
+        let result2 = await this.http.fetch(
+          `${DNS}/api/Achievements/GetSuperSwatAddDaySuccess/${child.id}`,
+          {
+            method: "get",
+            credentials: "include"
+          }
+        );
+        if (result2.ok) {
+          data2 = (await result2.json()) as ISuperSwat;
+          console.log(data2);
+        } else {
+          this.errorHadOccurred = true;
+          this.errorMessage = "Failed to retrieve SuperSwat progress from server";
         }
-      );
-      if (result2.ok) {
-        data2 = (await result2.json()) as ISuperSwat;
-        console.log(data2);
-      } else {
+      } catch (e) {
         this.errorHadOccurred = true;
-        this.errorMessage = "Failed to retrieve SuperSwat progress from server";
+        this.errorMessage = e;
+        return;
       }
-    } catch (e) {
-      this.errorHadOccurred = true;
-      this.errorMessage = e;
-      return;
-    }
 
-    let now = moment();
+      let now = moment();
 
-    if (this.IsDateSet(data2.day1Date)) {
-      completedDays++;
-
-      if (this.IsDateSet(data2.day2Date)) {
+      if (this.IsDateSet(data2.day1Date)) {
         completedDays++;
 
-        if (this.IsDateSet(data2.day3Date)) {
+        if (this.IsDateSet(data2.day2Date)) {
           completedDays++;
 
-          if (this.IsDateSet(data2.day4Date)) {
+          if (this.IsDateSet(data2.day3Date)) {
             completedDays++;
 
-            // Now if today is no older than a day from day then COMPLETED!!! well done
-            if (this.IsDateDiffOneDay(data2.day4Date)) {
-              // Set achievement to completed!!!!!
-              this.SetSuperSwatProgressLocal(child, 100);
-            } else if (!this.IsSameDay(data2.day4Date)) {
-              this.SetSuperSwatProgressLocal(child, 0);
-              await this.ResetSuperSwatSuccesServer(child);
+            if (this.IsDateSet(data2.day4Date)) {
+              completedDays++;
+
+              // Now if today is no older than a day from day then COMPLETED!!! well done
+              if (this.IsDateDiffOneDay(data2.day4Date)) {
+                // Set achievement to completed!!!!!
+                this.SetSuperSwatProgressLocal(child, 100);
+              } else if (!this.IsSameDay(data2.day4Date)) {
+                this.SetSuperSwatProgressLocal(child, 0);
+                await this.ResetSuperSwatSuccesServer(child);
+              }
+            } else {
+              if (this.IsDateDiffOneDay(data2.day3Date)) {
+                await this.AddSuperSwatSuccesServer(child, 4, now.toString());
+                this.SetSuperSwatProgressLocal(child, 80);
+              } else if (!this.IsSameDay(data2.day3Date)) {
+                this.SetSuperSwatProgressLocal(child, 0);
+                await this.ResetSuperSwatSuccesServer(child);
+              }
             }
           } else {
-            if (this.IsDateDiffOneDay(data2.day3Date)) {
-              await this.AddSuperSwatSuccesServer(child, 4, now.toString());
-              this.SetSuperSwatProgressLocal(child, 80);
-            } else if (!this.IsSameDay(data2.day3Date)) {
+            if (this.IsDateDiffOneDay(data2.day2Date)) {
+              await this.AddSuperSwatSuccesServer(child, 3, now.toString());
+              this.SetSuperSwatProgressLocal(child, 60);
+            } else if (!this.IsSameDay(data2.day2Date)) {
               this.SetSuperSwatProgressLocal(child, 0);
               await this.ResetSuperSwatSuccesServer(child);
             }
           }
         } else {
-          if (this.IsDateDiffOneDay(data2.day2Date)) {
-            await this.AddSuperSwatSuccesServer(child, 3, now.toString());
-            this.SetSuperSwatProgressLocal(child, 60);
-          } else if (!this.IsSameDay(data2.day2Date)) {
+          if (this.IsDateDiffOneDay(data2.day1Date)) {
+            await this.AddSuperSwatSuccesServer(child, 2, now.toString());
+            this.SetSuperSwatProgressLocal(child, 40);
+          } else if (!this.IsSameDay(data2.day1Date)) {
             this.SetSuperSwatProgressLocal(child, 0);
             await this.ResetSuperSwatSuccesServer(child);
           }
         }
       } else {
-        if (this.IsDateDiffOneDay(data2.day1Date)) {
-          await this.AddSuperSwatSuccesServer(child, 2, now.toString());
-          this.SetSuperSwatProgressLocal(child, 40);
-        } else if (!this.IsSameDay(data2.day1Date)) {
-          this.SetSuperSwatProgressLocal(child, 0);
-          await this.ResetSuperSwatSuccesServer(child);
-        }
+        await this.AddSuperSwatSuccesServer(child, 1, now.toString());
+        this.SetSuperSwatProgressLocal(child, 20);
       }
-    } else {
-      await this.AddSuperSwatSuccesServer(child, 1, now.toString());
-      this.SetSuperSwatProgressLocal(child, 20);
     }
   }
 
@@ -561,46 +547,41 @@ export class Home {
 
   public async CheckForMegaPoints(child: BrowniePoints) {
     if (child.pendingAdds >= 50) {
-      let mega = this.achievements.find(item => item.title === "Mega Points");
-      //@ts-ignore
-      let streak: IMyAchievements = child.myAchievements.find(
-        //@ts-ignore
-        item => item.achievementsID === mega.id
-      );
-      streak.progress = 100;
+      let mega = await FindAchievement(child, "Mega Points", dev, DNS);
+      mega.progress = 100;
 
-      SetBrowniePoints(this.browniePoints);
+      if (dev) {
+        //TODO
+      } else {
+        SetBrowniePoints(this.browniePoints);
 
-      let result = await this.http.fetch(
-        `${DNS}/api/Achievements/SetAchivementProgress/${child.id}/${streak.achievementsID}/100`,
-        {
-          method: "get",
-          credentials: "include"
-        }
-      );
+        let result = await this.http.fetch(
+          `${DNS}/api/Achievements/SetAchivementProgress/${child.id}/${mega.achievementsID}/100`,
+          {
+            method: "get",
+            credentials: "include"
+          }
+        );
+      }
     }
   }
 
   public async SetLevelMadMyAchievementsProgressServer(child: BrowniePoints, progress: number) {
-      let levelMad = this.achievements.find(item => item.title === "Level Mad");
-      //@ts-ignore
-      let myLevelMad: IMyAchievements = child.myAchievements.find(
-        //@ts-ignore
-        item => item.achievementsID === levelMad.id
-      );
-      myLevelMad.progress = progress;
+    let myLevelMad = await FindAchievement(child, "Level Mad", dev, DNS);
+    myLevelMad.progress = progress;
 
-      SetBrowniePoints(this.browniePoints);
+    SetBrowniePoints(this.browniePoints);
 
-      let result = await this.http.fetch(
-        `${DNS}/api/Achievements/SetAchivementProgress/${child.id}/${myLevelMad.achievementsID}/${progress}`,
-        {
-          method: "get",
-          credentials: "include"
-        }
-      );
-    }
-  
+    let result = await this.http.fetch(
+      `${DNS}/api/Achievements/SetAchivementProgress/${child.id}/${
+        myLevelMad.achievementsID
+      }/${progress}`,
+      {
+        method: "get",
+        credentials: "include"
+      }
+    );
+  }
 
   public CloseRewards() {
     this.showingAvailableRewards = false;
@@ -643,15 +624,13 @@ export class Home {
         }
       );
       if (result.ok) {
-        let achievement = this.achievements.find(item => item.title == "Level Mad");
-        //@ts-ignore
-        let item = child.myAchievements.find(item => item.achievementsID == achievement.id);
+        let item = await FindAchievement(child, "Level Mad", dev, DNS);
 
         if (item) {
           let data = (await result.json()) as ILevelMadAchievement;
           if (data.dateOfLevelCompletion1 === null || data.dateOfLevelCompletion1 === undefined) {
             this.SetLevelMadProgressServer(child);
-            this.SetLevelMadMyAchievementsProgressServer(child, 50)
+            this.SetLevelMadMyAchievementsProgressServer(child, 50);
             item.progress = 50;
           } else {
             //Completed achievement!!!! ... if on the same day!
@@ -664,7 +643,7 @@ export class Home {
             } else {
               //Reset progress to 0..
               item.progress = 0;
-              this.SetLevelMadMyAchievementsProgressServer(child, 0)
+              this.SetLevelMadMyAchievementsProgressServer(child, 0);
               //TODO update this on the server too!
             }
           }
@@ -683,7 +662,7 @@ export class Home {
     }
   }
 
-  async CheckIfLevelCompleted(child: BrowniePoints) {
+  CheckIfLevelCompleted(child: BrowniePoints) {
     if (child.points >= child.pointsNeeded) {
       this.CheckLevelMadAchievement(child);
 
@@ -705,22 +684,24 @@ export class Home {
         child.availableRewards.push(reward);
         this.router.navigate(`/levelup/${child.id}`);
       } else {
-        try {
-          let result = await this.http.fetch(`${DNS}/api/PointsData/LevelUp/${child.id}`, {
+        this.http
+          .fetch(`${DNS}/api/PointsData/LevelUp/${child.id}`, {
             method: "Get",
             credentials: "include"
-          });
-          if (result.ok) {
-            child.availableRewards.push(reward);
-            this.router.navigate(`/levelup/${child.id}`);
-          } else {
+          })
+          .then(result => {
+            if (!result.ok) {
+              this.errorHadOccurred = true;
+              this.errorMessage = "Failed to update level to server..";
+            }
+          })
+          .catch(e => {
             this.errorHadOccurred = true;
-            this.errorMessage = "Failed to update level to server..";
-          }
-        } catch (e) {
-          this.errorHadOccurred = true;
-          this.errorMessage = e;
-        }
+            this.errorMessage = "Failed to update level to server.." + e;
+          });
+
+        child.availableRewards.push(reward);
+        this.router.navigate(`/levelup/${child.id}`);
       }
     }
   }
@@ -917,8 +898,6 @@ export class Home {
     child.points += amount;
     console.log("child points " + child.points);
 
-    this.CheckIfLevelCompleted(child);
-
     if (child.pendingAdds === 0) {
       setTimeout(() => {
         console.log("making call to server to update with points " + child.pendingAdds);
@@ -932,6 +911,8 @@ export class Home {
 
     console.log("child pending " + child.pendingAdds);
     child.pendingAdds += amount;
+
+    this.CheckIfLevelCompleted(child);
   }
 
   public async incrementCounterInternal(child: BrowniePoints, amount: number) {

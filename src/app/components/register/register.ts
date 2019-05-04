@@ -46,6 +46,9 @@ export class Register {
           console.log("added new user successfully!");
           this.addedNewUserOk = true;
           this.attemptedAddNewUser = false;
+          setTimeout(() => { 
+            this.router.navigate('/welcome')
+          }, 1000)
         }
         else {
           this.error = true;

@@ -72,6 +72,8 @@ export class Achievements {
     }
   }
 
+ 
+
   constructor(router: Router, http: HttpClient) {
     this.router = router;
     this.http = http;

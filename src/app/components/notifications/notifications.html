@@ -27,7 +27,8 @@
     }
 
     .container {
-      width: 100%;
+      width: 100vw;
+      padding: 2rem;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -36,8 +37,7 @@
     }
   </style>
 
-  <div class="row orangeBackground">
-    <div class="col-sm-offset-4 col-sm-4">
+  <div class="orangeBackground container">
       <form id="myForm">
         <div class="currentStatus">
           <h3 if.bind="serviceWorker">

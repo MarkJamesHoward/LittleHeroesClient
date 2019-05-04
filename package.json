@@ -24,7 +24,8 @@
     "flubber": "^0.4.2",
     "lit-element": "^2.1.0",
     "moment": "^2.24.0",
-    "popmotion": "^8.4.0"
+    "popmotion": "^8.4.0",
+    "unique-names-generator": "^2.0.2"
   },
   "peerDependencies": {},
   "devDependencies": {

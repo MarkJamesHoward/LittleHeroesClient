@@ -1,21 +1,27 @@
 
 export let achievements = [
   {
-    ID: 1,
+    id: 1,
     title: "Super Swat",
     description: "Earn points on 5 consecutive days",
     progress: 0
   },
   {
-    ID: 2,
+    id: 2,
     title: "Mega Points",
     description: "Earn 50 points in one day",
     progress: 0
   },
   {
-    ID: 3,
+    id: 3,
     title: "Level Mad",
     description: "Level up twice in one day",
+    progress: 0
+  },
+  {
+    id: 4,
+    title: "Make a Monster",
+    description: "Customize your monster",
     progress: 0
   }
   ];
@@ -59,10 +65,12 @@ export let data = [
       selectedlegsy: 49
     },
     myAchievements: [
-      {ID: 1, achievementsID: 1, progress: 0},
-      {ID: 2, achievementsID: 2, progress: 50}
+      {id: 1, achievementsID: 1, progress: 0},
+      {id: 2, achievementsID: 2, progress: 0},
+      {id: 3, achievementsID: 3, progress: 0},
+      {id: 4, achievementsID: 4, progress: 0},
     ],
-    achievementsTotal: 3
+    achievementsTotal: 4
   },
   {
     id: 4,
@@ -115,8 +123,8 @@ export let data = [
       selectedlegsy: 49
     },
     myAchievements: [
-      {ID: 1, achievementsID: 1, progress: 10},
-      {ID: 2, achievementsID: 2, progress: 100}
+      {id: 1, achievementsID: 1, progress: 0},
+      {id: 2, achievementsID: 2, progress: 0}
     ],
     achievementsTotal: 2,
   },
@@ -171,7 +179,7 @@ export let data = [
       selectedlegsy: 49
     },
     myAchievements: [
-      {ID: 1, achievementsID: 1, progress: 10}
+      {id: 1, achievementsID: 1, progress: 0}
     ],
     achievementsTotal: 2
   }
