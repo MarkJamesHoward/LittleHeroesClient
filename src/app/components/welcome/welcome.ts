@@ -1,3 +1,4 @@
+import { PLATFORM } from "aurelia-pal";
 import { HttpClient } from "aurelia-fetch-client";
 import { inject } from "aurelia-framework";
 import { Router } from "aurelia-router";
@@ -10,6 +11,8 @@ import "LittleHeroesHomePageAnimation";
 
 @inject(HttpClient, Router)
 export class Welcome {
+  private showFCA: boolean = false;
+  private observer: IntersectionObserver;
   private username: string;
   private proceedToChildrenScreen: boolean = true;
   public http: HttpClient;
@@ -196,6 +199,27 @@ export class Welcome {
         this.AmISignedIn();
       }
     });
+  }
+
+  // Activate animations as the element comes into view
+  attached() {
+    //@ts-ignore
+    const myImg = this.FullyCustomisableMonsterTitle;
+
+    this.observer = new IntersectionObserver((entry, observer) => {
+      if (entry[0].intersectionRatio > 0) {
+        console.log("fully customisable text now IN view");
+        this.showFCA = true;
+      } else {
+        console.log("fully customisable view NOT in view");
+        this.showFCA = false;
+      }
+    });
+
+    console.log("myimg");
+    console.log(myImg);
+
+    this.observer.observe(myImg);
   }
 
   activate(params: any) {
