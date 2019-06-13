@@ -21,6 +21,26 @@ export class login {
     this.attemptingLogin = false;
   }
 
+  TestChildren() {
+    fetch(`${DNS}/api/children/all`, {
+      method: "get",
+      credentials: "include"
+    })
+      .then(response => {
+        if (response.ok) {
+
+          console.log(`We are logged in`);
+          console.log(response);
+         
+        } else {
+          console.log("Not logged in - should see a 401 not auth on the get children call");
+        }
+      })
+      .catch(e => {
+        console.log("failed to login");
+      });
+  }
+
   Register() {
     this.router.navigate("register");
   }
@@ -28,7 +48,6 @@ export class login {
   Home() {
     this.router.navigate("welcome");
   }
-
 
   Login() {
     // console.log(`username: ${this.myusername}`)
@@ -51,14 +70,16 @@ export class login {
           console.log(`login succeeded! - should have a cookie now:`);
           console.log(response);
           //Now let's navigate to the view of hereos
-          this.router.navigate("/children/1");
+          // this.router.navigate("/children/1");
+          // this.router.navigate("/welcome");
+          this.TestChildren();
           this.loginFailed = false;
         } else {
           this.loginFailed = true;
           this.attemptingLogin = false;
           setTimeout(() => {
             this.loginFailed = false;
-          }, 3000)
+          }, 3000);
           console.log("response was not ok");
         }
       })
@@ -68,7 +89,7 @@ export class login {
         this.attemptingLogin = false;
         setTimeout(() => {
           this.loginFailed = false;
-        }, 3000)
+        }, 3000);
       });
   }
 }

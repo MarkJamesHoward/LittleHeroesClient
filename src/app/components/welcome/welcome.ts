@@ -208,16 +208,13 @@ export class Welcome {
 
     this.observer = new IntersectionObserver((entry, observer) => {
       if (entry[0].intersectionRatio > 0) {
-        console.log("fully customisable text now IN view");
+        //console.log("fully customisable text now IN view");
         this.showFCA = true;
       } else {
-        console.log("fully customisable view NOT in view");
+        //console.log("fully customisable view NOT in view");
         this.showFCA = false;
       }
     });
-
-    console.log("myimg");
-    console.log(myImg);
 
     this.observer.observe(myImg);
   }

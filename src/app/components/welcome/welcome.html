@@ -125,7 +125,8 @@
     }
 
     .container {
-      background-color: orange;
+      background-color: black;
+      color: white;
       display: grid;
       grid-template-areas:
         "welcome"
@@ -521,17 +522,15 @@
       <div class="wimage">
         <img
           id="superheroimg"
-          style="max-width: 100%;max-height:100%"
+          style="max-width: 100%;max-height:100%;margin-top:2rem;"
           src="../../../../images/superhero.png"
           alt="Super hero image"
         />
       </div>
 
-      <p class="text" style="margin: 5rem;">
-        Start rewarding your kids for good behaviour today! Keep them engaged with customizable
-        monsters, achievements and mini games. Invite Grandparents and other carers so they can
-        award points. Receive updates when points are awarded by any members of the family.
-      </p>
+      <h1 class="text" style="font-size:3rem;margin: 5rem; font-family: 'Gochi Hand', cursive;">
+        Start motivating your kids TODAY!
+      </h1>
 
       <div class="buttons">
         <div class="WelcomeScreenButtonsInternal" show.bind="!loading">
@@ -631,7 +630,7 @@
       </div>
     </div>
 
-    <div class="achievements" style="background:orange;border: 1px solid black;">
+    <div class="achievements" style="background:black;border: 1px solid black;">
       <H1 style="margin-top: 5rem;margin-bottom: 4rem;max-width: 25ch">
         Complete achievements to unlock bonus rewards!
       </H1>
@@ -662,6 +661,12 @@
             alt="Screenshot"
           />
         </div>
+
+        <p class="text" style="margin: 5rem;">
+          Start rewarding your kids for good behaviour today! Keep them engaged with customizable
+          monsters, achievements and mini games. Invite Grandparents and other carers so they can
+          award points. Receive updates when points are awarded by any members of the family.
+        </p>
 
         <h2>Mobile First - Progressive Web Application (PWA)</h2>
         <p>
