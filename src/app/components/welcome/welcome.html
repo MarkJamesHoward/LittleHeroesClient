@@ -175,9 +175,10 @@
     }
 
     .welcomeTitle {
-      border: 2px solid black;
+      border: 20px solid pink;
       grid-area: welcome;
       height: 100vh;
+      max-height: 100vh;
       display: grid;
       justify-content: center;
       grid-template-rows: 1fr 5fr 2fr 2fr;
@@ -525,7 +526,7 @@
       <div class="wimage">
         <img
           id="superheroimg"
-          style="max-width: 100%;max-height:100%;margin-top:2rem;"
+          style="max-width: 50%;max-height:50%;margin-top:2rem;"
           src="../../../../images/superhero.png"
           alt="Super hero image"
         />
@@ -639,7 +640,7 @@
       </H1>
 
       <div style="display:grid;place-items:center;">
-        <img
+        <img loading="lazy"
           style="width:75vw;max-width: 700px"
           src="../../../../images/WelcomePageAchievementImg.png"
           alt="Example Achievemnts Image"
@@ -658,7 +659,7 @@
         </p>
 
         <div style="display:grid;place-items:center;">
-          <img
+          <img loading="lazy"
             style="width:60vmin;max-width: 500px;display:block;border:0.5rem solid black;margin-top:2rem;margin-bottom: 2rem"
             src="../../../../images/phoneandscreenshot.png"
             alt="Screenshot"
