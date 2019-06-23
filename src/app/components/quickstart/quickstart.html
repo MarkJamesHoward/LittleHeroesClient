@@ -24,6 +24,7 @@
     paper-button {
       font-size: 2rem;
       margin-top: 1rem;
+      background:  var(--button-color);
     }
 
     .DeleteBtn {
@@ -52,7 +53,7 @@
     }
 
     .WhiteText {
-      color: black;
+      color: white;
     }
   </style>
 
@@ -76,12 +77,12 @@
     <h1 class="title">You're all set</h1>
     <h3>We've created two child accounts to get you started</h3>
     <paper-button
-      style="background-color: blue; color: white"
+      style="background-color: var(--button-color)"
       raised
       click.trigger="Start()"
       >Let's Go!</paper-button
     >
-    <h3>
+    <!-- <h3>
       You can edit their names right from the application page which we'll take
       you to now:
     </h3>
@@ -99,6 +100,6 @@
     <div show.bind="loading">
       <span>Putting things together... just a moment ..</span>
       <span class="glyphicon glyphicon-refresh wait"> </span>
-    </div>
+    </div> -->
   </div>
 </template>

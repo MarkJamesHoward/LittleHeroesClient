@@ -145,9 +145,10 @@
       grid-area: PWA;
       display: flex;
       justify-content: center;
+      color: black;
     }
 
-    .whiteBackgroundArea {
+    .blueBackground {
       background-color: rgb(72, 115, 235);
       padding: 2rem 2rem 0 2rem;
       grid-area: details;
@@ -515,7 +516,9 @@
       <div class="title">
         <h1 id="WelcomeTitle" style="margin-top:1rem">
           <div id="WelcomeTitleStart" style="position:relative;left:-600px;">Welcome to</div>
-          <div id="WelcomeTitleEnd" style="position:relative;left:700px">Little Heroes</div>
+          <div id="WelcomeTitleEnd" style="position:relative;left:700px">
+            Little Heroes <span class="alphaText">(alpha)</span>
+          </div>
         </h1>
       </div>
 
@@ -537,7 +540,7 @@
           <div style="grid-area: main" show.bind="(!signedIn && !offline) || dev">
             <paper-button
               id="QuickStartText"
-              style="font-size: 2rem;margin-top:1rem;background-color:blue; color: white"
+              style="font-size: 2rem;margin-top:1rem"
               click.trigger="QuickStart()"
             >
               <div>QuickStart!</div>
@@ -545,7 +548,7 @@
           </div>
           <div show.bind="(!signedIn && !offline) || dev">
             <paper-button
-              style="margin-top:1rem;background-color:blue; color: white"
+              style="margin-top:1rem"
               click.trigger="Login()"
             >
               Login or Register
@@ -554,11 +557,11 @@
 
           <div show.bind="(signedIn && !offline) || dev">
             <div style="margin: 1rem;">
-              <div>Welcome back <span style="color:red">${username}</span></div>
+              <div>Welcome back <span style="color: rgb(255, 129, 45)">${username}</span></div>
             </div>
             <paper-button
               click.trigger="ViewHeroTastic()"
-              style="margin-top:1rem;margin-bottom: 2rem; background-color: blue; color: white"
+              style="margin-top:1rem;margin-bottom: 2rem;"
               class="btn btn-primary btn-lg"
             >
               View Heroes
@@ -585,9 +588,9 @@
       </div>
     </div>
 
-    <div class="whiteBackgroundArea" style="border: 1px solid black;">
+    <div style="background:rgb(248, 244, 244)">
       <div class="AnimationGrid">
-        <div style="z-index:2;text-align: center;margin-bottom: 3rem;">
+        <div style="z-index:2;text-align: center;margin-bottom: 3rem;color: black">
           <div ref="FullyCustomisableMonsterTitle" class="FullyCustomisableMonsterTitle">
             <span id="span1F" class.bind="showFCA ? 'span1F' : 'hidden'">F</span
             ><span id="span1U" class.bind="showFCA ? 'span1U' : 'hidden'">u</span
@@ -630,7 +633,7 @@
       </div>
     </div>
 
-    <div class="achievements" style="background:black;border: 1px solid black;">
+    <div class="achievements" style="background: rgb(27, 26, 26);">
       <H1 style="margin-top: 5rem;margin-bottom: 4rem;max-width: 25ch">
         Complete achievements to unlock bonus rewards!
       </H1>
@@ -644,9 +647,9 @@
       </div>
     </div>
 
-    <div class="PWA" style="background-color: mediumpurple">
-      <div style="margin-bottom:2rem;margin-top:2rem;text-align:center">
-        <p style="text-align:center">
+    <div class="PWA" style="background: rgb(248, 244, 244)">
+      <div style="margin-bottom:2rem;text-align:center;background: rgb(248, 244, 244);color: black">
+        <p style="margin: 2rem" class="TextColorOnBlackBackground">
           Each time 100 points is reached the reward is activated and can be redeemed. Multiple
           rewards can be built up and used in combination if saving wants to be promoted. The
           rewards themselves can be entered by the parent to ensure they are relevant. Each time the
@@ -657,18 +660,18 @@
         <div style="display:grid;place-items:center;">
           <img
             style="width:60vmin;max-width: 500px;display:block;border:0.5rem solid black;margin-top:2rem;margin-bottom: 2rem"
-            src="../../../../images/screenshot.png"
+            src="../../../../images/phoneandscreenshot.png"
             alt="Screenshot"
           />
         </div>
 
-        <p class="text" style="margin: 5rem;">
+        <p class="TextColorOnBlackBackground" style="margin: 1.3rem;">
           Start rewarding your kids for good behaviour today! Keep them engaged with customizable
           monsters, achievements and mini games. Invite Grandparents and other carers so they can
           award points. Receive updates when points are awarded by any members of the family.
         </p>
 
-        <h2>Mobile First - Progressive Web Application (PWA)</h2>
+        <h2 class="TextColorOnBlackBackground">Mobile First - Progressive Web Application (PWA)</h2>
         <p>
           Little Heroes is a new kind of web page, designed to work across all mobile phones. It has
           the feel of a native application, will work even when you don't have a internet
@@ -677,20 +680,20 @@
           application.
         </p>
         <br />
-        <h3>Offline support*</h3>
+        <h3 class="TextColorOnBlackBackground">Offline support*</h3>
         <p>
           LittleHeroes will work even when you don't have a signal. Any points awarded will be
           registered as soon as your device is back on line
         </p>
         <br />
-        <h3>Notifications</h3>
+        <h3 class="TextColorOnBlackBackground">Notifications</h3>
         <p>
           We can send you updates directly to your phone when a little hero is awarded points.
           Simply opt into these on the
           <a href="/Notifications">Notifications page</a>
         </p>
         <br />
-        <h3>Fullscreen</h3>
+        <h3 class="TextColorOnBlackBackground">Fullscreen</h3>
         <p>
           LittleHeroes uses all the real estate of your phone just like a native application. There
           is no browser bar reducing the space available to you.
@@ -698,12 +701,12 @@
       </div>
     </div>
 
-    <div class="buttons">
+    <div class="buttons" style="background: black">
       <div style="display:flex;justify-content: space-around">
         <div show.bind="(signedIn && !offline) || dev">
           <paper-button
             click.trigger="ManageHeroes()"
-            style="margin-top:1rem; background-color: blue; color: white"
+            style="margin-top:1rem;"
           >
             Manage Heroes
           </paper-button>
@@ -712,7 +715,7 @@
         <div show.bind="(signedIn && !offline) || dev">
           <paper-button
             click.trigger="ManageNotifications()"
-            style="margin-top:1rem; background-color: blue; color: white"
+            style="margin-top:1rem;"
           >
             Manage Notifications
           </paper-button>
@@ -720,7 +723,7 @@
 
         <div if.bind="signedIn">
           <paper-button
-            style="margin-top:1rem; background-color: blue; color: white"
+            style="margin-top:1rem;"
             click.trigger="Logout()"
             >Logout</paper-button
           >

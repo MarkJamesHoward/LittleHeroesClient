@@ -10,15 +10,30 @@
     transform: rotate(360deg);
   }
 }
+:root {
+  --button-color: rgb(255, 129, 45);
+  --button-text: black;
+}
+
+.alphaText {
+  font-size: 0.8rem;
+  color:var(--button-color);
+}
 
 .wait {
   animation: myspinner 3s infinite;
+}
+
+paper-button {
+  background-color: var(--button-color);
+  color: var(--button-text);
 }
 
 .OfflineDialog {
   z-index: 2;
   background-color: black;
   padding: 2rem;
+  color: white;
 }
 
 html,
@@ -36,6 +51,10 @@ body {
   font-size: 1.5rem;
 }
 
+.TextColorOnBlackBackground {
+  color:black;
+}
+
 /*Size of text in all paragraphs*/
 p {
   font-size: 1.4rem;
@@ -43,25 +62,30 @@ p {
 
 h1 {
   font-size: 2.5rem;
+  color: white;
 }
 
 h2 {
   font-size: 1.7rem;
   font-family: "Fredoka One", cursive;
+  color: white;
 }
 
 h3 {
   font-size: 1.5rem;
   font-family: "Fredoka One", cursive;
+  color: white;
 }
 
 h4 {
   font-size: 1.3rem;
   font-family: "Fredoka One", cursive;
+  color: white;
 }
 
 h5 {
   font-size: 1.1rem;
+  color: white;
 }
 
 .largeText {
@@ -115,7 +139,6 @@ h5 {
 
 paper-button.Continue {
   font-family: "Fredoka One", cursive;
-  background: blue;
   font-size: 5rem;
   margin: 0;
   padding: 0;
