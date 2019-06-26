@@ -16,12 +16,15 @@ export class Achievements {
   private browniePoints: Array<BrowniePoints>;
   private child: BrowniePoints;
   private TotalAchievementCount: number;
+  scrollPos: number = 0;
 
   Back() {
-    this.router.navigate("/children/0");
+    this.router.navigate(`/children/0/${this.scrollPos}`);
   }
 
   async activate(params: any) {
+    this.scrollPos = params.scrollPos;
+
     console.log(`loading achievements for ${params.id}`);
     if (dev) {
       this.browniePoints = data;

@@ -7,6 +7,7 @@ import { data } from "../devdata/childrendata";
 
 @inject(Router)
 export class LevelUp {
+  scrollPos: number = 0;
   router: Router;
   name: String;
   reward: String;
@@ -16,10 +17,12 @@ export class LevelUp {
 
   Continue() {
     this.sound.pause();
-    this.router.navigate("/children/0");
+    this.router.navigate(`/children/0/${this.scrollPos}`);
   }
 
   activate(params: any) {
+    this.scrollPos = params.scrollPos;
+
     console.log(`loading achievements for ${params.id}`);
     if (dev) {
       this.browniePoints = data;
@@ -42,7 +45,7 @@ export class LevelUp {
 
   public CloseLevelUp() {
     this.sound.pause();
-    this.router.navigate(`unlock/${this.child.level}`);
+    this.router.navigate(`unlock/${this.child.level}/${this.scrollPos}`);
   }
 
   constructor(router: Router) {

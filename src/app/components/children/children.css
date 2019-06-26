@@ -50,6 +50,43 @@
     animation: fadeOut 1s;
 }*/
 
+
+.ChildNameAnimation {
+  animation-name: ChildNameAnimation;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  animation-delay: 0.6;
+}
+
+@keyframes ChildNameAnimation{
+  0% {
+    transform: Scale(0.1) rotate(1deg);
+    opacity: 0;
+  }
+  100% {
+    transform: Scale(1) rotate(360deg);
+    opacity: 1;
+  }
+}
+
+.LevelAnimation {
+animation-name: LevelAnimation;
+animation-duration: 0.5s;
+animation-fill-mode: forwards;
+animation-delay: 0.5s;
+}
+
+@keyframes LevelAnimation {
+  0% {
+    transform: Scale(0.1) rotate(1deg);
+    opacity: 0
+  }
+  100% {
+    transform: Scale(1) rotate(360deg);
+    opacity: 1
+  }
+}
+
 .AllChildrenAureliaAnimators div.SwitchChild div.ControlPanelAnimation.au-leave-active {
     animation: moveControlPanel 0.8s ease-in-out;
 }

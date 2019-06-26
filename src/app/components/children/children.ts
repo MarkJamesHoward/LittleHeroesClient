@@ -30,6 +30,7 @@ import { number } from "style-value-types";
 
 @inject(HttpClient, Router)
 export class Home {
+  scrollPos: number = 0;
   public editingAvatar: boolean = false;
   public currentCount: number = 0;
   public showingChild: string;
@@ -70,13 +71,19 @@ export class Home {
     this.router.navigate(`welcome`);
   }
 
+  getScrollPos() {
+    let scrollPos = document.querySelector(".SnapContainer").scrollLeft;
+    return scrollPos;
+  }
+
   ViewPet(child: BrowniePoints) {
     console.log("display pet " + child.childName);
     SetBrowniePoints(this.browniePoints);
     const sound = new Audio();
     sound.src = require("../../sounds/click.mp3");
     sound.play();
-    this.router.navigate(`pet/${child.id}`);
+    let scrollPos = this.getScrollPos();
+    this.router.navigate(`pet/${child.id}/${scrollPos}`);
   }
 
   EditAvatar(child: BrowniePoints) {
@@ -256,12 +263,24 @@ export class Home {
   // BackToBrowse(child: string) {
   //   this.router.navigate(child);
   // }
+  attached() {
+    let node = document.querySelector(".SnapContainer");
+    console.log("node is " + node);
+    if (node) {
+      console.log("scrolling back to " + this.scrollPos);
+      node.scrollTo(this.scrollPos, 0);
+    } else {
+      console.log("no scroll needed");
+    }
+  }
 
   async activate(params) {
     if (!this.achievements) {
       // Not awaited so just happends in the background
       //this.achievements = GetAchievements();
     }
+
+    this.scrollPos = params.scrollPos;
 
     console.log("children activated called!!!");
     if (params.id === "0") {
@@ -682,8 +701,10 @@ export class Home {
 
       if (dev) {
         child.availableRewards.push(reward);
-        this.router.navigate(`/levelup/${child.id}`);
+        let scrollPos = this.getScrollPos();
+        this.router.navigate(`/levelup/${child.id}/${scrollPos}`);
       } else {
+        let scrollPos = this.getScrollPos();
         this.http
           .fetch(`${DNS}/api/PointsData/LevelUp/${child.id}`, {
             method: "Get",
@@ -701,7 +722,7 @@ export class Home {
           });
 
         child.availableRewards.push(reward);
-        this.router.navigate(`/levelup/${child.id}`);
+        this.router.navigate(`/levelup/${child.id}/${scrollPos}`);
       }
     }
   }
@@ -729,7 +750,8 @@ export class Home {
   }
 
   public ViewAchievements(child: BrowniePoints) {
-    this.router.navigate(`achievements/${child.id}`);
+    let scrollPos = this.getScrollPos();
+    this.router.navigate(`achievements/${child.id}/${scrollPos}`);
     const sound = new Audio();
     sound.src = require("../../sounds/click.mp3");
     sound

@@ -1,7 +1,7 @@
 import { Aurelia, PLATFORM, inject } from "aurelia-framework";
 import { Router, RouterConfiguration } from "aurelia-router";
 import { HttpClient } from "aurelia-fetch-client";
-import {dev, DNS} from '../global';
+import { dev, DNS } from "../global";
 
 interface SignedIn {
   signedIn: boolean;
@@ -14,7 +14,6 @@ export class App {
   public signedIn: boolean = false;
   public signedInAs: string;
   http: HttpClient;
-
 
   constructor(http: HttpClient) {
     this.http = http;
@@ -78,7 +77,7 @@ export class App {
         title: "Welcome"
       },
       {
-        route: ["children/:id"],
+        route: ["children/:id/:scrollPos"],
         name: "children",
         settings: { icon: "" },
         moduleId: PLATFORM.moduleName("../children/children"),
@@ -102,7 +101,7 @@ export class App {
         title: "Manage Parents"
       },
       {
-        route: "pet/:id",
+        route: "pet/:id/:scrollPos",
         name: "pet",
         settings: { icon: "" },
         moduleId: PLATFORM.moduleName("../pet/pet"),
@@ -134,7 +133,7 @@ export class App {
         title: "QuickStart"
       },
       {
-        route: ["achievements/:id"],
+        route: ["achievements/:id/:scrollPos"],
         name: "achievements",
         settings: { icon: "" },
         moduleId: PLATFORM.moduleName("../achievements/achievements"),
@@ -142,7 +141,7 @@ export class App {
         title: "Achievements"
       },
       {
-        route: ["unlock/:level"],
+        route: ["unlock/:level/:scrollPos"],
         name: "unlock",
         settings: { icon: "" },
         moduleId: PLATFORM.moduleName("../unlock/unlock"),
@@ -150,7 +149,7 @@ export class App {
         title: "Unlock"
       },
       {
-        route: ["levelup/:id"],
+        route: ["levelup/:id/:scrollPos"],
         name: "levelup",
         settings: { icon: "" },
         moduleId: PLATFORM.moduleName("../levelup/levelup"),

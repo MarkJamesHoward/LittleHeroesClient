@@ -182,9 +182,9 @@ export class Welcome {
   }
 
   ViewHeroTastic() {
-    this.router.navigate("children/1");
+    this.router.navigate("children/1/0");
   }
-
+ 
   Login() {
     this.router.navigate("Login");
   }
@@ -196,6 +196,7 @@ export class Welcome {
     }).then(response => {
       if (response.ok) {
         console.log("logged out");
+        window.scrollTo(0,0);
         this.AmISignedIn();
       }
     });

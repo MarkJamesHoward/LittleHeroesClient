@@ -2,7 +2,7 @@
   <require from="./children.css"></require>
   <!-- <require from="./levelup.css"></require> -->
   <require from="../app/shake.css"></require>
-  <require from="../app/levelrotate.css"></require>
+
 
   <style>
     .RewardItem {
@@ -580,7 +580,7 @@
               <div>
                 <div style="display:flex;justify-content:space-between;flex-direction:row;">
                   <!-- Circle with Level (dashed)-->
-                  <div id="Level">
+                  <div id="Level" class="LevelAnimation" style="opacity:0">
                     <div
                       style="display:flex;justify-content:center;
                                             background-color:red;
@@ -602,7 +602,7 @@
                   <div
                     style="display:flex; flex-direction: column;margin: 1rem;align-items:flex-end"
                   >
-                    <div if.bind="!editingChildName" click.trigger="EditMode()">
+                    <div if.bind="!editingChildName" click.trigger="EditMode()" class="ChildNameAnimation">
                       <span style="user-select: none;" class="nameTitle">${child.childName}</span>
                     </div>
                     <div if.bind="editingChildName">
@@ -686,7 +686,7 @@
                 style="grid-area:Rewards"
               >
                 <div class="RewardsRow">
-                  <div style="user-select: none;">Next Reward at 100 pts is:</div>
+                  <div  style="user-select: none;">Next Reward at 100 pts is:</div>
 
                   <div if.bind="!editingReward">
                     <div style="display:flex;justify-content:center;align-items:center">

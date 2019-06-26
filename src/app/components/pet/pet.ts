@@ -20,6 +20,7 @@ export class Pet {
   child: BrowniePoints;
   childID: number;
   browniePoints: Array<BrowniePoints>;
+  scrollPos: number = 0;
 
   HandledCharacterChange(e: any) {
     console.log("handled" + e.detail.kicked);
@@ -67,6 +68,7 @@ export class Pet {
     selectedeyey: number,
     selectedlegsx: number,
     selectedlegsy: number
+
   ) {
 
       this.child.pet.eyes = eyes;
@@ -79,6 +81,7 @@ export class Pet {
       this.child.pet.selectedeyey = selectedeyey;
       this.child.pet.selectedlegsx = selectedlegsx;
       this.child.pet.selectedlegsy = selectedlegsy;
+
       SetBrowniePoints(this.browniePoints);
       // console.log(
       //   `${DNS}/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${legs}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}/${selectedlegsx}/${selectedlegsy}`
@@ -91,11 +94,14 @@ export class Pet {
       //var data = await result.json();
       //console.log(data);
 
-    this.router.navigate(`children/0`);
+    this.router.navigate(`children/0/${this.scrollPos}`);
   }
 
   activate(params: any) {
     console.log(`loading pety for ${params.id}`);
+    console.log(`return scroll Pos ${params.scrollPos}`);
+    this.scrollPos = params.scrollPos;
+    
     this.browniePoints = GetBrowniePoints();
 
     if (!this.browniePoints) {

@@ -20,7 +20,7 @@ export class Unlock {
 
 
   UnlockMouth1 = 2;
-  UnlockMouth2 = 7;
+  UnlockMouth2 = 6;
   UnlockMouth3 = 13;
   UnlockMouth4 = 21;
 
@@ -31,7 +31,7 @@ export class Unlock {
 
 
   UnlockLegs1 = 3;
-  UnlockLegs2 = 9;
+  UnlockLegs2 = 7;
   UnlockLegs3 = 15;
   UnlockLegs4 = 24;
 
@@ -40,14 +40,16 @@ export class Unlock {
   UnlockLegs3Visible = false;
   UnlockLegs4Visible = false;
 
-
+  scrollPos: number = 0;
   level: number = 0;
 
   Continue() {
-    this.router.navigate("/children/0");
+    this.router.navigate(`/children/0/${this.scrollPos}`);
   }
 
   activate(params: any) {
+
+    this.scrollPos = params.scrollPos;
 
     let foundOne = false;
     

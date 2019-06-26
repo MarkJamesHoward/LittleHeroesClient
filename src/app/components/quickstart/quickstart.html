@@ -70,13 +70,17 @@
     </div>
   </div>
 
+  <div show.bind="connecting">
+    <h1 class="title">Creating your account... hold tight, nearly done</h1>
+  </div>
+
   <div
     class="Myflex orangeBackground WhiteText"
-    show.bind="!addingChildActivated"
+    show.bind="!connecting"
   >
     <h1 class="title">You're all set</h1>
     <h3>We've created two child accounts to get you started</h3>
-    <paper-button
+    <paper-button id="LetsGo"
       style="background-color: var(--button-color)"
       raised
       click.trigger="Start()"
