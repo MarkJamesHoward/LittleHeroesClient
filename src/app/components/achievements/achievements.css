@@ -1,0 +1,114 @@
+.au-stagger {
+  animation-delay: 200ms;
+}
+
+.achieveSlideIn.au-enter {
+  opacity: 0;
+}
+
+.achieveSlideIn.au-enter-active {
+  animation: achieveSlideIn 1s;
+}
+.achieveSlideInItem.au-enter {
+  opacity: 0;
+}
+
+.achieveSlideInItem.au-enter-active {
+  animation: achieveSlideIn 1s;
+}
+
+@keyframes achieveSlideIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.achieveSlideOut.au-leave {
+  opacity: 0;
+}
+
+.achieveSlideOut.au-leave-active {
+  animation: achieveSlideOut 0.5s;
+}
+
+@keyframes achieveSlideOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+* {
+  padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.achievement {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0.4rem;
+}
+
+.achievementItem {
+  background: burlywood;
+  width: 100%;
+  text-align: center;
+  margin: 0.3rem;
+  display: grid;
+  grid-template-areas:
+    "title description description completed"
+    "progress progress progress trophy";
+  grid-template-rows: 1fr 2fr;
+  grid-template-columns: 4fr 3fr 3fr 1fr;
+  border-radius: 1rem;
+  box-shadow: inset -0.3rem -0.3rem 0.9rem 0.2rem;
+}
+
+.nowrap {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.title {
+  grid-area: title;
+  margin-top: 1rem;
+  font-family: "Fredoka One", cursive;
+  font-size: 1.3rem;
+}
+
+.description {
+  margin-top: 1rem;
+  grid-area: description;
+  font-size: 0.8rem;
+  align-self: center;
+  font-family: "Fredoka One", cursive;
+}
+
+.completed {
+  margin-right: 1rem;
+  font-family: Gochi Hand;
+  font-size: 3rem;
+  margin-top: 0.5rem;
+  font-size: 1.5rem;
+  grid-area: completed;
+}
+
+.progress {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  grid-area: progress;
+  align-self: center;
+}
+
+.trophy {
+  align-self: center;
+  grid-area: trophy;
+  width: 2rem;
+}

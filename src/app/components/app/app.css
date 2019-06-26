@@ -5,6 +5,8 @@
     }*/
 /*}*/
 
+
+
 @keyframes myspinner {
   to {
     transform: rotate(360deg);
@@ -17,7 +19,7 @@
 
 .alphaText {
   font-size: 0.8rem;
-  color:var(--button-color);
+  color: var(--button-color);
 }
 
 .wait {
@@ -52,7 +54,7 @@ body {
 }
 
 .TextColorOnBlackBackground {
-  color:black;
+  color: black;
 }
 
 /*Size of text in all paragraphs*/

@@ -1,10 +1,441 @@
 ﻿
+.RewardItem {
+  background: brown;
+  border-radius: 1rem;
+  font-family: "Fredoka One", cursive;
+}
+
+.BonusOverlayActive {
+  background-color: black;
+  opacity: 0.9;
+  z-index: 1000;
+}
+
+.BonusPointsTime {
+  background-color: black;
+  border: 0.3rem solid blue;
+  width: 100vw;
+  height: 20vh;
+  font-size: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  grid-area: main;
+  opacity: 0.8;
+  font-family: "Fredoka One", cursive;
+}
+
+.ball,
+.ball2 {
+  width: 5rem;
+  height: 5rem;
+  position: absolute;
+  top: 45vh;
+  left: 45vw;
+  border-radius: 50%;
+  background-color: chartreuse;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: AnimateBall 4s 1;
+  animation-delay: 5s;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 1000;
+  user-select: none;
+  border: 0.2rem solid black;
+}
+
+.ball2 {
+  animation: AnimateBall2 4s 1;
+  animation-delay: 5s;
+}
+
+.square {
+  cursor: pointer;
+  width: 4rem;
+  user-select: none;
+  height: 4rem;
+  position: absolute;
+  top: 55vh;
+  left: 55vw;
+  background-color: cadetblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: AnimateSquare 4s 1;
+  animation-delay: 5s;
+  opacity: 0;
+  z-index: 1000;
+  border: 0.2rem solid black;
+}
+
+@keyframes AnimateBall2 {
+  5% {
+    opacity: 0.8;
+    transform: rotate(359deg) scale(1.5);
+  }
+  29% {
+    opacity: 1;
+  }
+  30% {
+    transform: translateX(40vw) scale(1) rotate(5deg);
+  }
+  70% {
+    transform: translateY(40vh) scale(1) rotate(-5deg);
+  }
+  90% {
+    opacity: 1;
+    transform: scale(1) rotate(10deg);
+  }
+  100% {
+    opacity: 0.2;
+    transform: scale(0.2) rotate(359deg);
+  }
+}
+@keyframes AnimateBall {
+  5% {
+    opacity: 0.8;
+    transform: rotate(359deg) scale(1.5);
+  }
+  29% {
+    opacity: 1;
+  }
+  30% {
+    transform: translateX(-40vw) scale(1) rotate(5deg);
+  }
+  70% {
+    transform: translateY(-40vh) scale(1) rotate(-5deg);
+  }
+  90% {
+    opacity: 1;
+    transform: scale(1) rotate(10deg);
+  }
+  100% {
+    opacity: 0.2;
+    transform: scale(0.2) rotate(359deg);
+  }
+}
+
+@keyframes AnimateSquare {
+  5% {
+    opacity: 0.8;
+    transform: rotate(359deg) scale(1.5);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(35vh) scale(1) rotate(180deg);
+  }
+  70% {
+    transform: translateX(40vw) scale(1) rotate(-50deg);
+  }
+  90% {
+    transform: scale(1) rotate(50deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(350deg) scale(0.2);
+  }
+}
+
+.MasterContainer {
+  display: grid;
+  grid-template-areas: "main";
+  height: 99vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle-container > img {
+  width: 15vmin;
+}
+
+.SnapContainer {
+  scroll-snap-type: x mandatory;
+  width: 100vw;
+  overflow-x: scroll;
+  display: flex;
+}
+
+.SnapChild {
+  min-width: 100vw;
+  scroll-snap-align: start;
+}
+
+.ControlPanel {
+  --border: 0.5rem solid red;
+  --border-radius: 3rem;
+  --padding: 1rem;
+  --background-color: peachpuff;
+}
+
+.ControlPanelWrapper {
+  --border: 0.5rem solid black;
+  --border-radius: 3rem;
+  --background-color: red;
+  --margin-bottom: 1rem;
+}
+
+.ControlPanelBase {
+  --border-left: 1rem solid black;
+  --border-right: 1rem solid black;
+  --height: 2rem;
+  --width: 50%;
+}
+
+.OverlayTwoItems {
+  display: grid;
+  grid-template-areas: "main";
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr;
+  align-items: center;
+  justify-items: center;
+  /*border: 5px solid yellow;*/
+  width: 80%;
+}
+
+.EmojiButtons {
+  margin-left: 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.EmojiButtons:hover {
+  transform: scale(1.1);
+  transition: 0.1s all;
+}
+
+.MakeMeGrey {
+  filter: grayscale(100%);
+  opacity: 0.1;
+  transition: opacity 5s, filter 0.5s;
+}
+
+.circle-container {
+  grid-area: main;
+}
+
+.ActualAvatarImage {
+  grid-area: main;
+  /*width: 20vmin;*/
+}
+
+#Level {
+  grid-area: main;
+  /*z-index: 3;*/
+  align-self: start;
+  justify-self: start;
+  font-family: "Fredoka One", cursive;
+}
+
+#Pet {
+  grid-area: main;
+  align-self: start;
+  justify-self: start;
+}
+
+@keyframes MySlideIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes MySlideOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.AvailableRewardsButton {
+  font-size: 1.5rem;
+  margin-top: 0.2rem;
+  display: block;
+  margin: 2px;
+}
+
+.flipContainer {
+  perspective: 1200px;
+  height: 100%;
+  /*border: 10px solid blue;*/
+}
+
+.rotate {
+  transform: rotateY(180deg);
+}
+
+.front,
+.back {
+  height: 100%;
+  width: 100%;
+  backface-visibility: hidden;
+  grid-area: card;
+}
+
+.front {
+  --background-color: black;
+}
+
+.back {
+  background-color: black;
+  transform: rotateY(180deg);
+  border-radius: 1rem;
+}
+
+#card {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "card";
+  transition: all 1s ease-in-out;
+  transform-style: preserve-3d;
+  height: 100%;
+}
+
+.AvailableRewardsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1rem;
+  max-height: 100px;
+  margin-bottom: 0.2rem;
+}
+
+.waiting {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  font-size: 2.5rem;
+}
+
+.errorMessage {
+  position: absolute;
+  bottom: 20px;
+  right: 100px;
+  height: 20px;
+  color: red;
+}
+
+.myContainer {
+  box-sizing: border-box;
+  height: 97vh;
+  width: 100vw;
+  display: grid;
+  grid-template-rows: 1fr 8fr 1fr 1fr;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "Name"
+    "Avatar"
+    "Rewards"
+    "Buttons";
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.nameTitle {
+  /*max-width: 68vw;*/
+  text-align: center;
+  font-size: 6rem;
+  margin-bottom: 0;
+  margin-top: 0;
+  font-family: "Gochi Hand", cursive;
+}
+
+.DojoButton {
+  /*min-width: 25rem;*/
+  font-size: 1.5rem;
+  margin-top: 0.2rem;
+  display: block;
+  margin: 2px;
+}
+
+.level {
+  color: white;
+  font-size: 1rem;
+}
+
+.points {
+  color: white;
+  font-size: 5rem;
+  text-align: center;
+  /*background-color:darkorange;*/
+  font-family: "Fredoka One", cursive;
+}
+
+.levelUp {
+  display: block;
+}
+
+.RewardsRow {
+  text-align: center;
+  font-size: 2rem;
+  font-family: "Fredoka One", cursive;
+}
+
+.childSelection button {
+  margin: 10px;
+}
+
+
+
 .aurelia-animators {
     padding: 20px;
     list-style: none;
 }
 .rewardsAnimations {
 
+}
+
+.ChildrenFadeOut.au-leave {
+  opacity: 1;
+}
+
+.ChildrenFadeOut.au-leave-active {
+  animation: FadeOutChild 1s;
+}
+
+@keyframes FadeOutChild {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.ChildrenFadeIn.au-enter {
+  opacity: 0;
+}
+
+.ChildrenFadeIn.au-enter-active {
+  animation: FadeInChild 2s;
+}
+
+@keyframes FadeInChild {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
  /* width */
