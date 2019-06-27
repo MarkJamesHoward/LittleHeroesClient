@@ -1,0 +1,50 @@
+.UnlockFadeOut.au-leave {
+  transform: translateX(0)
+}
+
+.UnlockFadeOut.au-leave-active {
+  animation: FadeOutUnlock 0.5s;
+}
+
+@keyframes FadeOutUnlock {
+  0% {
+    transform: translateY(0)
+  }
+  100% {
+    transform: translateY(-100%)
+  }
+}
+
+.UnockFadeIn.au-enter {
+  transform: translateY(-100%);
+}
+
+.UnlockFadeIn.au-enter-active {
+  animation: FadeInUnlock 0.5s;
+}
+
+@keyframes FadeInUnlock {
+  0% {
+    transform: translateY(-100%)
+  }
+  100% {
+    transform: translateY(0)
+  }
+}
+
+* {
+  padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+.title {
+  grid-area: title;
+  margin-top: 1rem;
+  font-family: "Fredoka One", cursive;
+  font-size: 1.3rem;
+}

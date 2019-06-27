@@ -3,6 +3,45 @@
   font-family: "Fredoka One", cursive;
 }
 
+    .container {
+      display: grid;
+      grid-template-areas: main;
+    }
+
+.UnlockFadeOut.au-leave {
+  transform: translateY(0)
+}
+
+.UnlockFadeOut.au-leave-active {
+  animation: FadeOutUnlock 0.5s;
+}
+
+@keyframes FadeOutUnlock {
+  0% {
+    transform: translateY(0)
+  }
+  100% {
+    transform: translateY(-100%)
+  }
+}
+
+.UnockFadeIn.au-enter {
+  transform: translateY(-100%);
+}
+
+.UnlockFadeIn.au-enter-active {
+  animation: FadeInUnlock 0.5s;
+}
+
+@keyframes FadeInUnlock {
+  0% {
+    transform: translateY(-100%)
+  }
+  100% {
+    transform: translateY(0)
+  }
+}
+
 @keyframes myr {
   40% {
     transform: scale(1.3);

@@ -1,0 +1,542 @@
+
+.WelcomeFadeOut.au-leave {
+  opacity: 1
+}
+
+.WelcomeFadeOut.au-leave-active {
+  animation: FadeOutWelcome 0.3s;
+}
+
+@keyframes FadeOutWelcome {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.WelcomeFadeIn.au-enter {
+  opacity: 0
+}
+
+.WelcomeFadeIn.au-enter-active {
+  animation: FadeInWelcome 0.3s;
+}
+
+@keyframes FadeInWelcome {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+p,
+h1,
+h2,
+h3 {
+max-width: 60ch;
+text-align: center;
+margin: auto;
+user-select: none;
+}
+
+.AnimationGrid {
+margin-bottom: 1rem;
+justify-content: space-around;
+margin-top: 2rem;
+max-width: 90vw;
+flex-wrap: wrap;
+display: flex;
+font-family: "Gochi Hand", cursive;
+font-size: 3rem;
+}
+
+paper-button {
+padding: 1rem;
+margin: 1rem;
+}
+
+#kidPicture {
+width: 200px;
+}
+
+.toolbar-top {
+background-color: var(--app-header-background-color);
+}
+
+[main-title] {
+font-family: "Pacifico";
+text-transform: lowercase;
+font-size: 30px;
+/* In the narrow layout, the toolbar is offset by the width of the
+  drawer button, and the text looks not centered. Add a padding to
+  match that button */
+padding-right: 44px;
+}
+
+* {
+padding: 0;
+margin: 0;
+box-sizing: border-box;
+}
+
+.toolbar-list {
+display: none;
+}
+
+.toolbar-list > a {
+display: inline-block;
+color: var(--app-header-text-color);
+text-decoration: none;
+line-height: 30px;
+padding: 4px 24px;
+}
+
+.toolbar-list > a[selected] {
+color: var(--app-header-selected-color);
+border-bottom: 4px solid var(--app-header-selected-color);
+}
+
+.menu-btn {
+background: none;
+border: none;
+fill: var(--app-header-text-color);
+cursor: pointer;
+height: 44px;
+width: 44px;
+}
+
+.drawer-list {
+box-sizing: border-box;
+width: 100%;
+height: 100%;
+padding: 24px;
+background: var(--app-drawer-background-color);
+position: relative;
+}
+
+.drawer-list > a {
+display: block;
+text-decoration: none;
+color: var(--app-drawer-text-color);
+line-height: 40px;
+padding: 0 24px;
+}
+
+.drawer-list > a[selected] {
+color: var(--app-drawer-selected-color);
+}
+
+/* Workaround for IE11 displaying <main> as inline */
+main {
+display: block;
+}
+
+.main-content {
+padding-top: 64px;
+min-height: 100vh;
+}
+
+.page {
+display: none;
+}
+
+.page[active] {
+display: block;
+}
+
+footer {
+padding: 24px;
+background: var(--app-drawer-background-color);
+color: var(--app-drawer-text-color);
+text-align: center;
+}
+
+.container {
+background-color: black;
+color: white;
+display: grid;
+grid-template-areas:
+  "welcome"
+  "details"
+  "achievements"
+  "PWA"
+  "screenshot"
+  "buttons";
+}
+
+.achievements {
+grid-area: achievements;
+}
+
+.PWA {
+grid-area: PWA;
+display: flex;
+justify-content: center;
+color: black;
+}
+
+.blueBackground {
+background-color: rgb(72, 115, 235);
+padding: 2rem 2rem 0 2rem;
+grid-area: details;
+}
+
+.title {
+grid-area: title;
+}
+
+.wimage {
+grid-area: image;
+display: grid;
+place-items: center;
+}
+
+.text {
+grid-area: text;
+}
+
+.buttons {
+grid-area: buttons;
+display: grid;
+place-items: center;
+}
+
+.welcomeTitle {
+grid-area: welcome;
+height: 100vh;
+max-height: 100vh;
+display: grid;
+justify-content: center;
+grid-template-rows: 1fr 5fr 2fr 2fr;
+grid-template-areas:
+  "title"
+  "image"
+  "text"
+  "buttons";
+}
+
+.screenshot {
+background-color: white;
+}
+
+.buttons {
+grid-area: buttons;
+}
+
+.FullyCustomisableMonsterTitle > span {
+display: inline-block;
+}
+
+@keyframes TitleAnimation {
+0% {
+  opacity: 0.5;
+}
+50% {
+  transform: translateY(-10px) scale(1.5);
+}
+100% {
+  opacity: 1;
+}
+}
+
+.hidden {
+opacity: 0;
+}
+
+.span1F {
+animation-delay: 1s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span1U {
+animation-delay: 1.05s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span1L {
+animation-delay: 1.1s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span1L {
+animation-delay: 1.15s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span1L2 {
+animation-delay: 1.2s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span1Y {
+animation-delay: 1.25s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span2C {
+animation-delay: 1.3s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span2U {
+animation-delay: 1.35s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span2S {
+animation-delay: 1.4s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span2T {
+animation-delay: 1.45s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span2O {
+animation-delay: 1.5s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span2M {
+animation-delay: 1.55s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span2I {
+animation-delay: 1.6s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span2S {
+animation-delay: 1.65s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span2Z {
+animation-delay: 1.7s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span2A {
+animation-delay: 1.75s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span2B {
+animation-delay: 1.8s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span2L {
+animation-delay: 1.85s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span2E {
+animation-delay: 1.9s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span3M {
+animation-delay: 1.95s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span3O {
+animation-delay: 2s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span3N {
+animation-delay: 2.05s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span3S {
+animation-delay: 2.1s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span3T {
+animation-delay: 2.15s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span3E {
+animation-delay: 2.2s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span3R {
+animation-delay: 2.25s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+.span3S {
+animation-delay: 2.3s;
+animation-duration: 1s;
+animation-name: TitleAnimation;
+animation-fill-mode: forwards;
+}
+
+@keyframes WelcomeTitleAnimationFront {
+0% {
+  left: -500px;
+}
+100% {
+  left: 0px;
+  transform: skew(10deg) rotate(-2deg);
+}
+}
+
+@keyframes WelcomeTitleAnimationEnd {
+0% {
+  left: 700px;
+}
+100% {
+  left: 0px;
+  transform: skew(10deg) rotate(-4deg) scale(1.5);
+}
+}
+
+#WelcomeTitleStart {
+transform: skew(10deg) rotate(-2deg);
+animation-name: WelcomeTitleAnimationFront;
+animation-duration: 0.6s;
+animation-timing-function: ease-in-out;
+animation-delay: 1s;
+animation-fill-mode: forwards;
+display: block;
+margin-right: 1.7rem;
+}
+
+#WelcomeTitleEnd {
+transform: skew(10deg) rotate(-4deg);
+animation-name: WelcomeTitleAnimationEnd;
+animation-timing-function: ease-in-out;
+animation-duration: 0.6s;
+animation-delay: 1.1s;
+animation-fill-mode: forwards;
+display: block;
+margin-right: 1.7rem;
+}
+
+@keyframes QuickStartText {
+20% {
+  transform: Scale(1);
+}
+21% {
+  transform: Scale(0.9);
+}
+22% {
+  transform: Scale(1);
+}
+23% {
+  transform: Scale(0.9);
+}
+24% {
+  transform: Scale(1);
+}
+60% {
+  transform: Rotate(0deg);
+}
+65% {
+  transform: Rotate(4deg);
+}
+70% {
+  transform: Rotate(-4deg);
+}
+75% {
+  transform: Rotate(0deg);
+}
+}
+
+#QuickStartText {
+animation-name: QuickStartText;
+animation-duration: 10s;
+animation-delay: 5s;
+animation-iteration-count: infinite;
+}
+@keyframes SuperHeroImgZoom {
+0% {
+  transform: scale(0.1);
+}
+75% {
+  transform: scale(1.1);
+}
+100% {
+  transform: scale(1);
+}
+}
+
+#superheroimg {
+transform: scale(0);
+animation-name: SuperHeroImgZoom;
+animation-duration: 0.2s;
+animation-fill-mode: forwards;
+animation-timing-function: ease-in-out;
+animation-delay: 1.5s;
+}
+
+.WelcomeScreenButtonsInternal {
+display: flex;
+flex-direction: column;
+align-items: center;
+}
