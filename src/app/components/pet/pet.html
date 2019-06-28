@@ -1,44 +1,5 @@
 <template>
-  <style>
-    paper-button {
-      font-size: 2rem;
-    }
-    * {
-      padding: 0;
-      margin: 0;
-      box-sizing: border-box;
-    }
-
-    paper-button {
-      margin:0;
-      padding:0;
-    }
-
-    .MasterContainerPet {
-      display: grid;
-      grid-template-areas: "main";
-      height: 100vh;
-      background: rgb(255, 255, 255)
-    }
-
-    .FadeIn.au-enter {
-      opacity: 0;
-    }
-
-    .FadeIn.au-enter-active {
-      animation: 1s FadeIn;
-    }
-
-    @keyframes FadeIn {
-      0% {
-        opacity: 0;
-      }
-      100% {
-        opacity: 100;
-      }
-    }
-
-  </style>
+    <require from="./pet.css"></require>
 
   <div class="au-animate FadeIn FadeOut MasterContainerPet">
     <div style="height: 100%; grid-area: main">

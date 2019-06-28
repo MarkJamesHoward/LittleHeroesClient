@@ -1,0 +1,54 @@
+paper-button {
+  font-size: 2rem;
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+paper-button {
+  margin: 0;
+  padding: 0;
+}
+
+.MasterContainerPet {
+  display: grid;
+  grid-template-areas: "main";
+  height: 100vh;
+  background: rgb(255, 255, 255);
+}
+
+.FadeIn.au-enter {
+  opacity: 0;
+}
+
+.FadeIn.au-enter-active {
+  animation: 0.3s FadeIn;
+}
+
+.FadeOut.au-leave {
+  opacity: 1;
+}
+
+.FadeOut.au-leave-active {
+  animation: 0.3s FadeOut;
+}
+
+@keyframes FadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 100;
+  }
+}
+
+@keyframes FadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
