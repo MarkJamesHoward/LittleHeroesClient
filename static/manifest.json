@@ -24,7 +24,7 @@
     }
   ],
   "start_url": "https://littleheroes.azurewebsites.net/",
-  "background_color": "#FF812D",
+  "background_color": "#000000",
   "display": "standalone",
-  "theme_color": "#FF812D"
+  "theme_color": "#000000"
 }

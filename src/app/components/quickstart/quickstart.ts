@@ -9,15 +9,19 @@ export class QuickStart {
   router: Router;
   connecting: boolean = true;
   displayError: boolean = false;
+  DelayInCreationOfAccount: boolean = false;
 
-  activate() {
-    this.RegisterAsGuest();
+  attached() {
+    let btn =  document.querySelector("#LetsGo")
+    if(btn) {
     //@ts-ignore
-   let btn =  document.querySelector("#LetsGo")
-   if(btn)
-    focus();
-    else
-    console.error('cannot find button')
+     btn.focus();
+     console.log('button should now have focus')
+    }
+     else
+     console.error('cannot find button');
+
+     this.RegisterAsGuest();
   }
 
   constructor(router: Router) {
@@ -35,9 +39,15 @@ export class QuickStart {
 
   // TODO:This needs to be completed
   RegisterAsGuest() {
+    this.connecting = true;
     const shortName = uniqueNamesGenerator("-", true); // big-donkey
 
     let details = { email: shortName, password: "password" };
+
+    //After 2 seconds lets display the spinner
+    setTimeout(() => {
+      this.DelayInCreationOfAccount = true;
+    }, 2000)
 
     fetch(`${DNS}/api/auth/registerguest/${shortName}`, {
       method: "post",
@@ -52,11 +62,13 @@ export class QuickStart {
           console.log("added new user successfully!");
           //this.addedNewUserOk = true;
           this.connecting = false;
+          this.displayError = false;
           //this.attemptedAddNewUser = false;
         }
       })
       .catch(e => {
         this.displayError = true;
+        this.connecting = false;
         //this.attemptedAddNewUser = true;
         console.log("error adding new user");
       });

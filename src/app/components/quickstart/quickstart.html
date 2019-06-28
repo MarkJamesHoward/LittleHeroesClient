@@ -24,7 +24,7 @@
     paper-button {
       font-size: 2rem;
       margin-top: 1rem;
-      background:  var(--button-color);
+      background: var(--button-color);
     }
 
     .DeleteBtn {
@@ -60,50 +60,54 @@
   <!--Error occurred-->
   <div show.bind="displayError">
     <div class="center">
+      <h2>Sorry! something went wrong..</h2>
       <h2>${errorMessage}</h2>
-      <paper-button
-        class="btn btn-primary btn-lg "
-        click.trigger="CloseError()"
-      >
+      <paper-button class="btn btn-primary btn-lg " click.trigger="Home()">
         Close
       </paper-button>
     </div>
   </div>
 
-  <div show.bind="connecting">
-    <h1 class="title">Creating your account... hold tight, nearly done</h1>
-  </div>
+  <div show.bind="!displayError">
+    <div show.bind="connecting">
+      <div style="display: flex; flex-direction: column;place-items:center">
+        <h2 class="title">Creating your account... hold tight, nearly done</h2>
+        <paper-button show.bind="DelayInCreationOfAccount" style="width: 40vw;font-size: 2rem" click.trigger="Login()" raised>
+            <div class="spinner"></div>
+            <span>Cancel</span>
+        </paper-button>    
+      </div>     
+    </div>
 
-  <div
-    class="Myflex orangeBackground WhiteText"
-    show.bind="!connecting"
-  >
-    <h1 class="title">You're all set</h1>
-    <h3>We've created two child accounts to get you started</h3>
-    <paper-button id="LetsGo"
-      style="background-color: var(--button-color)"
-      raised
-      click.trigger="Start()"
-      >Let's Go!</paper-button
-    >
-    <!-- <h3>
-      You can edit their names right from the application page which we'll take
-      you to now:
-    </h3>
-
-    <h3>
-      If you need to add or remove a child then head over to the admin page
-      below at any time
-    </h3>
-
-    <paper-button raised click.trigger="AddRemove()">Add/Remove</paper-button>
-
-    <h3>Errm not sure why I'm here...</h3>
-    <paper-button raised click.trigger="Home()">Take me Home</paper-button>
-
-    <div show.bind="loading">
-      <span>Putting things together... just a moment ..</span>
-      <span class="glyphicon glyphicon-refresh wait"> </span>
-    </div> -->
+    <div class="Myflex orangeBackground WhiteText" show.bind="!connecting">
+      <h1 class="title">You're all set</h1>
+      <h3>We've created two child accounts to get you started</h3>
+      <paper-button
+        id="LetsGo"
+        style="background-color: var(--button-color)"
+        raised
+        click.trigger="Start()"
+        >Let's Go!</paper-button
+      >
+      <!-- <h3>
+        You can edit their names right from the application page which we'll take
+        you to now:
+      </h3>
+  
+      <h3>
+        If you need to add or remove a child then head over to the admin page
+        below at any time
+      </h3>
+  
+      <paper-button raised click.trigger="AddRemove()">Add/Remove</paper-button>
+  
+      <h3>Errm not sure why I'm here...</h3>
+      <paper-button raised click.trigger="Home()">Take me Home</paper-button>
+  
+      <div show.bind="loading">
+        <span>Putting things together... just a moment ..</span>
+        <span class="glyphicon glyphicon-refresh wait"> </span>
+      </div> -->
+    </div>
   </div>
 </template>
