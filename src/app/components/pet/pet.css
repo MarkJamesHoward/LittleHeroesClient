@@ -16,7 +16,7 @@ paper-button {
   display: grid;
   grid-template-areas: "main";
   height: 100vh;
-  background: rgb(255, 255, 255);
+  background:  rgb(150, 146, 146);
 }
 
 .FadeIn.au-enter {
