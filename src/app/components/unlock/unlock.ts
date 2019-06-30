@@ -8,7 +8,7 @@ import "@polymer/paper-button";
 export class Unlock {
   router: Router;
 
-  UnlockEyes1 = 1; 
+  UnlockEyes1 = 1;
   UnlockEyes2 = 5;
   UnlockEyes3 = 11;
   UnlockEyes4 = 18;
@@ -17,7 +17,6 @@ export class Unlock {
   UnlockEyes2Visible = false;
   UnlockEyes3Visible = false;
   UnlockEyes4Visible = false;
-
 
   UnlockMouth1 = 2;
   UnlockMouth2 = 6;
@@ -29,7 +28,6 @@ export class Unlock {
   UnlockMouth3Visible = false;
   UnlockMouth4Visible = false;
 
-
   UnlockLegs1 = 3;
   UnlockLegs2 = 7;
   UnlockLegs3 = 15;
@@ -40,6 +38,14 @@ export class Unlock {
   UnlockLegs3Visible = false;
   UnlockLegs4Visible = false;
 
+  UnlockSilhouette2 = 4;
+  UnlockSilhouette3 = 8;
+  UnlockSilhouette4 = 16;
+
+  UnlockSilhouette2Visible = false;
+  UnlockSilhouette3Visible = false;
+  UnlockSilhouette4Visible = false;
+
   scrollPos: number = 0;
   level: number = 0;
 
@@ -48,12 +54,11 @@ export class Unlock {
   }
 
   activate(params: any) {
-
     this.scrollPos = params.scrollPos;
 
     let foundOne = false;
-    
-    console.log(params.level)
+
+    console.log(params.level);
     if (params.level == this.UnlockEyes1) {
       this.UnlockEyes1Visible = true;
       foundOne = true;
@@ -88,7 +93,6 @@ export class Unlock {
       foundOne = true;
     }
 
-
     if (params.level == this.UnlockLegs1) {
       this.UnlockLegs1Visible = true;
       foundOne = true;
@@ -97,12 +101,25 @@ export class Unlock {
       this.UnlockLegs2Visible = true;
       foundOne = true;
     }
-    if (params.level == this.UnlockLegs4) {
+    if (params.level == this.UnlockLegs3) {
       this.UnlockLegs3Visible = true;
       foundOne = true;
     }
-    if (params.level == this.UnlockLegs2) {
+    if (params.level == this.UnlockLegs4) {
       this.UnlockLegs4Visible = true;
+      foundOne = true;
+    }
+
+    if (params.level == this.UnlockSilhouette2) {
+      this.UnlockSilhouette2Visible = true;
+      foundOne = true;
+    }
+    if (params.level == this.UnlockSilhouette3) {
+      this.UnlockSilhouette3Visible = true;
+      foundOne = true;
+    }
+    if (params.level == this.UnlockSilhouette4) {
+      this.UnlockSilhouette4Visible = true;
       foundOne = true;
     }
 
@@ -110,7 +127,6 @@ export class Unlock {
       this.Continue();
     }
   }
-
 
   constructor(router: Router) {
     this.router = router;
