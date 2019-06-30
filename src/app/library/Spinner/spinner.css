@@ -2,6 +2,7 @@
   width: 2rem;
   height: 2rem;
   background-color: #333;
+  color: white;
 
   margin-right: 1rem;
   -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;

@@ -1,14 +1,28 @@
 <template>
   <style>
-    html,
-    body {
+    .center {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-content: center;
+      height: 100vh;
+      margin: 2rem;
+    }
+    div {
       padding: 0;
       margin: 0;
+      box-sizing: border-box;
     }
 
-    h3 {
-      margin-top: 5vh;
-      margin-bottom: 5vh;
+    paper-button {
+      width: 50vw;
+    }
+
+    h3,
+    h2,
+    h1 {
+      margin: 1rem;
+      text-align: center;
     }
 
     paper-button {
@@ -20,6 +34,28 @@
       justify-content: center;
       align-items: center;
     }
+    label {
+      color: white;
+    }
+
+    .container {
+      height: 100vh;
+      grid-template-areas:
+        "title"
+        "inputs"
+        "buttons";
+      grid-template-rows: 1fr 1fr 4fr;
+    }
+
+    .CreationInProgress {
+      place-items: center;
+      height: 100vh;
+      display: grid;
+      grid-template-areas:
+        "title"
+        "button";
+      grid-template-rows: 1fr 1fr;
+    }
 
     input {
       font-size: 2rem;
@@ -29,19 +65,23 @@
       margin-bottom: 1rem;
       flex-shrink: 0;
     }
-    .data {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 95vh;
-    }
   </style>
 
-  <div class="container">
-    <div class="data">
-      <h3>Register</h3>
-      <div class="inputgroup" style="grid-area: username">
+  <div if.bind="addedNewUserOk && !error" class="center">
+    <h1>
+      Added new user ${myusername} successfully
+    </h1>
+    <h2>
+      Taking you back to the home page now...
+    </h2>
+  </div>
+
+  <div show.bind="!connecting && !error" style="height:100vh;display:grid; place-items:center;">
+    <h1>Please enter a username and password for your new account</h1>
+    <br />
+    <br />
+    <div>
+      <div class="inputgroup">
         <label for="username">Username</label>
         <input
           id="papertest"
@@ -49,20 +89,15 @@
           name="username"
           type="text"
           value.bind="myusername"
-        >
-        </input>
+        />
       </div>
-      <div class="inputgroup" style="grid-area: password">
+      <div class="inputgroup">
         <label for="Password">Password</label>
-        <input
-        name="Password"
-          label="Password"
-          type="Password"
-          value.bind="mypassword"
-        >
-        </input>
+        <input name="Password" label="Password" type="Password" value.bind="mypassword" />
       </div>
+    </div>
 
+    <div>
       <div>
         <paper-button click.trigger="Register()" raised>
           <span if.bind="!error">Register</span>
@@ -72,15 +107,36 @@
       <div>
         <paper-button click.trigger="Home()" raised>Return Home</paper-button>
       </div>
+    </div>
+  </div>
 
-      <div if.bind="addedNewUserOk">
-        Added new user ${usename} successfully
-      </div>
-     
-      <div if.bind="!addedNewUserOk && attemptedAddNewUser">
-        Sorry failed to add ${usename}
-      </div>
+  <div if.bind="error">
+    <div class="center">
+      <h3>
+        Sorry failed to add ${myusername}
+      </h3>
+      <p style="color: white">
+        Error Details: ${errorMsg}
+      </p>
+      <paper-button click.trigger="Home()" raised>Return Home</paper-button>
+    </div>
+  </div>
 
+  <div show.bind="connecting && !error">
+    <div class="CreationInProgress">
+      <div style="grid-area: title">
+        <h1>Creating Your Account...</h1>
+        <h1>hold tight, nearly done</h1>
+        <div class="spinner"></div>
+      </div>
+      <paper-button
+        show.bind="DelayInCreationOfAccount"
+        style="font-size: 2rem; grid-area: button;"
+        click.trigger="Login()"
+        raised
+      >
+        <span>Cancel</span>
+      </paper-button>
     </div>
   </div>
 </template>

@@ -4,5 +4,5 @@
   "html.suggest.angular1": false,
   "html.suggest.ionic": false,
   "appService.deploySubpath": "dist",
-  "appService.defaultWebAppToDeploy": "/subscriptions/ce2b00d4-956a-406a-9cb5-79a8ccec30f9/resourceGroups/LittleHeroesResourceGroup/providers/Microsoft.Web/sites/LittleHeroes"
+  "appService.defaultWebAppToDeploy": "None"
 }
