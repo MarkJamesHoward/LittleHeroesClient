@@ -17,6 +17,12 @@
   --button-text: black;
 }
 
+paper-input {
+  font-size: 2rem;
+  color: white;
+  --paper-input-container-input-color: white;
+}
+
 .alphaText {
   font-size: 0.8rem;
   color: var(--button-color);

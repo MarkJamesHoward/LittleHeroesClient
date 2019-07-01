@@ -1,12 +1,9 @@
 <template>
   <style>
     .center {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-evenly;
-      align-content: center;
+      display: grid;
+      place-items: center;
       height: 100vh;
-      margin: 2rem;
     }
     div {
       padding: 0;
@@ -82,18 +79,17 @@
     <br />
     <div>
       <div class="inputgroup">
-        <label for="username">Username</label>
-        <input
+        <paper-input
           id="papertest"
           label="Username"
           name="username"
           type="text"
           value.bind="myusername"
-        />
+        ></paper-input>
       </div>
       <div class="inputgroup">
-        <label for="Password">Password</label>
-        <input name="Password" label="Password" type="Password" value.bind="mypassword" />
+        <paper-input name="Password" label="Password" type="Password" value.bind="mypassword" >
+        </paper-input> 
       </div>
     </div>
 
@@ -110,24 +106,24 @@
     </div>
   </div>
 
-  <div if.bind="error">
-    <div class="center">
+  <div class="center" if.bind="error">
       <h3>
         Sorry failed to add ${myusername}
       </h3>
-      <p style="color: white">
+      <div style="color: white;margin: 1rem;">
         Error Details: ${errorMsg}
-      </p>
+      </div>
       <paper-button click.trigger="Home()" raised>Return Home</paper-button>
-    </div>
   </div>
 
   <div show.bind="connecting && !error">
     <div class="CreationInProgress">
       <div style="grid-area: title">
-        <h1>Creating Your Account...</h1>
-        <h1>hold tight, nearly done</h1>
-        <div class="spinner"></div>
+        <div style="display: grid; place-items: center;">
+          <h1>Creating Your Account...</h1>
+          <h1>hold tight, nearly done</h1>
+          <div style="margin-top:2rem;" class="spinner"></div>
+        </div>
       </div>
       <paper-button
         show.bind="DelayInCreationOfAccount"
@@ -139,4 +135,5 @@
       </paper-button>
     </div>
   </div>
+
 </template>
