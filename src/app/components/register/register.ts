@@ -45,6 +45,15 @@ export class Register {
   }
 
   Register() {
+
+    let user = document.querySelector('#username');
+    //@ts-ignore
+    this.myusername = user.value;
+
+    let pass = document.querySelector('#password')
+    //@ts-ignore
+    this.mypassword = pass.value;
+
     let details = { email: this.myusername, password: this.mypassword };
     this.attemptedAddNewUser = false;
 

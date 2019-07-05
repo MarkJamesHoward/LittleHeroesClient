@@ -5,8 +5,6 @@
     }*/
 /*}*/
 
-
-
 @keyframes myspinner {
   to {
     transform: rotate(360deg);
@@ -15,12 +13,16 @@
 :root {
   --button-color: rgb(255, 129, 45);
   --button-text: black;
+  --paperbutton-text: white;
 }
-
 paper-input {
   font-size: 2rem;
   color: white;
-  --paper-input-container-input-color: white;
+  --paper-input-container-input-color: var(--paperbutton-text);
+}
+
+paper-checkbox {
+  --primary-text-color: var(--paperbutton-text);
 }
 
 .alphaText {

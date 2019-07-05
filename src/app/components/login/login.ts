@@ -11,6 +11,9 @@ import { DNS, dev } from "../global";
 export class login {
   private myusername: string;
   private mypassword: string;
+  private errorMsg1: string;
+  private errorMsg2: string;
+  private errorMsg3: string;
   private router: Router;
   private loginFailed: boolean;
   attemptingLogin: boolean = false;
@@ -28,10 +31,8 @@ export class login {
     })
       .then(response => {
         if (response.ok) {
-
           console.log(`We are logged in`);
           console.log(response);
-         
         } else {
           console.log("Not logged in - should see a 401 not auth on the get children call");
         }
@@ -49,9 +50,20 @@ export class login {
     this.router.navigate("welcome");
   }
 
+  attached() {}
+
   Login() {
-    // console.log(`username: ${this.myusername}`)
-    // console.log(`password: ${this.mypassword}`)
+    let username = document.querySelector("#Username");
+    let password = document.querySelector("#Password");
+
+    //@ts-ignore
+    this.myusername = username.value;
+    //@ts-ignore
+    this.mypassword = password.value;
+
+    // console.log(this.myusername)
+    // console.log(this.mypassword)
+
     let details = { email: this.myusername, password: this.mypassword };
 
     this.attemptingLogin = true;
@@ -75,18 +87,18 @@ export class login {
           //this.TestChildren();
           this.loginFailed = false;
         } else {
-          this.loginFailed = true;
-          this.attemptingLogin = false;
-          setTimeout(() => {
-            this.loginFailed = false;
-          }, 3000);
-          console.log("response was not ok");
+          this.errorMsg1 = response.status.toString();
+          throw response;
         }
       })
       .catch(e => {
         console.log("failed to login - no connection");
         this.loginFailed = true;
         this.attemptingLogin = false;
+        this.errorMsg2 = e.message;
+        e.text().then(error => {
+          this.errorMsg3 = error;
+        });
         setTimeout(() => {
           this.loginFailed = false;
         }, 3000);

@@ -30,6 +30,8 @@ import { number } from "style-value-types";
 
 @inject(HttpClient, Router)
 export class Home {
+  storedChildName: string = "";
+  storedReward: string = "";
   scrollPos: number = 0;
   public editingAvatar: boolean = false;
   public currentCount: number = 0;
@@ -104,40 +106,104 @@ export class Home {
     this.editingAvatar = false;
   }
 
-  EditReward() {
+  EditReward(child: BrowniePoints) {
     this.editingReward = true;
+    this.storedReward = child.reward;
+    child.reward = "";
+    this.editingReward = true;
+    setTimeout(() => {
+    let node = document.querySelector('#rewardEditBox');
+    //@ts-ignore
+    node.focus();
+    }, 10);
+
   }
 
-  editChildName() {
+  editChildName(child: BrowniePoints) {
     this.editingChildName = true;
+    this.storedChildName = child.childName;
+    child.childName = "";
+    this.editingChildName = true;
+    setTimeout(() => {
+      let node = document.querySelector('#childNameEditBox');
+      //@ts-ignore
+      node.focus();
+      }, 10);
   }
 
-  EditMode() {
-    this.EditReward();
-    this.editChildName();
-    this.editing = true;
-  }
+  // EditMode(child: BrowniePoints) {
+  //   this.EditReward(child);
+  //   this.editChildName(child);
+  //   this.editing = true;
+  // }
 
-  IfEnterKeySaveChanges($event: any, child: BrowniePoints, childName: string, childreward: string) {
+  IfEnterKeySaveChangesReward($event: any, child: BrowniePoints, childreward: string) {
     if ($event.key == "Enter") {
-      this.SaveChanges(child, childName, childreward);
+      this.SaveReward(child, childreward);
+      console.log($event);
+    }
+    console.log($event);
+    return true;
+  }
+  LostFocusInEditChildName($event: any, child: BrowniePoints, childName: string) {
+    console.log(child.childName);
+    if (child.childName == "") {
+      child.childName = this.storedChildName;
+      console.log("revert to old name");
+    } else {
+      console.log("going to update with the new name");
+      this.saveChildName(child, childName);
+    }
+    this.editingChildName = false;
+  }
+  LostFocusInEditReward($event: any, child: BrowniePoints, reward: string) {
+    console.log("should lose focus");
+    if (child.reward == "") {
+      child.reward = this.storedReward;
+    } else {
+      this.SaveReward(child, reward);
+    }
+    this.editingReward = false;
+  }
+
+  escapePressedInEditChildName($event: any, child: BrowniePoints) {
+    if ($event.key === "Escape") {
+      child.childName = this.storedChildName;
+      this.editingChildName = false;
+    }
+    console.log($event.key);
+    return true;
+  }
+
+  escapePressedInEditReward($event: any, child: BrowniePoints) {
+    if ($event.key === "Escape") {
+      child.reward = this.storedReward;
+      this.editingReward = false;
+    }
+    console.log($event.key);
+    return true;
+  }
+
+  IfEnterKeySaveChangesChildName($event: any, child: BrowniePoints, childName: string) {
+    if ($event.key == "Enter") {
+      this.saveChildName(child, childName);
       console.log($event);
     }
     console.log($event);
     return true;
   }
 
-  async SaveChanges(child: BrowniePoints, childName: string, childreward: string) {
-    console.log("save changes");
-    this.editing = false;
-    this.editingChildName = false;
-    this.editingReward = false;
+  // async SaveChanges(child: BrowniePoints, childName: string, childreward: string) {
+  //   console.log("save changes");
+  //   this.editing = false;
+  //   this.editingChildName = false;
+  //   this.editingReward = false;
 
-    let nameUpdate = this.saveChildName(child, childName);
-    let rewardUpdate = this.SaveReward(child, childreward);
+  //   let nameUpdate = this.saveChildName(child, childName);
+  //   let rewardUpdate = this.SaveReward(child, childreward);
 
-    await Promise.all([nameUpdate, rewardUpdate]);
-  }
+  //   await Promise.all([nameUpdate, rewardUpdate]);
+  // }
 
   async saveChildName(child: BrowniePoints, newName: string) {
     if (dev) {
@@ -185,15 +251,14 @@ export class Home {
           var data = await result.json();
           this.editingReward = false;
           this.editingChildName = false;
-          this.editing = false;
-          //this.ConfigureDisplay(data);
+          //this.editing = false;
         } else {
-          this.DisplayError("Failed to update reward - notFound returned from server");
+          this.DisplayError("Failed to update reward " + result.status);
         }
       } catch (err) {
         this.editingChildName = false;
         this.editingReward = false;
-        this.editing = false;
+        //this.editing = false;
         this.DisplayError(err);
       }
     }

@@ -1,5 +1,5 @@
 <template>
-    <require from="../../library/Spinner/spinner.css"></require>
+  <require from="../../library/Spinner/spinner.css"></require>
 
   <style>
     html,
@@ -11,7 +11,7 @@
       color: white;
     }
 
-    label{
+    label {
       font-family: "Gochi Hand", cursive;
       font-size: 3rem;
     }
@@ -24,13 +24,10 @@
       color: red;
     }
 
-    paper-checkbox {
-      color: white;
-    }
-
-   .horizontalcenter {
-      display:flex;
-      flex-direction:column;
+    .horizontalcenter {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
       align-items: center;
     }
 
@@ -41,7 +38,6 @@
 
     paper-button {
       margin-top: 1rem;
-      background :var(--button-color);
     }
 
     .inputgroup {
@@ -50,88 +46,89 @@
       align-items: center;
     }
 
-    input {
-      font-size: 2rem;
-      flex-grow: 1;
-      min-height: 20px;
-      margin-left: 1rem;
-      margin-bottom: 1rem;
-      flex-shrink: 0;
-    }
     .data {
       display: grid;
-      grid-template-rows: 3fr 2fr 1fr;
-      grid-template-areas: "signin"
-                            "register"
-                            "back";
-      height: 95vh;
-      justify-content: space-around;
-      align-items: center;
+      grid-template-rows: 40vh 1fr 1fr;
+      grid-template-areas:
+        "signin"
+        "register"
+        "back";
+      height: 100vh;
+    }
+    .ErrorMsgs div {
+      text-align: center;
     }
 
   </style>
 
-
-
-
-    <div class="data">
-      <div style="grid-area: signin">
-        <div class="horizontalcenter">
-          <h3>Already signed up?</h3>
-          <div class="inputgroup" style="grid-area: username">
-            <!-- <label for="username">Username</label> -->
-            <paper-input
-              id="papertest"
-              label="Username"
-              name="username"
-              type="text"
-              value.bind="myusername"
-            >
-            </paper-input>
-          </div>
-          <div class="inputgroup" style="grid-area: password">
-            <!-- <label for="Password">Password</label> -->
-            <paper-input
+  <div class="data">
+    <div style="grid-area: signin">
+      <div class="horizontalcenter">
+        <h3>Already signed up?</h3>
+        <div>
+          <paper-input
+            ID="Username"
+            label="Username"
+            name="username"
+            type="text"
+            value.bind="myusername"
+          >
+          </paper-input>
+        </div>
+        <div>
+          <paper-input
             name="Password"
-              label="Password"
-              type="Password"
-              value.bind="mypassword"
-            >
-            </paper-input>
-          </div>
-          <div>
-            <paper-button style="min-width: 50vw;font-size: 2rem" click.trigger="Login()" raised>
-              <div class="${attemptingLogin ? 'spinner' : 'hidden'}"></div>
-              <span show.bind="attemptingLogin">Attempting Login...</span>
-              <span show.bind="!loginFailed && !attemptingLogin">Login</span>
-              <span show.bind="loginFailed" class="${loginFailed == true ? 'loginFailed' : '' }">
-                Login failed
-              </span>
-            </paper-button>            
-          </div>
-          <paper-checkbox style="margin-top: 1rem;" value.bind="rememberMe">Remember me</paper-checkbox>
-
-        </div>
-      </div>
-
-      <div style="grid-area: register">
-        <div class="horizontalcenter">
-          <h3 style="margin-bottom:0" id="RegisterTitle">First time here?</h3>
-          <paper-button  style="min-width: 40vw;font-size: 2rem" id="RegisterButton" raised click.trigger="Register()"
-            >Register</paper-button
+            id="Password"
+            label="Password"
+            type="Password"
+            value.bind="mypassword"
           >
+          </paper-input>
         </div>
-      </div>
-
-      <div style="grid-area: back">
-        <div class="horizontalcenter">
-          <h3 style="margin-bottom:0">Take me Home!</h3>
-          <paper-button style="min-width: 30vw;font-size: 2rem" raised click.trigger="Home()"
-            >Home</paper-button
+        <div style="min-height:5rem; display: grid; place-items:center;">
+          <paper-button
+            style="min-height: 4rem; width: 50vw"
+            show.bind="!loginFailed"
+            click.trigger="Login()"
+            raised
           >
+            <div class="${attemptingLogin ? 'spinner' : 'hidden'}"></div>
+            <span show.bind="attemptingLogin">Attempting Login...</span>
+            <span show.bind="!loginFailed && !attemptingLogin">Login</span>
+          </paper-button>
+          <div show.bind="loginFailed" class="ErrorMsgs" >
+            <div style="margin:1rem 0 0 0;width: 70vw;">
+              Failed to login: 
+              <div>
+                ${errorMsg1}
+              </div>
+              <div>
+                ${errorMsg2}
+              </div>
+              <div>
+                ${errorMsg3}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 1rem;min-height: 20vh;">
+          <paper-checkbox value.bind="rememberMe">Remember me</paper-checkbox>
         </div>
       </div>
     </div>
 
- 
+    <div style="grid-area: register;align-self:flex-end">
+      <div class="horizontalcenter">
+        <h3 style="margin-bottom:0" id="RegisterTitle">First time here?</h3>
+        <paper-button id="RegisterButton" raised click.trigger="Register()">Register</paper-button>
+      </div>
+    </div>
+
+    <div style="grid-area: back">
+      <div class="horizontalcenter">
+        <h3 style="margin-bottom:0">I'm not meant to be here!</h3>
+        <paper-button raised click.trigger="Home()">Home</paper-button>
+      </div>
+    </div>
+  </div>
 </template>
