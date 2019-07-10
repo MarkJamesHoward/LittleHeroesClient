@@ -112,7 +112,7 @@ export class Home {
     child.reward = "";
     this.editingReward = true;
     setTimeout(() => {
-    let node = document.querySelector('#rewardEditBox');
+    let node = document.querySelector('#editChildReward' + child.id);
     //@ts-ignore
     node.focus();
     }, 10);
@@ -125,7 +125,8 @@ export class Home {
     child.childName = "";
     this.editingChildName = true;
     setTimeout(() => {
-      let node = document.querySelector('#childNameEditBox');
+      let node = document.querySelector('#editname' + child.id );
+      console.log('#' + 'editname' + child.id )
       //@ts-ignore
       node.focus();
       }, 10);
@@ -699,6 +700,22 @@ export class Home {
 
   async CheckLevelMadAchievement(child: BrowniePoints) {
     console.log("called get level mad achievement");
+    if (dev) {
+      let item = await FindAchievement(child, "Level Mad", dev, DNS);
+
+      if (item) {
+        if (item.progress === 50) {
+          item.progress = 100;
+        }
+        else {
+          item.progress  = 50;
+        }
+        console.log("printing Level Mad details");
+      } else {
+        console.log("Warning - could not find levelMAd achievement to update");
+      }
+    }
+    else {
     try {
       let result = await this.http.fetch(
         `${DNS}/api/Achievements/GetLevelMadProgress/${child.id}`,
@@ -744,6 +761,7 @@ export class Home {
       this.errorHadOccurred = true;
       this.errorMessage = e;
     }
+  }
   }
 
   CheckIfLevelCompleted(child: BrowniePoints) {

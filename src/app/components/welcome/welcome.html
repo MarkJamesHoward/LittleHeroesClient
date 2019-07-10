@@ -221,6 +221,12 @@
           </paper-button>
         </div>
 
+        <div show.bind="(signedIn && !offline) || dev">
+          <paper-button click.trigger="Privacy()" style="margin-top:1rem;">
+            Privacy
+          </paper-button>
+        </div>
+
         <div if.bind="signedIn">
           <paper-button style="margin-top:1rem;" click.trigger="Logout()">Logout</paper-button>
         </div>

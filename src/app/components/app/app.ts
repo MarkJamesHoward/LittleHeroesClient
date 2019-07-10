@@ -155,6 +155,14 @@ export class App {
         moduleId: PLATFORM.moduleName("../levelup/levelup"),
         nav: false,
         title: "LevelUp"
+      },
+      {
+        route: ["privacy"],
+        name: "privacy",
+        settings: { icon: "" },
+        moduleId: PLATFORM.moduleName("../privacy/privacy"),
+        nav: false,
+        title: "privacy"
       }
     ]);
 

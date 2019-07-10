@@ -73,6 +73,10 @@ export class Welcome {
     this.router.navigate("ManageHeroes");
   }
 
+  Privacy() {
+    this.router.navigate('privacy')
+  }
+
   ManageNotifications() {
     this.router.navigate("notifications");
   }
@@ -184,12 +188,19 @@ export class Welcome {
   ViewHeroTastic() {
     this.router.navigate("children/1/0");
   }
- 
+
   Login() {
     this.router.navigate("Login");
   }
 
   Logout() {
+    if (dev) {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth"
+      });
+    }
     fetch(`${DNS}/api/auth/logout`, {
       method: "get",
       credentials: "include"
@@ -199,7 +210,7 @@ export class Welcome {
         window.scrollTo({
           top: 0,
           left: 0,
-          behavior: 'smooth'
+          behavior: "smooth"
         });
         this.AmISignedIn();
       }
