@@ -41,7 +41,8 @@
 
             <div draggable="false;" class="MasterContainer">
 
-              <div style="grid-area:main; background: mediumpurple;z-index:1;height: 20vh;display: grid; place-items:center;"
+              <div class="au-animate ChildrenFadeIn ChildrenFadeOut" style="grid-area:main; background: mediumpurple;z-index:1;align-self: start;display: grid;
+              place-items: center;"
                   if.bind="AchievementCompleted">
                 <h3>${AchievementCompletedMessage}</h3>
               </div>

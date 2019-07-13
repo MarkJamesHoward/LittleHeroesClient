@@ -15,6 +15,8 @@ import { DNS, dev, GetBrowniePoints, SetBrowniePoints } from "../global";
 
 @inject(HttpClient, Router)
 export class Pet {
+  AchievementCompleted: boolean = false;
+  AchievementCompletedMessage: string = '';
   router: Router;
   http: HttpClient;
   child: BrowniePoints;
@@ -119,9 +121,21 @@ export class Pet {
     }
   }
 
+  DisplayAchievementEarned(text) {
+    this.AchievementCompleted = true;
+    this.AchievementCompletedMessage = text;
+  
+    setTimeout(() => {
+      this.AchievementCompleted = false;
+    }, 4000)
+  }
+
   async CheckForMakeAMonster() {
     if (dev) {
       let MonsterAchievement = await FindAchievement(this.child, "Make a Monster", dev, DNS)
+      if (MonsterAchievement.progress < 100) {
+        this.DisplayAchievementEarned('Make a monster achievement earned!')
+      }
       MonsterAchievement.progress = 100;
     }
     else {
@@ -134,6 +148,7 @@ export class Pet {
       if (result.ok) {
         let MonsterAchievement = await FindAchievement(this.child, "Make a Monster", dev, DNS)
         MonsterAchievement.progress = 100;
+        this.DisplayAchievementEarned('Make a monster achievement earned!')
         //TODO
       } else {
         //this.errorHadOccurred = true;

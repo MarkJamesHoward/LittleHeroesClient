@@ -634,10 +634,22 @@ export class Home {
     }
   }
 
+  DisplayAchievementEarned(text) {
+    this.AchievementCompleted = true;
+    this.AchievementCompletedMessage = text;
+  
+    setTimeout(() => {
+      this.AchievementCompleted = false;
+    }, 2000)
+  }
+
+
   public async CheckForMegaPoints(child: BrowniePoints) {
     if (child.pendingAdds >= 50) {
       let mega = await FindAchievement(child, "Mega Points", dev, DNS);
       mega.progress = 100;
+
+      this.DisplayAchievementEarned('Super Swat achievement earned!')
 
       if (dev) {
         //TODO

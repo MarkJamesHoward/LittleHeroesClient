@@ -2,6 +2,13 @@
   <require from="./pet.css"></require>
 
   <div class="au-animate FadeIn FadeOut MasterContainerPet">
+
+      <div class="au-animate ChildrenFadeIn ChildrenFadeOut" style="grid-area:main; background: mediumpurple;z-index:1;align-self: start;display: grid;
+      place-items: center;"
+          if.bind="AchievementCompleted">
+        <h3>${AchievementCompletedMessage}</h3>
+      </div>
+      
     <div style="height: 100%; grid-area: main; max-height: 300px">
       <monster-creator
         customize="Yes"
