@@ -40,6 +40,12 @@
             <!--Levelled up - moved to its own page!-->
 
             <div draggable="false;" class="MasterContainer">
+
+              <div style="grid-area:main; background: mediumpurple;z-index:1;height: 20vh;display: grid; place-items:center;"
+                  if.bind="AchievementCompleted">
+                <h3>${AchievementCompletedMessage}</h3>
+              </div>
+
               <div
                 style="user-select: none;display:grid; height: 100%;width: 100%;
               grid-area: main;position:relative; "
@@ -174,7 +180,7 @@
                   <img slot="LegsSlot1" src="../../../../images/legs/Legs1.png" />
                   <img slot="LegsSlot2" src="../../../../images/legs/Legs2.png" />
                   <img slot="LegsSlot3" src="../../../../images/legs/Legs4.png" />
-                  <img slot="LegsSlot4" src="../../../../images/legs/Legs3.png" />
+                  <img slot="LegsSlot4" src="../../../../images/legs/Legs5.png" />
                 </monster-creator>
               </div>
 

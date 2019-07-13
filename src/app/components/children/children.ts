@@ -33,6 +33,8 @@ export class Home {
   storedChildName: string = "";
   storedReward: string = "";
   scrollPos: number = 0;
+  AchievementCompleted: boolean = false;
+  AchievementCompletedMessage: string = '';
   public editingAvatar: boolean = false;
   public currentCount: number = 0;
   public showingChild: string;
@@ -473,6 +475,8 @@ export class Home {
       MySuperSwat.progress = progress;
       if (progress === 100) {
         child.achievementsTotal++;
+        this.AchievementCompleted = true;
+        this.AchievementCompletedMessage = 'Super Swat achievement earned!'
       }
       console.log("Super Swat achievement earned!");
     }

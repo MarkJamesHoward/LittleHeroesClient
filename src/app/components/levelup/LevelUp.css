@@ -13,7 +13,7 @@
 }
 
 .UnlockFadeOut.au-leave-active {
-  animation: FadeOutUnlock 0.5s;
+  animation: FadeOutUnlock 1s;
 }
 
 @keyframes FadeOutUnlock {
@@ -30,7 +30,7 @@
 }
 
 .UnlockFadeIn.au-enter-active {
-  animation: FadeInUnlock 0.5s;
+  animation: FadeInUnlock 1s;
 }
 
 @keyframes FadeInUnlock {
