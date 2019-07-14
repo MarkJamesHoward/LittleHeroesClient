@@ -134,10 +134,11 @@ export class Pet {
     if (dev) {
       let MonsterAchievement = await FindAchievement(this.child, "Make a Monster", dev, DNS)
       if (MonsterAchievement.progress < 100) {
+        console.log(MonsterAchievement.progress)
         this.DisplayAchievementEarned('Make a monster achievement earned!')
       }
       MonsterAchievement.progress = 100;
-    }
+    } 
     else {
      // Update the Make a Monster achievement to completed
      try {
@@ -147,8 +148,10 @@ export class Pet {
       });
       if (result.ok) {
         let MonsterAchievement = await FindAchievement(this.child, "Make a Monster", dev, DNS)
-        MonsterAchievement.progress = 100;
+        if (MonsterAchievement.progress < 100) {
         this.DisplayAchievementEarned('Make a monster achievement earned!')
+      }
+        MonsterAchievement.progress = 100;
         //TODO
       } else {
         //this.errorHadOccurred = true;

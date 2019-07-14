@@ -142,6 +142,8 @@ export class Home {
 
   IfEnterKeySaveChangesReward($event: any, child: BrowniePoints, childreward: string) {
     if ($event.key == "Enter") {
+      this.editingReward = false;
+      this.editing = false;
       this.SaveReward(child, childreward);
       console.log($event);
     }
@@ -189,6 +191,8 @@ export class Home {
 
   IfEnterKeySaveChangesChildName($event: any, child: BrowniePoints, childName: string) {
     if ($event.key == "Enter") {
+      this.editingChildName = false;
+      this.editing = false;
       this.saveChildName(child, childName);
       console.log($event);
     }
@@ -223,9 +227,7 @@ export class Home {
         if (result.ok) {
           var data = await result.json();
           this.editingChildName = false;
-          this.editingReward = false;
           this.editing = false;
-          //this.ConfigureDisplay(data);
         } else {
           this.DisplayError("Failed to update childName - notFound returned from server");
         }
@@ -475,10 +477,8 @@ export class Home {
       MySuperSwat.progress = progress;
       if (progress === 100) {
         child.achievementsTotal++;
-        this.AchievementCompleted = true;
-        this.AchievementCompletedMessage = 'Super Swat achievement earned!'
       }
-      console.log("Super Swat achievement earned!");
+      console.log("Super Swat day added");
     }
   }
 
@@ -486,10 +486,10 @@ export class Home {
     let completedDays: number = 0;
     let data2: ISuperSwat;
 
-    if (dev) {
-      let superswat = await FindAchievement(child, "Super Swat", dev, DNS);
-      superswat.progress = 100;
-    } else {
+    // if (dev) {
+    //   let superswat = await FindAchievement(child, "Super Swat", dev, DNS);
+    //   superswat.progress = 100;
+    // } else {
       console.log("making call");
       try {
         let result2 = await this.http.fetch(
@@ -512,6 +512,11 @@ export class Home {
         return;
       }
 
+      if (this.IsDateSet(data2.day5Date)) {
+        //already achieved this 
+        return;
+      }
+
       let now = moment();
 
       if (this.IsDateSet(data2.day1Date)) {
@@ -530,6 +535,8 @@ export class Home {
               if (this.IsDateDiffOneDay(data2.day4Date)) {
                 // Set achievement to completed!!!!!
                 this.SetSuperSwatProgressLocal(child, 100);
+                this.DisplayAchievementEarned('SuperSwat achievement earned!')
+                await this.AddSuperSwatSuccesServer(child, 5, now.toString());
               } else if (!this.IsSameDay(data2.day4Date)) {
                 this.SetSuperSwatProgressLocal(child, 0);
                 await this.ResetSuperSwatSuccesServer(child);
@@ -538,6 +545,7 @@ export class Home {
               if (this.IsDateDiffOneDay(data2.day3Date)) {
                 await this.AddSuperSwatSuccesServer(child, 4, now.toString());
                 this.SetSuperSwatProgressLocal(child, 80);
+                this.DisplayAchievementEarned('Just 1 more day of points to achieve SuperSwat!!!')
               } else if (!this.IsSameDay(data2.day3Date)) {
                 this.SetSuperSwatProgressLocal(child, 0);
                 await this.ResetSuperSwatSuccesServer(child);
@@ -547,6 +555,7 @@ export class Home {
             if (this.IsDateDiffOneDay(data2.day2Date)) {
               await this.AddSuperSwatSuccesServer(child, 3, now.toString());
               this.SetSuperSwatProgressLocal(child, 60);
+              this.DisplayAchievementEarned('Just 2 more days of points to achieve SuperSwat...')
             } else if (!this.IsSameDay(data2.day2Date)) {
               this.SetSuperSwatProgressLocal(child, 0);
               await this.ResetSuperSwatSuccesServer(child);
@@ -556,6 +565,7 @@ export class Home {
           if (this.IsDateDiffOneDay(data2.day1Date)) {
             await this.AddSuperSwatSuccesServer(child, 2, now.toString());
             this.SetSuperSwatProgressLocal(child, 40);
+            this.DisplayAchievementEarned('Just 3 more days of points to achieve SuperSwat...')
           } else if (!this.IsSameDay(data2.day1Date)) {
             this.SetSuperSwatProgressLocal(child, 0);
             await this.ResetSuperSwatSuccesServer(child);
@@ -564,8 +574,9 @@ export class Home {
       } else {
         await this.AddSuperSwatSuccesServer(child, 1, now.toString());
         this.SetSuperSwatProgressLocal(child, 20);
+        this.DisplayAchievementEarned('Just 4 more days of points to achieve SuperSwat...')
       }
-    }
+    
   }
 
   IsDateSet(date: string): boolean {
@@ -640,16 +651,18 @@ export class Home {
   
     setTimeout(() => {
       this.AchievementCompleted = false;
-    }, 2000)
+    }, 4000)
   }
 
 
   public async CheckForMegaPoints(child: BrowniePoints) {
     if (child.pendingAdds >= 50) {
       let mega = await FindAchievement(child, "Mega Points", dev, DNS);
-      mega.progress = 100;
 
-      this.DisplayAchievementEarned('Super Swat achievement earned!')
+      if (mega.progress < 100) {
+      this.DisplayAchievementEarned('Mega Points achievement earned!')
+      }
+      mega.progress = 100;
 
       if (dev) {
         //TODO
@@ -728,7 +741,7 @@ export class Home {
         }
         console.log("printing Level Mad details");
       } else {
-        console.log("Warning - could not find levelMAd achievement to update");
+        console.log("Warning - could not find levelMad achievement to update");
       }
     }
     else {
@@ -751,6 +764,9 @@ export class Home {
             item.progress = 50;
           } else {
             //Completed achievement!!!! ... if on the same day!
+            if (item.progress < 100) {
+            this.DisplayAchievementEarned('Level Mad achievement earned!')
+            }
             let lastLevelUp = moment(data.dateOfLevelCompletion1);
             let now = moment();
             if (now.diff(lastLevelUp, "days") === 0) {
