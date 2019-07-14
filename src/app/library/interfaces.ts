@@ -55,6 +55,14 @@ export interface IAchievements {
   progress: number;
 }
 
+export interface IAchievementsPlusSuperSwatDays {
+  id: number;
+  title: string;
+  description: string;
+  days: string;
+  progress: number;
+}
+
 export interface BrowniePoints {
   id: number;
   childName: string;

@@ -2,18 +2,22 @@
   <require from="./achievements.css"></require>
 
   <div class="au-animate achieveSlideIn achieveSlideOut">
-    <h3
-      style="text-align: center;font-size: 3.5rem;font-family: 'Fredoka One', cursive;
-    "
-    >
-      Achievements
-      <!-- ${child.achievementsTotal}/${TotalAchievementCount} -->
-    </h3>
+    <div style="display:flex; justify-content: space-around;align-items: flex-end">
+      <div
+        style="color:white;text-align: center;font-size: 3rem;font-family: 'Fredoka One', cursive;margin:0;padding:0;
+      "
+      >
+        <div style="display:grid">
+          <div>
+            Achievements
+          </div>
+          ${child.achievementsTotal}/${TotalAchievementCount}
+        </div>
+    </div>
+      <paper-button style="font-size: 2rem;align-self: center;" raised click.trigger="Back()">Back</paper-button>
+    </div>
 
     <div class="achievement">
-      <paper-button style="font-size: 2rem; margin-bottom: 1rem" raised click.trigger="Back()"
-        >Back</paper-button
-      >
       <div class="au-stagger">
         <div
           repeat.for="achievement of achievements"
@@ -22,6 +26,9 @@
           <div class="title nowrap">${achievement.title}</div>
           <div class="description nowrap">${achievement.description}</div>
           <div class="completed">${achievement.progress || 0}%</div>
+          <div show.bind="achievement.days" class="superswatdays">
+            <span style="font-weight:bold">Points streak days:</span> ${achievement.days}
+          </div>
           <div class="progress">
             <paper-progress
               style="display: block; width:100%"
@@ -30,7 +37,7 @@
               max="100"
             ></paper-progress>
           </div>
-          <div>
+          <div class="trophy" if.bind="achievement.progress === 100">
             🏆
           </div>
           <!-- <div class="trophy" title="Trophy by Milinda Courey from the Noun Project">

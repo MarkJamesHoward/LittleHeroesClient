@@ -1,4 +1,8 @@
-import { BrowniePoints } from "../../library/interfaces";
+import {
+  BrowniePoints,
+  ISuperSwat,
+  IAchievementsPlusSuperSwatDays
+} from "../../library/interfaces";
 import { IAchievements, IMyAchievements } from "../../library/interfaces";
 import "@polymer/paper-progress/paper-progress.js";
 import { inject } from "aurelia-framework";
@@ -7,16 +11,81 @@ import { HttpClient } from "aurelia-fetch-client";
 import { DNS, dev, GetBrowniePoints, SetBrowniePoints } from "../global";
 import { data } from "../devdata/childrendata";
 import "@polymer/paper-button";
+import * as moment from "moment";
 
 @inject(Router, HttpClient)
 export class Achievements {
-  private achievements: Array<IAchievements>;
-  private router: Router;
-  private http: HttpClient;
-  private browniePoints: Array<BrowniePoints>;
-  private child: BrowniePoints;
-  private TotalAchievementCount: number;
+  achievements: Array<IAchievementsPlusSuperSwatDays>;
+  router: Router;
+  http: HttpClient;
+  browniePoints: Array<BrowniePoints>;
+  child: BrowniePoints;
+  TotalAchievementCount: number;
   scrollPos: number = 0;
+  errorHadOccurred: boolean;
+  errorMessage: string;
+  DisplayDaysSoFar: string = "";
+
+  IsDateSet(date: string): boolean {
+    if (date === null) {
+      return false;
+    }
+
+    let now = moment(date);
+    if (moment(date).isBefore("2010-01-01")) {
+      return false;
+    } else return true;
+  }
+
+  GetDayName(date: string): string {
+    let dt = moment(date);
+    return dt.format("dddd");
+  }
+
+  async CheckForSuperSwat(child: BrowniePoints) {
+    let data2: ISuperSwat;
+    let days: string = '';
+
+    console.log("making call to get super swat days so far achieved");
+    try {
+      let result2 = await this.http.fetch(
+        `${DNS}/api/Achievements/GetSuperSwatAddDaySuccess/${child.id}`,
+        {
+          method: "get",
+          credentials: "include"
+        }
+      );
+      if (result2.ok) {
+        data2 = (await result2.json()) as ISuperSwat;
+        console.log(data2);
+      } else {
+        this.errorHadOccurred = true;
+        this.errorMessage = "Failed to retrieve SuperSwat progress from server";
+      }
+    } catch (e) {
+      this.errorHadOccurred = true;
+      this.errorMessage = e;
+      return;
+    }
+
+    if (this.IsDateSet(data2.day1Date)) {
+      days += this.GetDayName(data2.day1Date);
+    }
+
+    if (this.IsDateSet(data2.day2Date)) {
+      days += ", " + this.GetDayName(data2.day2Date);
+    }
+
+    if (this.IsDateSet(data2.day3Date)) {
+      days += ", " + this.GetDayName(data2.day3Date);
+    }
+
+    if (this.IsDateSet(data2.day4Date)) {
+      days += ", " + this.GetDayName(data2.day4Date);
+    }
+
+    return days;
+  }
 
   Back() {
     this.router.navigate(`/children/0/${this.scrollPos}`);
@@ -55,8 +124,8 @@ export class Achievements {
   }
 
   UpdateScreen() {
-    this.child.achievementsTotal =0;
-    
+    this.child.achievementsTotal = 0;
+
     if (this.child.myAchievements) {
       for (let i = 0; i < this.achievements.length; i++) {
         let achieve = this.child.myAchievements.find(
@@ -64,7 +133,15 @@ export class Achievements {
           item => item.achievementsID === this.achievements[i].id
         );
         if (achieve) {
-          console.log("setting progress " + achieve.progress);
+          console.log(this.achievements[i].title);
+          if (this.achievements[i].title === "Super Swat") {
+            console.log("setting progress for super swat");
+            this.CheckForSuperSwat(this.child).then((res) => {
+              this.achievements[i].days = res;
+            });
+          } else {
+            console.log("setting progress " + achieve.progress);
+          }
           this.achievements[i].progress = achieve.progress;
 
           if (this.achievements[i].progress === 100) {
@@ -74,8 +151,6 @@ export class Achievements {
       }
     }
   }
-
- 
 
   constructor(router: Router, http: HttpClient) {
     this.router = router;
@@ -105,6 +180,7 @@ export class Achievements {
         .then(data => {
           console.log("Got achievements list" + data);
           console.log(data);
+          //@ts-ignore
           this.achievements = data;
 
           this.TotalAchievementCount = 0;

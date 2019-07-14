@@ -34,7 +34,7 @@ export class Home {
   storedReward: string = "";
   scrollPos: number = 0;
   AchievementCompleted: boolean = false;
-  AchievementCompletedMessage: string = '';
+  AchievementCompletedMessage: string = "";
   public editingAvatar: boolean = false;
   public currentCount: number = 0;
   public showingChild: string;
@@ -114,11 +114,10 @@ export class Home {
     child.reward = "";
     this.editingReward = true;
     setTimeout(() => {
-    let node = document.querySelector('#editChildReward' + child.id);
-    //@ts-ignore
-    node.focus();
+      let node = document.querySelector("#editChildReward" + child.id);
+      //@ts-ignore
+      node.focus();
     }, 10);
-
   }
 
   editChildName(child: BrowniePoints) {
@@ -127,11 +126,11 @@ export class Home {
     child.childName = "";
     this.editingChildName = true;
     setTimeout(() => {
-      let node = document.querySelector('#editname' + child.id );
-      console.log('#' + 'editname' + child.id )
+      let node = document.querySelector("#editname" + child.id);
+      console.log("#" + "editname" + child.id);
       //@ts-ignore
       node.focus();
-      }, 10);
+    }, 10);
   }
 
   // EditMode(child: BrowniePoints) {
@@ -482,6 +481,21 @@ export class Home {
     }
   }
 
+  ReplaceLastCommaWithAnd(str: string): string {
+    var word = ",";
+    var newWord = " and";
+
+    // find the index of last time word was used
+    var n = str.toLowerCase().lastIndexOf(word.toLowerCase());
+
+    // slice the string in 2, one from the start to the lastIndexOf
+    // and then replace the word in the rest
+    var pat = new RegExp(word, "i");
+    str = str.slice(0, n) + str.slice(n).replace(pat, newWord);
+    // result abc def test xyz
+    return str;
+  }
+
   async CheckForSuperSwat(child: BrowniePoints) {
     let completedDays: number = 0;
     let data2: ISuperSwat;
@@ -490,93 +504,108 @@ export class Home {
     //   let superswat = await FindAchievement(child, "Super Swat", dev, DNS);
     //   superswat.progress = 100;
     // } else {
-      console.log("making call");
-      try {
-        let result2 = await this.http.fetch(
-          `${DNS}/api/Achievements/GetSuperSwatAddDaySuccess/${child.id}`,
-          {
-            method: "get",
-            credentials: "include"
-          }
-        );
-        if (result2.ok) {
-          data2 = (await result2.json()) as ISuperSwat;
-          console.log(data2);
-        } else {
-          this.errorHadOccurred = true;
-          this.errorMessage = "Failed to retrieve SuperSwat progress from server";
+    console.log("making call");
+    try {
+      let result2 = await this.http.fetch(
+        `${DNS}/api/Achievements/GetSuperSwatAddDaySuccess/${child.id}`,
+        {
+          method: "get",
+          credentials: "include"
         }
-      } catch (e) {
+      );
+      if (result2.ok) {
+        data2 = (await result2.json()) as ISuperSwat;
+        console.log(data2);
+      } else {
         this.errorHadOccurred = true;
-        this.errorMessage = e;
-        return;
+        this.errorMessage = "Failed to retrieve SuperSwat progress from server";
       }
+    } catch (e) {
+      this.errorHadOccurred = true;
+      this.errorMessage = e;
+      return;
+    }
 
-      if (this.IsDateSet(data2.day5Date)) {
-        //already achieved this 
-        return;
-      }
+    if (this.IsDateSet(data2.day5Date)) {
+      //already achieved this
+      return;
+    }
 
-      let now = moment();
+    let now = moment();
+    let DisplayDaysSoFar = "";
 
-      if (this.IsDateSet(data2.day1Date)) {
+    if (this.IsDateSet(data2.day1Date)) {
+      completedDays++;
+      DisplayDaysSoFar += this.GetDayName(data2.day1Date);
+
+      if (this.IsDateSet(data2.day2Date)) {
         completedDays++;
+        DisplayDaysSoFar += ", " + this.GetDayName(data2.day2Date);
 
-        if (this.IsDateSet(data2.day2Date)) {
+        if (this.IsDateSet(data2.day3Date)) {
           completedDays++;
+          DisplayDaysSoFar += ", " + this.GetDayName(data2.day3Date);
 
-          if (this.IsDateSet(data2.day3Date)) {
+          if (this.IsDateSet(data2.day4Date)) {
             completedDays++;
+            DisplayDaysSoFar += ", " + this.GetDayName(data2.day4Date);
 
-            if (this.IsDateSet(data2.day4Date)) {
-              completedDays++;
-
-              // Now if today is no older than a day from day then COMPLETED!!! well done
-              if (this.IsDateDiffOneDay(data2.day4Date)) {
-                // Set achievement to completed!!!!!
-                this.SetSuperSwatProgressLocal(child, 100);
-                this.DisplayAchievementEarned('SuperSwat achievement earned!')
-                await this.AddSuperSwatSuccesServer(child, 5, now.toString());
-              } else if (!this.IsSameDay(data2.day4Date)) {
-                this.SetSuperSwatProgressLocal(child, 0);
-                await this.ResetSuperSwatSuccesServer(child);
-              }
-            } else {
-              if (this.IsDateDiffOneDay(data2.day3Date)) {
-                await this.AddSuperSwatSuccesServer(child, 4, now.toString());
-                this.SetSuperSwatProgressLocal(child, 80);
-                this.DisplayAchievementEarned('Just 1 more day of points to achieve SuperSwat!!!')
-              } else if (!this.IsSameDay(data2.day3Date)) {
-                this.SetSuperSwatProgressLocal(child, 0);
-                await this.ResetSuperSwatSuccesServer(child);
-              }
+            // Now if today is no older than a day from day then COMPLETED!!! well done
+            if (this.IsDateDiffOneDay(data2.day4Date)) {
+              // Set achievement to completed!!!!!
+              this.SetSuperSwatProgressLocal(child, 100);
+              this.DisplayAchievementEarned("!!! SuperSwat achievement earned !!!");
+              await this.AddSuperSwatSuccesServer(child, 5, now.toString());
+            } else if (!this.IsSameDay(data2.day4Date)) {
+              this.SetSuperSwatProgressLocal(child, 0);
+              await this.ResetSuperSwatSuccesServer(child);
             }
           } else {
-            if (this.IsDateDiffOneDay(data2.day2Date)) {
-              await this.AddSuperSwatSuccesServer(child, 3, now.toString());
-              this.SetSuperSwatProgressLocal(child, 60);
-              this.DisplayAchievementEarned('Just 2 more days of points to achieve SuperSwat...')
-            } else if (!this.IsSameDay(data2.day2Date)) {
+            if (this.IsDateDiffOneDay(data2.day3Date)) {
+              await this.AddSuperSwatSuccesServer(child, 4, now.toString());
+              this.SetSuperSwatProgressLocal(child, 80);
+              this.DisplayAchievementEarned(
+                `You've earned points on ${DisplayDaysSoFar} and ${moment(now.toString()).format('dddd')} Just earn some points tomorrow to achieve SuperSwat!!!`
+              );
+            } else if (!this.IsSameDay(data2.day3Date)) {
               this.SetSuperSwatProgressLocal(child, 0);
               await this.ResetSuperSwatSuccesServer(child);
             }
           }
         } else {
-          if (this.IsDateDiffOneDay(data2.day1Date)) {
-            await this.AddSuperSwatSuccesServer(child, 2, now.toString());
-            this.SetSuperSwatProgressLocal(child, 40);
-            this.DisplayAchievementEarned('Just 3 more days of points to achieve SuperSwat...')
-          } else if (!this.IsSameDay(data2.day1Date)) {
+          if (this.IsDateDiffOneDay(data2.day2Date)) {
+            await this.AddSuperSwatSuccesServer(child, 3, now.toString());
+            this.SetSuperSwatProgressLocal(child, 60);
+            this.DisplayAchievementEarned(
+              `You've earned points on ${DisplayDaysSoFar} and ${moment(now.toString()).format('dddd')} Just 2 more days of points to achieve SuperSwat...`
+            );
+          } else if (!this.IsSameDay(data2.day2Date)) {
             this.SetSuperSwatProgressLocal(child, 0);
             await this.ResetSuperSwatSuccesServer(child);
           }
         }
       } else {
-        await this.AddSuperSwatSuccesServer(child, 1, now.toString());
-        this.SetSuperSwatProgressLocal(child, 20);
-        this.DisplayAchievementEarned('Just 4 more days of points to achieve SuperSwat...')
+        if (this.IsDateDiffOneDay(data2.day1Date)) {
+          await this.AddSuperSwatSuccesServer(child, 2, now.toString());
+          this.SetSuperSwatProgressLocal(child, 40);
+          this.DisplayAchievementEarned(
+            `You've earned points on ${DisplayDaysSoFar} and ${moment(now.toString()).format('dddd')} Just 3 more days of points to achieve SuperSwat...`
+          );
+        } else if (!this.IsSameDay(data2.day1Date)) {
+          this.SetSuperSwatProgressLocal(child, 0);
+          await this.ResetSuperSwatSuccesServer(child);
+        }
       }
-    
+    } else {
+      await this.AddSuperSwatSuccesServer(child, 1, now.toString());
+      this.SetSuperSwatProgressLocal(child, 20);
+      this.DisplayAchievementEarned(`You've earned points today (${moment(now.toString()).format('dddd')}) Just 4 more days of points to achieve SuperSwat...`);
+    }
+  }
+
+  GetDayName(date: string): string {
+    let dt = moment(date);
+    return dt.format("dddd");
   }
 
   IsDateSet(date: string): boolean {
@@ -648,19 +677,18 @@ export class Home {
   DisplayAchievementEarned(text) {
     this.AchievementCompleted = true;
     this.AchievementCompletedMessage = text;
-  
+
     setTimeout(() => {
       this.AchievementCompleted = false;
-    }, 4000)
+    }, 4000);
   }
 
-
   public async CheckForMegaPoints(child: BrowniePoints) {
-    if (child.pendingAdds >= 50) {
+    if (child.pendingAdds >= 40) {
       let mega = await FindAchievement(child, "Mega Points", dev, DNS);
 
       if (mega.progress < 100) {
-      this.DisplayAchievementEarned('Mega Points achievement earned!')
+        this.DisplayAchievementEarned("Mega Points achievement earned!");
       }
       mega.progress = 100;
 
@@ -735,65 +763,63 @@ export class Home {
       if (item) {
         if (item.progress === 50) {
           item.progress = 100;
-        }
-        else {
-          item.progress  = 50;
+        } else {
+          item.progress = 50;
         }
         console.log("printing Level Mad details");
       } else {
         console.log("Warning - could not find levelMad achievement to update");
       }
-    }
-    else {
-    try {
-      let result = await this.http.fetch(
-        `${DNS}/api/Achievements/GetLevelMadProgress/${child.id}`,
-        {
-          method: "Get",
-          credentials: "include"
-        }
-      );
-      if (result.ok) {
-        let item = await FindAchievement(child, "Level Mad", dev, DNS);
-
-        if (item) {
-          let data = (await result.json()) as ILevelMadAchievement;
-          if (data.dateOfLevelCompletion1 === null || data.dateOfLevelCompletion1 === undefined) {
-            this.SetLevelMadProgressServer(child);
-            this.SetLevelMadMyAchievementsProgressServer(child, 50);
-            item.progress = 50;
-          } else {
-            //Completed achievement!!!! ... if on the same day!
-            if (item.progress < 100) {
-            this.DisplayAchievementEarned('Level Mad achievement earned!')
-            }
-            let lastLevelUp = moment(data.dateOfLevelCompletion1);
-            let now = moment();
-            if (now.diff(lastLevelUp, "days") === 0) {
-              item.progress = 100;
-              this.SetLevelMadMyAchievementsProgressServer(child, 100);
-              //TODO Store this on the serer also!!
-            } else {
-              //Reset progress to 0..
-              item.progress = 0;
-              this.SetLevelMadMyAchievementsProgressServer(child, 0);
-              //TODO update this on the server too!
-            }
+    } else {
+      try {
+        let result = await this.http.fetch(
+          `${DNS}/api/Achievements/GetLevelMadProgress/${child.id}`,
+          {
+            method: "Get",
+            credentials: "include"
           }
-          console.log("printing Level Mad details");
-          console.log(data);
+        );
+        if (result.ok) {
+          let item = await FindAchievement(child, "Level Mad", dev, DNS);
+
+          if (item) {
+            let data = (await result.json()) as ILevelMadAchievement;
+            if (data.dateOfLevelCompletion1 === null || data.dateOfLevelCompletion1 === undefined) {
+              this.SetLevelMadProgressServer(child);
+              this.SetLevelMadMyAchievementsProgressServer(child, 50);
+              item.progress = 50;
+            } else {
+              //Completed achievement!!!! ... if on the same day!
+              if (item.progress < 100) {
+                this.DisplayAchievementEarned("Level Mad achievement earned!");
+              }
+              let lastLevelUp = moment(data.dateOfLevelCompletion1);
+              let now = moment();
+              if (now.diff(lastLevelUp, "days") === 0) {
+                item.progress = 100;
+                this.SetLevelMadMyAchievementsProgressServer(child, 100);
+                //TODO Store this on the serer also!!
+              } else {
+                //Reset progress to 0..
+                item.progress = 0;
+                this.SetLevelMadMyAchievementsProgressServer(child, 0);
+                //TODO update this on the server too!
+              }
+            }
+            console.log("printing Level Mad details");
+            console.log(data);
+          } else {
+            console.log("Warning - could not find levelMAd achievement to update");
+          }
         } else {
-          console.log("Warning - could not find levelMAd achievement to update");
+          this.errorHadOccurred = true;
+          this.errorMessage = "Failed to update level to server..";
         }
-      } else {
+      } catch (e) {
         this.errorHadOccurred = true;
-        this.errorMessage = "Failed to update level to server..";
+        this.errorMessage = e;
       }
-    } catch (e) {
-      this.errorHadOccurred = true;
-      this.errorMessage = e;
     }
-  }
   }
 
   CheckIfLevelCompleted(child: BrowniePoints) {

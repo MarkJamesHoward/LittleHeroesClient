@@ -58,22 +58,28 @@
 
 .achievementItem {
   background: burlywood;
-  width: 100%;
+  width: 90%;
   text-align: center;
-  margin: 0.3rem;
+  margin: 1.5rem 1rem 0 1rem;
   display: grid;
   grid-template-areas:
     "title description description completed"
+    "superswatdays superswatdays superswatdays superswatdays"
     "progress progress progress trophy";
-  grid-template-rows: 1fr 2fr;
-  grid-template-columns: 4fr 3fr 3fr 1fr;
+  grid-template-rows: 1fr minmax(0, 1fr) 1fr;
+  grid-template-columns: 4fr 3fr 3fr 2fr;
   border-radius: 1rem;
-  box-shadow: inset -0.3rem -0.3rem 0.9rem 0.2rem;
+  --box-shadow: inset -0.3rem -0.3rem 0.9rem 0.2rem;
 }
 
 .nowrap {
   white-space: nowrap;
   overflow: hidden;
+}
+
+.superswatdays {
+  grid-area: superswatdays;
+  align-self: center;
 }
 
 .title {
