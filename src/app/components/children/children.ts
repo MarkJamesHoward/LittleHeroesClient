@@ -69,6 +69,8 @@ export class Home {
   private showBonusTimeIntro: boolean = false;
   private BonusCountdown: number = 5;
   private achievements: IAchievements[];
+  countdown: number = -1;
+  BonusBallRunning: boolean = false;
 
   Home() {
     console.log("home");
@@ -517,10 +519,12 @@ export class Home {
         data2 = (await result2.json()) as ISuperSwat;
         console.log(data2);
       } else {
+        if (dev) return;
         this.errorHadOccurred = true;
-        this.errorMessage = "Failed to retrieve SuperSwat progress from server";
+        this.errorMessage = "Failed to retrieve SuperSwat progress from server NEW";
       }
     } catch (e) {
+      if (dev) return;
       this.errorHadOccurred = true;
       this.errorMessage = e;
       return;
@@ -565,7 +569,9 @@ export class Home {
               await this.AddSuperSwatSuccesServer(child, 4, now.toString());
               this.SetSuperSwatProgressLocal(child, 80);
               this.DisplayAchievementEarned(
-                `You've earned points on ${DisplayDaysSoFar} and ${moment(now.toString()).format('dddd')} Just earn some points tomorrow to achieve SuperSwat!!!`
+                `You've earned points on ${DisplayDaysSoFar} and ${moment(now.toString()).format(
+                  "dddd"
+                )} Just earn some points tomorrow to achieve SuperSwat!!!`
               );
             } else if (!this.IsSameDay(data2.day3Date)) {
               this.SetSuperSwatProgressLocal(child, 0);
@@ -577,7 +583,9 @@ export class Home {
             await this.AddSuperSwatSuccesServer(child, 3, now.toString());
             this.SetSuperSwatProgressLocal(child, 60);
             this.DisplayAchievementEarned(
-              `You've earned points on ${DisplayDaysSoFar} and ${moment(now.toString()).format('dddd')} Just 2 more days of points to achieve SuperSwat...`
+              `You've earned points on ${DisplayDaysSoFar} and ${moment(now.toString()).format(
+                "dddd"
+              )} Just 2 more days of points to achieve SuperSwat...`
             );
           } else if (!this.IsSameDay(data2.day2Date)) {
             this.SetSuperSwatProgressLocal(child, 0);
@@ -589,7 +597,9 @@ export class Home {
           await this.AddSuperSwatSuccesServer(child, 2, now.toString());
           this.SetSuperSwatProgressLocal(child, 40);
           this.DisplayAchievementEarned(
-            `You've earned points on ${DisplayDaysSoFar} and ${moment(now.toString()).format('dddd')} Just 3 more days of points to achieve SuperSwat...`
+            `You've earned points on ${DisplayDaysSoFar} and ${moment(now.toString()).format(
+              "dddd"
+            )} Just 3 more days of points to achieve SuperSwat...`
           );
         } else if (!this.IsSameDay(data2.day1Date)) {
           this.SetSuperSwatProgressLocal(child, 0);
@@ -599,7 +609,11 @@ export class Home {
     } else {
       await this.AddSuperSwatSuccesServer(child, 1, now.toString());
       this.SetSuperSwatProgressLocal(child, 20);
-      this.DisplayAchievementEarned(`You've earned points today (${moment(now.toString()).format('dddd')}) Just 4 more days of points to achieve SuperSwat...`);
+      this.DisplayAchievementEarned(
+        `You've earned points today (${moment(now.toString()).format(
+          "dddd"
+        )}) Just 4 more days of points to achieve SuperSwat...`
+      );
     }
   }
 
@@ -985,16 +999,26 @@ export class Home {
   }
 
   public async AddBonusPointBall(child: BrowniePoints, amount: number) {
-    this.bonusBallClicked = true;
-    console.log("test");
-    this.combineAdds(child, amount);
-    this.showBonusBall = false;
+    if (!this.bonusBallClicked) {
+      this.bonusBallClicked = true;
+      setTimeout(() => {
+        this.bonusBallClicked = false;
+        this.showBonusBall = false;
+      }, 2000);
+      console.log("test");
+      this.combineAdds(child, amount);
+    }
   }
   public async AddBonusPointBall2(child: BrowniePoints, amount: number) {
-    this.bonusBall2Clicked = true;
-    console.log("bonus ball2 clicked");
-    this.combineAdds(child, amount);
-    this.showBonusBall2 = false;
+    if (!this.bonusBall2Clicked) {
+      this.bonusBall2Clicked = true;
+      setTimeout(() => {
+        this.bonusBall2Clicked = false;
+        this.showBonusBall2 = false;
+      }, 2000);
+      console.log("bonus ball2 clicked");
+      this.combineAdds(child, amount);
+    }
   }
   public async AddBonusPointSquare(child: BrowniePoints, amount: number) {
     this.bonusSquareClicked = true;
@@ -1011,37 +1035,59 @@ export class Home {
     }, 2000);
   }
 
+  private StoreBonusTime() {
+    this.showBonusTimeIntro = false;
+    this.showBonusBall = false;
+    this.showBonusSquare = false;
+    this.showBonusBall2 = false;
+  }
+
+  private StartBonusTime() {
+    if (!this.BonusBallRunning) {
+      this.showBonusTimeIntro = false;
+      this.BonusBallRunning = true;
+      console.log("clearing timer");
+      clearInterval(this.countdown);
+      this.BonusCountdown = 5;
+      this.showBonusTimeIntro = false;
+
+      this.showBonusBall = true;
+      this.showBonusSquare = true;
+      this.showBonusBall2 = true;
+    } else {
+      console.log("already RUNNING!!!!!!!!!!!!!!!!");
+    }
+  }
+
   private showBonusTime(child: BrowniePoints) {
     if (
       !this.showBonusTimeIntro &&
       !(this.showBonusBall || this.showBonusSquare || this.showBonusBall2) &&
-      child.pendingAdds >= 20 &&
-      Math.floor(Math.random() * 100 + 1) > 98
+      child.pendingAdds >= 1 &&
+      Math.floor(Math.random() * 100 + 1) > 80
     ) {
       this.showBonusTimeIntro = true;
-      let countdown = setInterval(() => {
+      this.countdown = setInterval(() => {
         console.log("decrement timer");
         this.BonusCountdown--;
-        if (this.BonusCountdown === 0) {
-          console.log("clearing timer");
-          clearInterval(countdown);
+        if (this.BonusCountdown <= 0) {
+          this.BonusBallRunning = true;
+          clearInterval(this.countdown);
           this.BonusCountdown = 5;
           this.showBonusTimeIntro = false;
+
+          this.showBonusBall = true;
+          this.showBonusSquare = true;
+          this.showBonusBall2 = true;
         }
       }, 1000);
 
-      if (!(this.showBonusBall || this.showBonusSquare || this.showBonusBall2)) {
-        console.log("show ball and square");
-        this.showBonusBall = true;
-        this.showBonusSquare = true;
-        this.showBonusBall2 = true;
-
-        setTimeout(() => {
-          this.showBonusBall = false;
-          this.showBonusSquare = false;
-          this.showBonusBall2 = false;
-        }, 11000);
-      }
+      setTimeout(() => {
+        this.BonusBallRunning = false;
+        this.showBonusBall = false;
+        this.showBonusSquare = false;
+        this.showBonusBall2 = false;
+      }, 20000);
     }
   }
 
@@ -1052,7 +1098,7 @@ export class Home {
     }
 
     this.ShakeyPoints();
-    //this.showBonusTime(child);
+    this.showBonusTime(child);
     this.CheckForMegaPoints(child);
     this.CheckForSuperSwat(child);
 

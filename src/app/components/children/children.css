@@ -1,5 +1,4 @@
-﻿
-.RewardItem {
+﻿.RewardItem {
   background: brown;
   border-radius: 1rem;
   font-family: "Fredoka One", cursive;
@@ -9,6 +8,10 @@
   background-color: black;
   opacity: 0.9;
   z-index: 1000;
+}
+
+.BonusTimeButtons {
+  font-size: 2rem;
 }
 
 .BonusPointsTime {
@@ -32,15 +35,19 @@
   width: 5rem;
   height: 5rem;
   position: absolute;
-  top: 45vh;
-  left: 45vw;
+  top: 35vh;
+  left: 25vw;
   border-radius: 50%;
   background-color: chartreuse;
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: AnimateBall 4s 1;
-  animation-delay: 5s;
+  animation-iteration-count: 10;
+  animation-delay: 0.1s;
+  animation-name: AnimateBall;
+  animation-fill-mode: forwards;
+  animation-duration: 5s;
+  animation-timing-function: none;
   opacity: 0;
   cursor: pointer;
   z-index: 1000;
@@ -49,8 +56,24 @@
 }
 
 .ball2 {
-  animation: AnimateBall2 4s 1;
-  animation-delay: 5s;
+  animation-name: AnimateBall2;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 5;
+  animation-delay: 0.5s;
+}
+
+.ballClicked {
+  display: flex;
+  justify-content: center;
+  background: none;
+  font-size: 3rem;
+  border-radius: 0;
+  align-items: center;
+  opacity: 1;
+  z-index: 1000;
+  user-select: none;
+  border: 0.2rem solid black;
 }
 
 .square {
@@ -73,70 +96,23 @@
 }
 
 @keyframes AnimateBall2 {
-  5% {
-    opacity: 0.8;
-    transform: rotate(359deg) scale(1.5);
-  }
-  29% {
-    opacity: 1;
-  }
-  30% {
-    transform: translateX(40vw) scale(1) rotate(5deg);
-  }
-  70% {
-    transform: translateY(40vh) scale(1) rotate(-5deg);
-  }
-  90% {
-    opacity: 1;
-    transform: scale(1) rotate(10deg);
+  0% {
+    opacity:1;
+    transform: rotate(0deg) translateX(30vw) rotate(180deg);
   }
   100% {
-    opacity: 0.2;
-    transform: scale(0.2) rotate(359deg);
+    opacity:1;
+    transform: rotate(180deg) translateX(-30vw) rotate(359deg);
   }
 }
 @keyframes AnimateBall {
-  5% {
-    opacity: 0.8;
-    transform: rotate(359deg) scale(1.5);
-  }
-  29% {
-    opacity: 1;
-  }
-  30% {
-    transform: translateX(-40vw) scale(1) rotate(5deg);
-  }
-  70% {
-    transform: translateY(-40vh) scale(1) rotate(-5deg);
-  }
-  90% {
-    opacity: 1;
-    transform: scale(1) rotate(10deg);
+  0% {
+    opacity:1;
+    transform: rotate(0deg) translateX(50vw) rotate(180deg);
   }
   100% {
-    opacity: 0.2;
-    transform: scale(0.2) rotate(359deg);
-  }
-}
-
-@keyframes AnimateSquare {
-  5% {
-    opacity: 0.8;
-    transform: rotate(359deg) scale(1.5);
-  }
-  30% {
-    opacity: 1;
-    transform: translateY(35vh) scale(1) rotate(180deg);
-  }
-  70% {
-    transform: translateX(40vw) scale(1) rotate(-50deg);
-  }
-  90% {
-    transform: scale(1) rotate(50deg);
-  }
-  100% {
-    opacity: 1;
-    transform: rotate(350deg) scale(0.2);
+    opacity:1;
+    transform: rotate(180deg) translateX(-50vw) rotate(359deg);
   }
 }
 
@@ -394,14 +370,11 @@ body {
   margin: 10px;
 }
 
-
-
 .aurelia-animators {
-    padding: 20px;
-    list-style: none;
+  padding: 20px;
+  list-style: none;
 }
 .rewardsAnimations {
-
 }
 
 .ChildrenFadeOut.au-leave {
@@ -438,8 +411,8 @@ body {
   }
 }
 
- /* width */
- ::-webkit-scrollbar {
+/* width */
+::-webkit-scrollbar {
   width: 10px;
 }
 
@@ -462,7 +435,7 @@ body {
 }*/
 
 .AvailableRewardsRow.au-leave-active {
-    animation: fadeOut 2s;
+  animation: fadeOut 2s;
 }
 
 /*.SwitchChild.au-enter {
@@ -470,7 +443,7 @@ body {
 }*/
 
 .SwitchChild {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 /*.AllChildrenAureliaAnimators div.SwitchChild.au-enter-active {
@@ -481,7 +454,6 @@ body {
     animation: fadeOut 1s;
 }*/
 
-
 .ChildNameAnimation {
   animation-name: ChildNameAnimation;
   animation-duration: 0.5s;
@@ -489,7 +461,7 @@ body {
   animation-delay: 0.6;
 }
 
-@keyframes ChildNameAnimation{
+@keyframes ChildNameAnimation {
   0% {
     transform: Scale(0.1) rotate(1deg);
     opacity: 0;
@@ -501,106 +473,95 @@ body {
 }
 
 .LevelAnimation {
-animation-name: LevelAnimation;
-animation-duration: 0.5s;
-animation-fill-mode: forwards;
-animation-delay: 0.5s;
+  animation-name: LevelAnimation;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  animation-delay: 0.5s;
 }
 
 @keyframes LevelAnimation {
   0% {
     transform: Scale(0.1) rotate(1deg);
-    opacity: 0
+    opacity: 0;
   }
   100% {
     transform: Scale(1) rotate(360deg);
-    opacity: 1
+    opacity: 1;
   }
 }
 
 .AllChildrenAureliaAnimators div.SwitchChild div.ControlPanelAnimation.au-leave-active {
-    animation: moveControlPanel 0.8s ease-in-out;
+  animation: moveControlPanel 0.8s ease-in-out;
 }
 
 .AllChildrenAureliaAnimators div.SwitchChild div.ControlPanelAnimation.au-enter-active {
-    animation: moveControlPanelBack 0.8s ease-in-out;
+  animation: moveControlPanelBack 0.8s ease-in-out;
 }
 
-.AllChildrenAureliaAnimators  div.SwitchChild div.avatarAnimation.au-enter-active {
-    animation: fadeIn 0.8s ease-in-out;
+.AllChildrenAureliaAnimators div.SwitchChild div.avatarAnimation.au-enter-active {
+  animation: fadeIn 0.8s ease-in-out;
 }
 
-.AllChildrenAureliaAnimators  div.SwitchChild div.avatarAnimation.au-leave-active {
-    animation: fadeOut 0.8s ease-in-out;
+.AllChildrenAureliaAnimators div.SwitchChild div.avatarAnimation.au-leave-active {
+  animation: fadeOut 0.8s ease-in-out;
 }
-
 
 .AllChildrenAureliaAnimators div.SwitchChild div.NameAnimation.au-enter-active {
-    animation: moveNameBack 0.8s;
+  animation: moveNameBack 0.8s;
 }
 
 .AllChildrenAureliaAnimators div.SwitchChild div.NameAnimation.au-leave-active {
-    animation: moveName 0.8s;
+  animation: moveName 0.8s;
 }
-
-
-
-
 
 /*.orangeBackground {
     animation-delay: 2000ms;
 }*/
 
 .KidsSelectionAnimationParent.au-stagger {
-    animation-delay: 500ms;
+  animation-delay: 500ms;
 }
-
 
 .KidsSelectionAnimation {
-    overflow: hidden;
+  overflow: hidden;
 }
 
+.KidsSelectionAnimation.au-enter {
+  opacity: 0;
+}
 
-    .KidsSelectionAnimation.au-enter {
-        opacity: 0;
-    }
-
-
-    .KidsSelectionAnimation.au-enter-active {
-        animation: fadeIn 0.5s;
-    }
+.KidsSelectionAnimation.au-enter-active {
+  animation: fadeIn 0.5s;
+}
 
 .rewardsAnimations.au-stagger {
-    animation-delay: 500ms;
+  animation-delay: 500ms;
 }
 
+.rewardsAnimations.au-enter {
+  opacity: 0;
+}
 
-    .rewardsAnimations.au-enter {
-        opacity: 0;
-    }
-
-
-    .rewardsAnimations.au-enter-active {
-        animation: fadeIn 0.5s;
-    }
+.rewardsAnimations.au-enter-active {
+  animation: fadeIn 0.5s;
+}
 
 .rewardsAnimations.au-leave-active {
-    animation: fadeOut 0.5s;
+  animation: fadeOut 0.5s;
 }
 
 .rewardsAnimations.au-stagger {
-    animation-delay: 500ms;
+  animation-delay: 500ms;
 }
 
+@keyframes movePet {
+  0% {
+    transform: translateX(100vw);
+  }
 
-@keyframes movePet{
-    0% {
-        transform: translateX(100vw)
-    }
-
-    100% {
-        transform: translateX(0)
-    }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 /*@keyframes movePetBack {
@@ -614,75 +575,73 @@ animation-delay: 0.5s;
 }*/
 
 @keyframes moveControlPanel {
-    0% {
-        transform: translateY(0)
-    }
+  0% {
+    transform: translateY(0);
+  }
 
-    100% {
-        transform: translateY(150vh)
-    }
+  100% {
+    transform: translateY(150vh);
+  }
 }
 
 @keyframes moveControlPanelBack {
-    0% {
-        transform: translateY(150vh)
-    }
+  0% {
+    transform: translateY(150vh);
+  }
 
-    100% {
-        transform: translateY(0)
-    }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 @keyframes moveName {
-    0% {
-        transform: translateY(0)
-    }
+  0% {
+    transform: translateY(0);
+  }
 
-    100% {
-        transform: translateY(-50vh)
-    }
+  100% {
+    transform: translateY(-50vh);
+  }
 }
 
 @keyframes moveNameBack {
-    0% {
-        transform: translateY(-50vh)
-    }
+  0% {
+    transform: translateY(-50vh);
+  }
 
-    100% {
-        transform: translateY(0)
-    }
+  100% {
+    transform: translateY(0);
+  }
 }
 
-
-
-
 @keyframes fadeIn {
-    0% {
-        opacity: 0;
-        transform: scale(0.3)
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1)
-    }
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes fadeOut {
-    0% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: scale(0.3);
-    }
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
 }
 
 @keyframes SlideInTest {
-    from {transform: translateX(-100vw) }
+  from {
+    transform: translateX(-100vw);
+  }
 
-    to {transform: translateX(0px)}
+  to {
+    transform: translateX(0px);
+  }
 }
-
-
-

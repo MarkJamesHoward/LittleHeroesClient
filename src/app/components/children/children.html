@@ -40,10 +40,12 @@
             <!--Levelled up - moved to its own page!-->
 
             <div draggable="false;" class="MasterContainer">
-
-              <div class="au-animate ChildrenFadeIn ChildrenFadeOut" style="grid-area:main; background: mediumpurple;z-index:10;align-self: start;display: grid;
+              <div
+                class="au-animate ChildrenFadeIn ChildrenFadeOut"
+                style="grid-area:main; background: mediumpurple;z-index:10;align-self: start;display: grid;
               place-items: center;"
-                  if.bind="AchievementCompleted">
+                if.bind="AchievementCompleted"
+              >
                 <h3>${AchievementCompletedMessage}</h3>
               </div>
 
@@ -55,14 +57,26 @@
                 <div class="BonusPointsTime" if.bind="showBonusTimeIntro">
                   <div>Bonus Time in</div>
                   <div>${BonusCountdown}</div>
+                  <div style="display:flex;">
+                    <paper-button click.trigger="StoreBonusTime()" class="BonusTimeButtons">Store For Later</paper-button>
+                    <paper-button click.trigger="StartBonusTime()" class="BonusTimeButtons">Start Now!</paper-button>
+                    <paper-button click.trigger="NoThanks()" class="BonusTimeButtons">No Thanks</paper-button>
+                  </div>
                 </div>
 
                 <div
                   click.trigger="AddBonusPointBall(child, 1)"
-                  if.bind="showBonusBall"
-                  class="${showBonusBall == true ? 'ball' : ''}"
+                  class="${showBonusBall == true ? 'ball' : ''} ${bonusBallClicked == true ? 'ballClicked' : ''}"
                 >
-                  <span style="font-family: Gochi Hand; font-size: 3rem;">1</span>
+                  <span
+                    if.bind="showBonusBall && !bonusBallClicked"
+                    style="font-family: Gochi Hand; font-size: 3rem;"
+                    >1</span
+                  >
+
+                  <div if.bind="bonusBallClicked" class="ballClicked">
+                    <span style="font-family: Gochi Hand; font-size: 3rem;">+1 Point</span>
+                  </div>
                 </div>
 
                 <div
@@ -75,12 +89,18 @@
                 </div>
 
                 <div
-                  style="font-family: Gochi Hand; font-size: 3rem;"
                   click.trigger="AddBonusPointBall2(child, 1)"
-                  if.bind="showBonusBall2"
-                  class="${showBonusBall2 == true ? 'ball2' : ''}"
+                  class="${showBonusBall2 == true  ? 'ball2' : ''} ${bonusBall2Clicked == true  ? 'ballClicked' : ''}"
                 >
-                  <span style="font-family: Gochi Hand; font-size: 3rem;">1</span>
+                  <span
+                    if.bind="showBonusBall2 && !bonusBall2Clicked"
+                    style="font-family: Gochi Hand; font-size: 3rem;"
+                    >2</span
+                  >
+
+                  <div if.bind="bonusBall2Clicked" class="ballClicked">
+                    <span style="font-family: Gochi Hand; font-size: 3rem;">+2 Point</span>
+                  </div>
                 </div>
               </div>
 
