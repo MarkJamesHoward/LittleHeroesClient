@@ -101,7 +101,7 @@ export class login {
         });
         setTimeout(() => {
           this.loginFailed = false;
-        }, 3000);
+        }, 10000);
       });
   }
 }

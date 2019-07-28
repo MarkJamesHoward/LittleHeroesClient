@@ -40,12 +40,18 @@ export class ManageHeroes {
         this.registeredKids = data;
         console.log("child removed successfully");
       } else {
-        this.errorMessage = "Failed to add child " + result.status;
+        this.errorMessage = "Failed to remove child " + await result.text();
         this.displayError = true;
+        setTimeout(() => {
+          this.displayError = false;
+        }, 10000)
       }
     } catch (e) {
-      this.errorMessage = "Failed to add child " + e;
+      this.errorMessage = "Failed to remove child " + e;
       this.displayError = true;
+     setTimeout(() => {
+      this.displayError = false;
+     }, 5000 )
     }
   }
 

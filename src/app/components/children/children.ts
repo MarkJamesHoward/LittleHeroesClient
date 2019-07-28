@@ -1098,7 +1098,7 @@ export class Home {
     }
 
     this.ShakeyPoints();
-    this.showBonusTime(child);
+    // this.showBonusTime(child);
     this.CheckForMegaPoints(child);
     this.CheckForSuperSwat(child);
 

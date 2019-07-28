@@ -11,32 +11,39 @@
     .Myflex {
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: space-between;
+      height: 100vh;
       align-items: center;
-      padding-left: 2rem;
-      padding-right: 2rem;
+    }
+
+    label {
+      color: var(--text-color);
     }
 
     input {
       font-size: 3rem;
     }
 
-    paper-button {
-      font-size: 2rem;
-      margin-top: 1rem;
+    KidsFlex > paper-button {
+      font-size: 10rem;
+      border-radius: 0;
     }
 
     .DeleteBtn {
       font-size: 1.5rem;
     }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     .KidsFlex {
       display: flex;
-      justify-content: center;
-      align-items: center;
       flex-direction: column;
       font-size: 3rem;
-      margin-top: 5rem;
+      height: 100vh;
+      justify-content: space-between;
     }
 
     .title {
@@ -44,16 +51,18 @@
       margin-bottom: 3rem;
       margin-top: 5rem;
     }
+
+    .border {
+      padding: 2rem;
+      border: 1rem solid mediumblue;
+    }
   </style>
 
   <!--Error occurred-->
   <div show.bind="displayError">
     <div class="center">
       <h2>${errorMessage}</h2>
-      <paper-button
-        class="btn btn-primary btn-lg "
-        click.trigger="CloseError()"
-      >
+      <paper-button class="btn btn-primary btn-lg " click.trigger="CloseError()">
         Close
       </paper-button>
     </div>
@@ -71,39 +80,33 @@
         value.bind="newChildName"
       />
     </div>
-    <div>
-      <paper-button raised click.trigger="AddChild()"> Add </paper-button>
-      <paper-button raised click.trigger="Cancel()"> Cancel </paper-button>
+    <div style="display: flex;">
+      <paper-button style="flex-grow: 1" raised click.trigger="AddChild()"> Add </paper-button>
+      <paper-button style="flex-grow: 1" raised click.trigger="Cancel()"> Cancel </paper-button>
     </div>
   </div>
 
   <div class="Myflex orangeBackground" show.bind="!addingChildActivated">
     <h1 class="title">Manage Heroes</h1>
 
-    <div repeat.for="child of registeredKids">
+    <div class="border" repeat.for="child of registeredKids">
       <div class="NameAndDeleteButton">
         <div class="largeText">${child.childName}</div>
-        <paper-button
-          class="DeleteBtn"
-          raised
-          click.trigger="RemoveChild(child)"
-        >
+        <paper-button class="DeleteBtn" raised click.trigger="RemoveChild(child)">
           delete
         </paper-button>
       </div>
     </div>
 
     <div style="display: flex">
-      <paper-button raised click.trigger="ActivateAddChild()"
-        >Add New</paper-button
-      >
-
-      <paper-button raised click.trigger="Home()">Return Home</paper-button>
+      <paper-button raised click.trigger="ActivateAddChild()">Add New</paper-button>
     </div>
 
     <div show.bind="loading">
       <span>Attempting add..</span>
       <span class="glyphicon glyphicon-refresh wait"> </span>
     </div>
+
+    <paper-button raised click.trigger="Home()">Return Home</paper-button>
   </div>
 </template>
