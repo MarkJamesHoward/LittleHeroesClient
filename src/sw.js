@@ -26,7 +26,7 @@ self.addEventListener("notificationclick", function(event) {
 
   event.notification.close();
 
-  event.waitUntil(clients.openWindow("https://dojopoints.azurewebsites.net"));
+  event.waitUntil(clients.openWindow("https://www.littlehereos.online"));
 });
 
 workbox.precaching.precacheAndRoute(self.__precacheManifest || []);
