@@ -8,6 +8,8 @@ import "@polymer/paper-icon-button";
 import "@polymer/iron-icons/iron-icons.js";
 import { DNS, dev, FirstLoadOData } from "../global";
 import "LittleHeroesHomePageAnimation";
+import createAuth0Client from "@auth0/auth0-spa-js";
+import * as auth_config from "./auth_config.json";
 
 @inject(HttpClient, Router)
 export class Welcome {
@@ -26,22 +28,68 @@ export class Welcome {
   public offline: boolean = false;
   public errorMessage: string;
   public errorHadOccurred: boolean = false;
+  public auth0: any;
+  public isAuthenticated: boolean = false;
+
+  async ConfigureClient() {
+    this.auth0 = await createAuth0Client({
+      domain: auth_config.domain,
+      client_id: auth_config.clientId,
+      audience: auth_config.audience
+    });
+    console.log("Completed Configure Client");
+
+    this.isAuthenticated = await this.auth0.isAuthenticated();
+    console.log(this.isAuthenticated);
+  }
+
+  async Login() {
+    console.log("attempting login");
+
+    try {
+      console.log("Logging in");
+
+      this.auth0
+        .loginWithRedirect({ redirect_uri: window.location.origin })
+        .then(data => {
+          this.auth0.getUser().then(name => {
+            console.log("login call completed", name);
+          });
+        });
+    } catch (err) {
+      console.log("Log in failed", err);
+    }
+  }
+
+  Logout() {
+    this.auth0.logout({
+      returnTo: window.location.origin
+    });
+  }
 
   public async AmISignedIn() {
-    if (dev) {
-      this.signedIn = true;
-      this.signedInAs = "DEV";
-      this.username = "DEV";
-      this.offline = false;
+    if (!this.isAuthenticated) {
+      this.signedIn = false;
       this.loading = false;
-      return true;
     }
 
-    fetch(`${DNS}/api/children/all`, {
-      method: "get",
-      credentials: "include"
-    })
-      .then(response => {
+    if (this.isAuthenticated) {
+      this.signedIn = true;
+      this.loading = false;
+      this.signedInAs = await this.auth0.getUser();
+      this.username = await this.auth0.getUser();
+
+      // Get the access token from the Auth0 client
+      const token = await this.auth0.getTokenSilently();
+
+      console.log("token", token);
+
+      fetch(`${DNS}/api/children/all`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        method: "get"
+      }).then(response => {
         if (response.ok) {
           this.signedIn = true;
           this.offline = false;
@@ -54,19 +102,21 @@ export class Welcome {
           } else {
             this.GetUsername();
           }
-        } else {
-          console.log("Not logged in - should see a 401 not auth on the get children call");
-          this.signedIn = false;
-          this.offline = false;
-          this.loading = false;
         }
-      })
-      .catch(e => {
-        console.log("failed to login");
-        this.offline = true;
-        this.loading = false;
-        this.signedIn = false;
       });
+    } else {
+      const query = window.location.search;
+      if (query.includes("code=") && query.includes("state=")) {
+        // Process the login state
+        await this.auth0.handleRedirectCallback();
+
+        //updateUI();
+        console.log("*** removing code ***");
+
+        // Use replaceState to redirect the user away and remove the querystring parameters
+        window.history.replaceState({}, document.title, "/");
+      }
+    }
   }
 
   ManageHeroes() {
@@ -74,7 +124,7 @@ export class Welcome {
   }
 
   Privacy() {
-    this.router.navigate('privacy')
+    this.router.navigate("privacy");
   }
 
   ManageNotifications() {
@@ -143,26 +193,28 @@ export class Welcome {
     window.addEventListener("offline", this.offlineHandler.bind(this));
     window.addEventListener("online", this.onlineHandler.bind(this));
 
-    this.AmISignedIn()
-      .then(() => {
-        if (this.signedIn) {
-          // this.startup();
-        }
-        console.log("finished constructor");
-        // this.loading = false;
-      })
-      .catch(err => {
-        if (err == "TypeError: Failed to fetch") {
-          console.log("Offline " + err);
-          this.offline = true;
-          this.loading = false;
-        } else {
-          console.log("Some error " + err);
-          this.errorHadOccurred = true;
-          this.errorMessage = err;
-          this.loading = false;
-        }
-      });
+    this.ConfigureClient().then(() => {
+      this.AmISignedIn()
+        .then(() => {
+          if (this.signedIn) {
+            // this.startup();
+          }
+          console.log("finished constructor");
+          // this.loading = false;
+        })
+        .catch(err => {
+          if (err == "TypeError: Failed to fetch") {
+            console.log("Offline " + err);
+            this.offline = true;
+            this.loading = false;
+          } else {
+            console.log("Some error " + err);
+            this.errorHadOccurred = true;
+            this.errorMessage = err;
+            this.loading = false;
+          }
+        });
+    });
   }
 
   public CloseError() {
@@ -189,36 +241,32 @@ export class Welcome {
     this.router.navigate("children/1/0");
   }
 
-  Login() {
-    this.router.navigate("Login");
-  }
-
-  Logout() {
-    if (dev) {
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: "smooth"
-      });
-    }
-    fetch(`${DNS}/api/auth/logout`, {
-      method: "get",
-      credentials: "include"
-    }).then(response => {
-      if (response.ok) {
-        console.log("logged out");
-        window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: "smooth"
-        });
-        this.AmISignedIn();
-      }
-    });
-  }
+  // Logout() {
+  //   if (dev) {
+  //     window.scrollTo({
+  //       top: 0,
+  //       left: 0,
+  //       behavior: "smooth"
+  //     });
+  //   }
+  //   fetch(`${DNS}/api/auth/logout`, {
+  //     method: "get",
+  //     credentials: "include"
+  //   }).then(response => {
+  //     if (response.ok) {
+  //       console.log("logged out");
+  //       window.scrollTo({
+  //         top: 0,
+  //         left: 0,
+  //         behavior: "smooth"
+  //       });
+  //       this.AmISignedIn();
+  //     }
+  //   });
+  // }
 
   // Activate animations as the element comes into view
-  attached() {
+  async attached() {
     //@ts-ignore
     const myImg = this.FullyCustomisableMonsterTitle;
 
@@ -235,7 +283,7 @@ export class Welcome {
     this.observer.observe(myImg);
   }
 
-  activate(params: any) {
+  async activate(params: any) {
     console.log(`loading home page from ${params.id}`);
     if (FirstLoadOData.firstLoad) {
       console.log("do not navigate to the children screen");
@@ -246,22 +294,4 @@ export class Welcome {
       this.proceedToChildrenScreen = false;
     }
   }
-
-  // Signup() {
-  //   try {
-  //     console.log("navigate to login");
-  //     window.location.href = `${DNS}/Account/Login`;
-  //   } catch (err) {
-  //     if (err == "TypeError: Failed to fetch") {
-  //       console.log("Offline " + err);
-  //       this.offline = true;
-  //       this.loading = false;
-  //     } else {
-  //       console.log("Some error " + err);
-  //       this.errorHadOccurred = true;
-  //       this.errorMessage = err;
-  //       this.loading = false;
-  //     }
-  //   }
-  // }
 }

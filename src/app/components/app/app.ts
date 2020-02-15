@@ -14,27 +14,20 @@ export class App {
   public signedIn: boolean = false;
   public signedInAs: string;
   http: HttpClient;
+  auth0: any;
+
 
   constructor(http: HttpClient) {
     this.http = http;
 
+
     if (dev) {
       this.signedIn = true;
     } else {
-      // http
-      //   .fetch(`${this.DNS}/Account/AmISignedIn`, {
-      //     method: "get",
-      //     credentials: "same-origin"
-      //   })
-      //   .then(result => result.json() as Promise<SignedIn>)
-      //   .then(data => {
-      //     console.log(data);
-      //     this.signedIn = data.signedIn;
-      //     this.signedInAs = data.signedInAs;
-      //   });
       this.signedIn = true;
     }
   }
+
   Logout() {
     this.http
       .fetch("/Account/Logout", { method: "post", credentials: "same-origin" })

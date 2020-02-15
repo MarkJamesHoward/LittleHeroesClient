@@ -1,8 +1,8 @@
 import { BrowniePoints } from "./../library/interfaces";
 // let DNS: string = "https://dojopoints.azurewebsites.net";
 //let DNS: string = "https://littleheroes-api.azurewebsites.net";
-let DNS: string = "https://api.littleheroes.online";
-//let DNS: string = "http://localhost:53067";
+//let DNS: string = "https://api.littleheroes.online";
+let DNS: string = "http://localhost:53068";
 let dev: boolean = false;
 
 interface LoadData {

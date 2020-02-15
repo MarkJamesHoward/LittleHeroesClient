@@ -42,9 +42,7 @@ export class notifications {
 
   urlB64ToUint8Array(base64String: any) {
     const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-    const base64 = (base64String + padding)
-      .replace(/\-/g, "+")
-      .replace(/_/g, "/");
+    const base64 = (base64String + padding).replace(/\-/g, "+").replace(/_/g, "/");
 
     const rawData = window.atob(base64);
     const outputArray = new Uint8Array(rawData.length);
@@ -59,7 +57,7 @@ export class notifications {
     if ("serviceWorker" in navigator) {
       const applicationServerPublicKey =
         "BPuzIwehJRwG6w26oLqlW9PPKWAom9W6y5BRQJTaehH7LecpzIwIIk5Ru1Emt_P92BORv60yOkJdxCxcXixWrJE";
-      //prvate key n5CHbqANwFkxUlfWMppg90UBF9v7hDEx9ICY8NXDqns
+      //prvate key (held in the Azure trigger only!)
 
       console.log("Service Worker is supported");
       //let reg1 = await navigator.serviceWorker.register('./service-worker-webpack.js');
@@ -67,9 +65,7 @@ export class notifications {
 
       console.log("My service worker " + reg1);
 
-      const applicationServerKey = this.urlB64ToUint8Array(
-        applicationServerPublicKey
-      );
+      const applicationServerKey = this.urlB64ToUint8Array(applicationServerPublicKey);
 
       let subscribeResult = await reg1.pushManager.subscribe({
         userVisibleOnly: true,
@@ -79,10 +75,11 @@ export class notifications {
       this.subscriptionJSONified = JSON.stringify(subscribeResult);
       console.log("subscribe result " + JSON.stringify(subscribeResult));
 
-      let result = await this.http.fetch(
-        `${DNS}/api/push/${this.friendlyName}`,
-        { method: "post", credentials: "include", body: json(subscribeResult) }
-      );
+      let result = await this.http.fetch(`${DNS}/api/push/${this.friendlyName}`, {
+        method: "post",
+        credentials: "include",
+        body: json(subscribeResult)
+      });
 
       console.log(result);
 

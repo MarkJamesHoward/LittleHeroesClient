@@ -34,7 +34,9 @@ export class login {
           console.log(`We are logged in`);
           console.log(response);
         } else {
-          console.log("Not logged in - should see a 401 not auth on the get children call");
+          console.log(
+            "Not logged in - should see a 401 not auth on the get children call"
+          );
         }
       })
       .catch(e => {

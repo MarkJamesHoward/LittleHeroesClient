@@ -12,16 +12,14 @@ export class QuickStart {
   DelayInCreationOfAccount: boolean = false;
 
   attached() {
-    let btn =  document.querySelector("#LetsGo")
-    if(btn) {
-    //@ts-ignore
-     btn.focus();
-     console.log('button should now have focus')
-    }
-     else
-     console.error('cannot find button');
+    let btn = document.querySelector("#LetsGo");
+    if (btn) {
+      //@ts-ignore
+      btn.focus();
+      console.log("button should now have focus");
+    } else console.error("cannot find button");
 
-     this.RegisterAsGuest();
+    this.RegisterAsGuest();
   }
 
   constructor(router: Router) {
@@ -42,14 +40,14 @@ export class QuickStart {
     this.connecting = true;
     const shortName = uniqueNamesGenerator("-", true); // big-donkey
 
-    let details = { email: shortName, password: "password" };
+    let details = { email: shortName, password: "P@ssword1" };
 
     //After 2 seconds lets display the spinner
     setTimeout(() => {
       this.DelayInCreationOfAccount = true;
-    }, 2000)
+    }, 2000);
 
-    fetch(`${DNS}/api/auth/registerguest/${shortName}`, {
+    fetch(`${DNS}/api/auth/register`, {
       method: "post",
       headers: new Headers({
         "Content-Type": "application/json"

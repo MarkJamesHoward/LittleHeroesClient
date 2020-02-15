@@ -3,11 +3,16 @@
   <require from="../../library/spinner/spinner.css"></require>
   <require from="./welcome.css"></require>
 
-  <div class="au-animate WelcomeFadeOut WelcomeFadeIn container" style="overflow-x:hidden;">
+  <div
+    class="au-animate WelcomeFadeOut WelcomeFadeIn container"
+    style="overflow-x:hidden;"
+  >
     <div class="welcomeTitle">
       <div class="title">
         <h1 id="WelcomeTitle" style="margin-top:1rem">
-          <div id="WelcomeTitleStart" style="position:relative;left:-100vw;">Welcome to</div>
+          <div id="WelcomeTitleStart" style="position:relative;left:-100vw;">
+            Welcome to
+          </div>
           <div id="WelcomeTitleEnd" style="position:relative;left:200vw">
             Little Heroes <span class="alphaText">(alpha)</span>
           </div>
@@ -23,13 +28,19 @@
         />
       </div>
 
-      <h1 class="text" style="font-size:3rem;margin: 5rem; font-family: 'Gochi Hand', cursive;">
+      <h1
+        class="text"
+        style="font-size:3rem;margin: 5rem; font-family: 'Gochi Hand', cursive;"
+      >
         Start motivating your kids TODAY!
       </h1>
 
       <div class="buttons">
         <div class="WelcomeScreenButtonsInternal" show.bind="!loading">
-          <div style="grid-area: main" show.bind="(!signedIn && !offline) || dev">
+          <div
+            style="grid-area: main"
+            show.bind="(!signedIn && !offline) || dev"
+          >
             <paper-button
               id="QuickStartText"
               style="font-size: 2rem;margin-top:1rem"
@@ -46,12 +57,15 @@
 
           <div show.bind="(signedIn && !offline) || dev">
             <div style="margin: 1rem;">
-              <div>Welcome back <span style="color: rgb(255, 129, 45)">${username}</span></div>
+              <div>
+                Welcome back
+                <span style="color: rgb(255, 129, 45)">${username}</span>
+              </div>
             </div>
             <paper-button
+              id="ViewHeroesBtn"
               click.trigger="ViewHeroTastic()"
               style="margin-top:1rem;margin-bottom: 2rem;"
-              class="btn btn-primary btn-lg"
             >
               View Heroes
             </paper-button>
@@ -61,7 +75,6 @@
             <paper-button
               click.trigger="CheckOnlineOrNot()"
               style="margin-top:1rem"
-              class="btn btn-primary btn-lg"
             >
               Offline - click to try again
             </paper-button>
@@ -79,35 +92,65 @@
 
     <div style="background:rgb(248, 244, 244)">
       <div class="AnimationGrid">
-        <div style="z-index:2;text-align: center;margin-bottom: 3rem;color: black">
-          <div ref="FullyCustomisableMonsterTitle" class="FullyCustomisableMonsterTitle">
+        <div
+          style="z-index:2;text-align: center;margin-bottom: 3rem;color: black"
+        >
+          <div
+            ref="FullyCustomisableMonsterTitle"
+            class="FullyCustomisableMonsterTitle"
+          >
             <span id="span1F" class.bind="showFCA ? 'span1F' : 'hidden'">F</span
-            ><span id="span1U" class.bind="showFCA ? 'span1U' : 'hidden'">u</span
-            ><span id="span1L" class.bind="showFCA ? 'span1L' : 'hidden'">l</span
-            ><span id="span1L2" class.bind="showFCA ? 'span1L2' : 'hidden'">l</span
-            ><span id="span1Y" class.bind="showFCA ? 'span1Y' : 'hidden'">y</span>
+            ><span id="span1U" class.bind="showFCA ? 'span1U' : 'hidden'"
+              >u</span
+            ><span id="span1L" class.bind="showFCA ? 'span1L' : 'hidden'"
+              >l</span
+            ><span id="span1L2" class.bind="showFCA ? 'span1L2' : 'hidden'"
+              >l</span
+            ><span id="span1Y" class.bind="showFCA ? 'span1Y' : 'hidden'"
+              >y</span
+            >
             <span>&nbsp;</span>
             <span id="span2C" class.bind="showFCA ? 'span2C' : 'hidden'">C</span
-            ><span id="span2U" class.bind="showFCA ? 'span2U' : 'hidden'">u</span
-            ><span id="span2S" class.bind="showFCA ? 'span2S' : 'hidden'">s</span
-            ><span class.bind="showFCA ? 'span2T' : 'hidden'" id="span2T">t</span
-            ><span class.bind="showFCA ? 'span2O' : 'hidden'" id="span2O">o</span
-            ><span class.bind="showFCA ? 'span2M' : 'hidden'" id="span2M">m</span
-            ><span class.bind="showFCA ? 'span2I' : 'hidden'" id="span2I">i</span
-            ><span class.bind="showFCA ? 'span2Z' : 'hidden'" id="span2Z">z</span
-            ><span class.bind="showFCA ? 'span2A' : 'hidden'" id="span2A">a</span
-            ><span class.bind="showFCA ? 'span2B' : 'hidden'" id="span2B">b</span
-            ><span class.bind="showFCA ? 'span2L' : 'hidden'" id="span2L">l</span
-            ><span class.bind="showFCA ? 'span2E' : 'hidden'" id="span2E">e</span>
+            ><span id="span2U" class.bind="showFCA ? 'span2U' : 'hidden'"
+              >u</span
+            ><span id="span2S" class.bind="showFCA ? 'span2S' : 'hidden'"
+              >s</span
+            ><span class.bind="showFCA ? 'span2T' : 'hidden'" id="span2T"
+              >t</span
+            ><span class.bind="showFCA ? 'span2O' : 'hidden'" id="span2O"
+              >o</span
+            ><span class.bind="showFCA ? 'span2M' : 'hidden'" id="span2M"
+              >m</span
+            ><span class.bind="showFCA ? 'span2I' : 'hidden'" id="span2I"
+              >i</span
+            ><span class.bind="showFCA ? 'span2Z' : 'hidden'" id="span2Z"
+              >z</span
+            ><span class.bind="showFCA ? 'span2A' : 'hidden'" id="span2A"
+              >a</span
+            ><span class.bind="showFCA ? 'span2B' : 'hidden'" id="span2B"
+              >b</span
+            ><span class.bind="showFCA ? 'span2L' : 'hidden'" id="span2L"
+              >l</span
+            ><span class.bind="showFCA ? 'span2E' : 'hidden'" id="span2E"
+              >e</span
+            >
             <span>&nbsp;</span>
             <span class.bind="showFCA ? 'span3M' : 'hidden'" id="span3M">m</span
-            ><span id="span3O" class.bind="showFCA ? 'span3O' : 'hidden'">o</span
-            ><span class.bind="showFCA ? 'span3N' : 'hidden'" id="span3N">n</span
-            ><span id="span3S" class.bind="showFCA ? 'span3S' : 'hidden'">s</span
-            ><span class.bind="showFCA ? 'span3T' : 'hidden'" id="span3T">t</span
-            ><span id="span3E" class.bind="showFCA ? 'span3E' : 'hidden'">e</span
-            ><span class.bind="showFCA ? 'span3R' : 'hidden'" id="span3R">r</span
-            ><span id="span3S" class.bind="showFCA ? 'span3S' : 'hidden'">s</span>
+            ><span id="span3O" class.bind="showFCA ? 'span3O' : 'hidden'"
+              >o</span
+            ><span class.bind="showFCA ? 'span3N' : 'hidden'" id="span3N"
+              >n</span
+            ><span id="span3S" class.bind="showFCA ? 'span3S' : 'hidden'"
+              >s</span
+            ><span class.bind="showFCA ? 'span3T' : 'hidden'" id="span3T"
+              >t</span
+            ><span id="span3E" class.bind="showFCA ? 'span3E' : 'hidden'"
+              >e</span
+            ><span class.bind="showFCA ? 'span3R' : 'hidden'" id="span3R"
+              >r</span
+            ><span id="span3S" class.bind="showFCA ? 'span3S' : 'hidden'"
+              >s</span
+            >
           </div>
         </div>
 
@@ -123,9 +166,9 @@
     </div>
 
     <div class="achievements" style="background: rgb(27, 26, 26);">
-      <H1 style="margin-top: 5rem;margin-bottom: 4rem;max-width: 25ch">
+      <h1 style="margin-top: 5rem;margin-bottom: 4rem;max-width: 25ch">
         Complete achievements to unlock bonus rewards!
-      </H1>
+      </h1>
 
       <div style="display:grid;place-items:center;">
         <img
@@ -138,19 +181,19 @@
     </div>
 
     <div class="AvailableRewards" style="background: rgb(27, 26, 26);">
-      <H1 style="margin-top: 5rem;margin-bottom: 4rem;max-width: 25ch">
+      <h1 style="margin-top: 5rem;margin-bottom: 4rem;max-width: 25ch">
         Rewards can be stored up for use as and when
-      </H1>
+      </h1>
       <p>
-        You can decide the value of each reward, be it 5, 10, 20 minutes of TV or Video Games. 
-        Maybe an ice cream, biscuit or chips!
-
-         If you're looking to give lots of points throughout the day then the smaller values rewards work well,
-         they are stored up each time and so can be used in a batch of say 4 rewards of 5 minutes for 
-         a total of 20 minutes TV or gaming.
+        You can decide the value of each reward, be it 5, 10, 20 minutes of TV
+        or Video Games. Maybe an ice cream, biscuit or chips! If you're looking
+        to give lots of points throughout the day then the smaller values
+        rewards work well, they are stored up each time and so can be used in a
+        batch of say 4 rewards of 5 minutes for a total of 20 minutes TV or
+        gaming.
       </p>
 
-      <br><br>
+      <br /><br />
 
       <div style="display:grid;place-items:center;">
         <img
@@ -163,13 +206,16 @@
     </div>
 
     <div class="PWA" style="background: rgb(248, 244, 244)">
-      <div style="margin-bottom:2rem;text-align:center;background: rgb(248, 244, 244);color: black">
+      <div
+        style="margin-bottom:2rem;text-align:center;background: rgb(248, 244, 244);color: black"
+      >
         <p style="margin: 2rem" class="TextColorOnBlackBackground">
-          Each time 100 points is reached the reward is activated and can be redeemed. Multiple
-          rewards can be built up and used in combination if saving wants to be promoted. The
-          rewards themselves can be entered by the parent to ensure they are relevant. Each time the
-          100 points barrier is reached the level for that child is bumped and allows access to
-          additional monster customisation
+          Each time 100 points is reached the reward is activated and can be
+          redeemed. Multiple rewards can be built up and used in combination if
+          saving wants to be promoted. The rewards themselves can be entered by
+          the parent to ensure they are relevant. Each time the 100 points
+          barrier is reached the level for that child is bumped and allows
+          access to additional monster customisation
         </p>
 
         <div style="display:grid;place-items:center;">
@@ -182,37 +228,42 @@
         </div>
 
         <p class="TextColorOnBlackBackground" style="margin: 1.3rem;">
-          Start rewarding your kids for good behaviour today! Keep them engaged with customizable
-          monsters, achievements and mini games. Invite Grandparents and other carers so they can
-          award points. Receive updates when points are awarded by any members of the family.
+          Start rewarding your kids for good behaviour today! Keep them engaged
+          with customizable monsters, achievements and mini games. Invite
+          Grandparents and other carers so they can award points. Receive
+          updates when points are awarded by any members of the family.
         </p>
 
-        <h2 class="TextColorOnBlackBackground">Mobile First - Progressive Web Application (PWA)</h2>
+        <h2 class="TextColorOnBlackBackground">
+          Mobile First - Progressive Web Application (PWA)
+        </h2>
         <p>
-          Little Heroes is a new kind of web page, designed to work across all mobile phones. It has
-          the feel of a native application, will work even when you don't have a internet
-          connection, can be installed and removed from your home screen just like an app, and
-          updates in the background with a much smaller footprint than an equivalent native
+          Little Heroes is a new kind of web page, designed to work across all
+          mobile phones. It has the feel of a native application, will work even
+          when you don't have a internet connection, can be installed and
+          removed from your home screen just like an app, and updates in the
+          background with a much smaller footprint than an equivalent native
           application.
         </p>
         <br />
         <h3 class="TextColorOnBlackBackground">Offline support*</h3>
         <p>
-          LittleHeroes will work even when you don't have a signal. Any points awarded will be
-          registered as soon as your device is back on line
+          LittleHeroes will work even when you don't have a signal. Any points
+          awarded will be registered as soon as your device is back on line
         </p>
         <br />
         <h3 class="TextColorOnBlackBackground">Notifications</h3>
         <p>
-          We can send you updates directly to your phone when a little hero is awarded points.
-          Simply opt into these on the
+          We can send you updates directly to your phone when a little hero is
+          awarded points. Simply opt into these on the
           <a href="/Notifications">Notifications page</a>
         </p>
         <br />
         <h3 class="TextColorOnBlackBackground">Fullscreen</h3>
         <p>
-          LittleHeroes uses all the real estate of your phone just like a native application. There
-          is no browser bar reducing the space available to you.
+          LittleHeroes uses all the real estate of your phone just like a native
+          application. There is no browser bar reducing the space available to
+          you.
         </p>
       </div>
     </div>
@@ -226,7 +277,10 @@
         </div>
 
         <div show.bind="(signedIn && !offline) || dev">
-          <paper-button click.trigger="ManageNotifications()" style="margin-top:1rem;">
+          <paper-button
+            click.trigger="ManageNotifications()"
+            style="margin-top:1rem;"
+          >
             Manage Notifications
           </paper-button>
         </div>
@@ -237,8 +291,10 @@
           </paper-button>
         </div>
 
-        <div if.bind="signedIn">
-          <paper-button style="margin-top:1rem;" click.trigger="Logout()">Logout</paper-button>
+        <div if.bind="signedIn || true">
+          <paper-button style="margin-top:1rem;" click.trigger="Logout()"
+            >Logout</paper-button
+          >
         </div>
       </div>
     </div>
