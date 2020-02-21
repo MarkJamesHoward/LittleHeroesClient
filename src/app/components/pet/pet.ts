@@ -1,7 +1,6 @@
 import { data } from "./../devdata/childrendata";
 import { inject } from "aurelia-framework";
-import { HttpClient } from "aurelia-fetch-client";
-import {FindAchievement} from '../../library/AchievementsCommon'
+import { FindAchievement } from "../../library/AchievementsCommon";
 import {
   Parent,
   BrowniePoints,
@@ -11,14 +10,22 @@ import {
 import { Router } from "aurelia-router";
 import "@polymer/paper-button";
 import "monster-creator";
-import { DNS, dev, GetBrowniePoints, SetBrowniePoints } from "../global";
+import {
+  DNS,
+  dev,
+  GetBrowniePoints,
+  SetBrowniePoints,
+  GetAccessToken,
+  token,
+  ConfigureClient,
+  isAuthenticated
+} from "../global";
 
-@inject(HttpClient, Router)
+@inject(Router)
 export class Pet {
   AchievementCompleted: boolean = false;
-  AchievementCompletedMessage: string = '';
+  AchievementCompletedMessage: string = "";
   router: Router;
-  http: HttpClient;
   child: BrowniePoints;
   childID: number;
   browniePoints: Array<BrowniePoints>;
@@ -35,13 +42,12 @@ export class Pet {
       this.child = this.browniePoints.find(item => item.id === childID);
       console.log(`Child is now ${this.child}`);
     } else {
-      var result = await this.http.fetch(
-        `${DNS}/api/Children/GetChild/${childID}`,
-        {
-          method: "get",
-          credentials: "include"
+      var result = await fetch(`${DNS}/api/Children/GetChild/${childID}`, {
+        method: "get",
+        headers: {
+          authorization: `Bearer ${token}`
         }
-      );
+      });
       var data = await result.json();
       this.child = data;
       console.log(data);
@@ -70,31 +76,24 @@ export class Pet {
     selectedeyey: number,
     selectedlegsx: number,
     selectedlegsy: number
-
   ) {
+    this.child.pet.eyes = eyes;
+    this.child.pet.mouth = mouth;
+    this.child.pet.legs = legs;
+    this.child.pet.silhouette = silhouette;
+    this.child.pet.selectedmouthx = selectedmouthx;
+    this.child.pet.selectedmouthy = selectedmouthy;
+    this.child.pet.selectedeyex = selectedeyex;
+    this.child.pet.selectedeyey = selectedeyey;
+    this.child.pet.selectedlegsx = selectedlegsx;
+    this.child.pet.selectedlegsy = selectedlegsy;
 
-      this.child.pet.eyes = eyes;
-      this.child.pet.mouth = mouth;
-      this.child.pet.legs = legs;
-      this.child.pet.silhouette = silhouette;
-      this.child.pet.selectedmouthx = selectedmouthx;
-      this.child.pet.selectedmouthy = selectedmouthy;
-      this.child.pet.selectedeyex = selectedeyex;
-      this.child.pet.selectedeyey = selectedeyey;
-      this.child.pet.selectedlegsx = selectedlegsx;
-      this.child.pet.selectedlegsy = selectedlegsy;
+    SetBrowniePoints(this.browniePoints);
 
-      SetBrowniePoints(this.browniePoints);
-      // console.log(
-      //   `${DNS}/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${legs}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}/${selectedlegsx}/${selectedlegsy}`
-      // );
-      //var result = await 
-      this.http.fetch(
-        `${DNS}/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${legs}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}/${selectedlegsx}/${selectedlegsy}`,
-        { method: "put", credentials: "include" }
-      );
-      //var data = await result.json();
-      //console.log(data);
+    fetch(
+      `${DNS}/api/Pet/CustomizePet/${childID}/${eyes}/${mouth}/${legs}/${silhouette}/${selectedmouthx}/${selectedmouthy}/${selectedeyex}/${selectedeyey}/${selectedlegsx}/${selectedlegsy}`,
+      { method: "put", headers: { authorization: `Bearer ${token}` } }
+    );
 
     this.router.navigate(`children/0/${this.scrollPos}`);
   }
@@ -103,7 +102,7 @@ export class Pet {
     console.log(`loading pety for ${params.id}`);
     console.log(`return scroll Pos ${params.scrollPos}`);
     this.scrollPos = params.scrollPos;
-    
+
     this.browniePoints = GetBrowniePoints();
 
     if (!this.browniePoints) {
@@ -124,50 +123,61 @@ export class Pet {
   DisplayAchievementEarned(text) {
     this.AchievementCompleted = true;
     this.AchievementCompletedMessage = text;
-  
+
     setTimeout(() => {
       this.AchievementCompleted = false;
-    }, 4000)
+    }, 4000);
   }
 
   async CheckForMakeAMonster() {
     if (dev) {
-      let MonsterAchievement = await FindAchievement(this.child, "Make a Monster", dev, DNS)
+      let MonsterAchievement = await FindAchievement(
+        this.child,
+        "Make a Monster",
+        dev,
+        DNS
+      );
       if (MonsterAchievement.progress < 100) {
-        console.log(MonsterAchievement.progress)
-        this.DisplayAchievementEarned('Make a monster achievement earned!')
+        console.log(MonsterAchievement.progress);
+        this.DisplayAchievementEarned("Make a monster achievement earned!");
       }
       MonsterAchievement.progress = 100;
-    } 
-    else {
-     // Update the Make a Monster achievement to completed
-     try {
-      let result = await fetch(`${DNS}/api/achievements/CheckForMakeAMonster/${this.child.id}`, {
-        method: "Get",
-        credentials: "include"
-      });
-      if (result.ok) {
-        let MonsterAchievement = await FindAchievement(this.child, "Make a Monster", dev, DNS)
-        if (MonsterAchievement.progress < 100) {
-        this.DisplayAchievementEarned('Make a monster achievement earned!')
-      }
-        MonsterAchievement.progress = 100;
+    } else {
+      // Update the Make a Monster achievement to completed
+      try {
+        let result = await fetch(
+          `${DNS}/api/achievements/CheckForMakeAMonster/${this.child.id}`,
+          {
+            method: "Get",
+            credentials: "include"
+          }
+        );
+        if (result.ok) {
+          let MonsterAchievement = await FindAchievement(
+            this.child,
+            "Make a Monster",
+            dev,
+            DNS
+          );
+          if (MonsterAchievement.progress < 100) {
+            this.DisplayAchievementEarned("Make a monster achievement earned!");
+          }
+          MonsterAchievement.progress = 100;
+          //TODO
+        } else {
+          //this.errorHadOccurred = true;
+          //this.errorMessage = "Failed to update level to server..";
+          //TODO
+        }
+      } catch (e) {
         //TODO
-      } else {
         //this.errorHadOccurred = true;
-        //this.errorMessage = "Failed to update level to server..";
-        //TODO
+        //this.errorMessage = e;
       }
-    } catch (e) {
-      //TODO
-      //this.errorHadOccurred = true;
-      //this.errorMessage = e;
     }
   }
-  }
 
-  constructor(http: any, Router: Router) {
-    this.http = http;
+  constructor(Router: Router) {
     this.router = Router;
   }
 }

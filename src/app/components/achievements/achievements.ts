@@ -115,7 +115,9 @@ export class Achievements {
     if (!this.browniePoints) {
       let result = await this.http.fetch(`${DNS}/api/Children/all`, {
         method: "get",
-        credentials: "include"
+        headers: {
+          authorization: `Bearer ${token}`
+        }
       });
 
       if (result.ok) {

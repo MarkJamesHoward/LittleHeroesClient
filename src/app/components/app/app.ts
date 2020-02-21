@@ -16,10 +16,8 @@ export class App {
   http: HttpClient;
   auth0: any;
 
-
   constructor(http: HttpClient) {
     this.http = http;
-
 
     if (dev) {
       this.signedIn = true;
@@ -28,39 +26,12 @@ export class App {
     }
   }
 
-  Logout() {
-    this.http
-      .fetch("/Account/Logout", { method: "post", credentials: "same-origin" })
-      .then(result => result)
-      .then(data => {
-        console.log(data);
-        this.signedIn = false;
-        this.signedInAs = "";
-      });
-  }
-
-  Login() {
-    window.location.href = "/Account/Login";
-  }
-
-  Register() {
-    window.location.href = "/Account/Register";
-  }
-
   configureRouter(config: RouterConfiguration, router: Router) {
     config.title = "LittleHeroes";
     config.options.pushState = true;
     config.options.hashChange = false;
     config.options.root = "/";
     config.map([
-      {
-        route: ["login"],
-        name: "login",
-        settings: { icon: "" },
-        moduleId: PLATFORM.moduleName("../login/login"),
-        nav: true,
-        title: "Login"
-      },
       {
         route: ["", "welcome"],
         name: "welcome",

@@ -29,8 +29,6 @@ async function CheckIfAuthenticated() {
 async function GlobalLogin() {
   console.log("attempting login");
 
-  console.log("Logging in");
-
   await auth0.loginWithRedirect({ redirect_uri: window.location.origin });
 
   isAuthenticated = await auth0.isAuthenticated();
