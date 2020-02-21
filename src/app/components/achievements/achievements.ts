@@ -8,7 +8,16 @@ import "@polymer/paper-progress/paper-progress.js";
 import { inject } from "aurelia-framework";
 import { Router } from "aurelia-router";
 import { HttpClient } from "aurelia-fetch-client";
-import { DNS, dev, GetBrowniePoints, SetBrowniePoints } from "../global";
+import {
+  DNS,
+  dev,
+  GetBrowniePoints,
+  SetBrowniePoints,
+  GetAccessToken,
+  token,
+  ConfigureClient,
+  isAuthenticated
+} from "../global";
 import { data } from "../devdata/childrendata";
 import "@polymer/paper-button";
 import * as moment from "moment";
@@ -44,7 +53,7 @@ export class Achievements {
 
   async CheckForSuperSwat(child: BrowniePoints) {
     let data2: ISuperSwat;
-    let days: string = '';
+    let days: string = "";
 
     console.log("making call to get super swat days so far achieved");
     try {
@@ -52,7 +61,9 @@ export class Achievements {
         `${DNS}/api/Achievements/GetSuperSwatAddDaySuccess/${child.id}`,
         {
           method: "get",
-          credentials: "include"
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
       );
       if (result2.ok) {
@@ -136,7 +147,7 @@ export class Achievements {
           console.log(this.achievements[i].title);
           if (this.achievements[i].title === "Super Swat") {
             console.log("setting progress for super swat");
-            this.CheckForSuperSwat(this.child).then((res) => {
+            this.CheckForSuperSwat(this.child).then(res => {
               this.achievements[i].days = res;
             });
           } else {
@@ -156,44 +167,50 @@ export class Achievements {
     this.router = router;
     this.http = http;
 
-    console.log("constructor");
+    ConfigureClient().then(() => {
+      console.log("configured client");
+      if (isAuthenticated) {
+        GetAccessToken().then(() => {
+          console.log("received access token");
+          if (dev) {
+            import("../devdata/childrendata").then(devdata => {
+              //@ts-ignore
+              this.achievements = devdata.achievements;
+              this.TotalAchievementCount = 0;
+              if (this.achievements) {
+                this.TotalAchievementCount = this.achievements.length || 0;
+              }
 
-    if (dev) {
-      import("../devdata/childrendata").then(devdata => {
-        //@ts-ignore
-        this.achievements = devdata.achievements;
-        this.TotalAchievementCount = 0;
-        if (this.achievements) {
-          this.TotalAchievementCount = this.achievements.length || 0;
-        }
+              console.log("using dev test data for achievements");
+            });
+          } else {
+            console.log("making API call");
+            this.http
+              .fetch(`${DNS}/api/Achievements/`, {
+                method: "get",
+                headers: {
+                  Authorization: `Bearer ${token}`
+                }
+              })
+              .then(result => result.json() as Promise<IAchievements[]>)
+              .then(data => {
+                console.log("Got achievements list" + data);
+                console.log(data);
+                //@ts-ignore
+                this.achievements = data;
 
-        console.log("using dev test data for achievements");
-      });
-    } else {
-      console.log("making API call");
-      this.http
-        .fetch(`${DNS}/api/Achievements/`, {
-          method: "get",
-          credentials: "include"
-        })
-        .then(result => result.json() as Promise<IAchievements[]>)
-        .then(data => {
-          console.log("Got achievements list" + data);
-          console.log(data);
-          //@ts-ignore
-          this.achievements = data;
+                this.TotalAchievementCount = 0;
+                if (this.achievements) {
+                  this.TotalAchievementCount = this.achievements.length || 0;
+                }
 
-          this.TotalAchievementCount = 0;
-          if (this.achievements) {
-            this.TotalAchievementCount = this.achievements.length || 0;
-          }
-
-          if (this.child) {
-            this.UpdateScreen();
+                if (this.child) {
+                  this.UpdateScreen();
+                }
+              });
           }
         });
-    }
-
-    //Display the total number of achivements
+      }
+    });
   }
 }

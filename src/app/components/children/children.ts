@@ -1,6 +1,10 @@
 import { PLATFORM } from "aurelia-pal";
 import { achievements } from "./../devdata/childrendata";
-import { IMyAchievements, IAchievements, ILevelMadAchievement } from "./../../library/interfaces";
+import {
+  IMyAchievements,
+  IAchievements,
+  ILevelMadAchievement
+} from "./../../library/interfaces";
 import { LitElement, html, property, customElement } from "lit-element";
 import { GestureEventListeners } from "@polymer/polymer/lib/mixins/gesture-event-listeners";
 import * as Gestures from "@polymer/polymer/lib/utils/gestures";
@@ -11,7 +15,6 @@ import { FindAchievement } from "../../library/AchievementsCommon";
 //@ts-ignore
 import { interpolate } from "flubber";
 
-import { HttpClient } from "aurelia-fetch-client";
 import { inject, child } from "aurelia-framework";
 import { Router } from "aurelia-router";
 import "@polymer/paper-icon-button";
@@ -19,16 +22,30 @@ import "@polymer/iron-icons/iron-icons.js";
 import "@polymer/paper-button";
 import { CssAnimator } from "aurelia-animator-css";
 
-import { SignedIn, BrowniePoints, IAvailableRewards, ISuperSwat } from "../../library/interfaces";
+import {
+  SignedIn,
+  BrowniePoints,
+  IAvailableRewards,
+  ISuperSwat
+} from "../../library/interfaces";
 import "monster-creator";
 import "./circle.scss";
 import "./pulse.scss";
 import { setTimeout } from "timers";
-import { DNS, dev, SetBrowniePoints, GetBrowniePoints } from "../global";
+import {
+  DNS,
+  dev,
+  SetBrowniePoints,
+  GetBrowniePoints,
+  GetAccessToken,
+  token,
+  ConfigureClient,
+  isAuthenticated
+} from "../global";
 import { runInThisContext } from "vm";
 import { number } from "style-value-types";
 
-@inject(HttpClient, Router)
+@inject(Router)
 export class Home {
   storedChildName: string = "";
   storedReward: string = "";
@@ -42,7 +59,6 @@ export class Home {
   public showChildData: boolean = false;
   public browniePoints: Array<BrowniePoints>;
   public currentReward: string;
-  public http: HttpClient;
   public levelledUp: boolean = false;
   public loading: boolean = true;
   public router: Router;
@@ -101,9 +117,11 @@ export class Home {
     let img = event.srcElement.src.split("/");
     img = img[img.length - 1];
     console.log(img);
-    var result = await this.http.fetch(`${DNS}/api/Avatar/${child.childName}/${img}`, {
+    var result = await fetch(`${DNS}/api/Avatar/${child.childName}/${img}`, {
       method: "put",
-      credentials: "include"
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
     var data = await result.json();
     child.avatar = img;
@@ -135,13 +153,11 @@ export class Home {
     }, 10);
   }
 
-  // EditMode(child: BrowniePoints) {
-  //   this.EditReward(child);
-  //   this.editChildName(child);
-  //   this.editing = true;
-  // }
-
-  IfEnterKeySaveChangesReward($event: any, child: BrowniePoints, childreward: string) {
+  IfEnterKeySaveChangesReward(
+    $event: any,
+    child: BrowniePoints,
+    childreward: string
+  ) {
     if ($event.key == "Enter") {
       this.editingReward = false;
       this.editing = false;
@@ -151,7 +167,11 @@ export class Home {
     console.log($event);
     return true;
   }
-  LostFocusInEditChildName($event: any, child: BrowniePoints, childName: string) {
+  LostFocusInEditChildName(
+    $event: any,
+    child: BrowniePoints,
+    childName: string
+  ) {
     console.log(child.childName);
     if (child.childName == "") {
       child.childName = this.storedChildName;
@@ -190,7 +210,11 @@ export class Home {
     return true;
   }
 
-  IfEnterKeySaveChangesChildName($event: any, child: BrowniePoints, childName: string) {
+  IfEnterKeySaveChangesChildName(
+    $event: any,
+    child: BrowniePoints,
+    childName: string
+  ) {
     if ($event.key == "Enter") {
       this.editingChildName = false;
       this.editing = false;
@@ -201,18 +225,6 @@ export class Home {
     return true;
   }
 
-  // async SaveChanges(child: BrowniePoints, childName: string, childreward: string) {
-  //   console.log("save changes");
-  //   this.editing = false;
-  //   this.editingChildName = false;
-  //   this.editingReward = false;
-
-  //   let nameUpdate = this.saveChildName(child, childName);
-  //   let rewardUpdate = this.SaveReward(child, childreward);
-
-  //   await Promise.all([nameUpdate, rewardUpdate]);
-  // }
-
   async saveChildName(child: BrowniePoints, newName: string) {
     if (dev) {
       child.childName = newName;
@@ -221,16 +233,23 @@ export class Home {
     } else {
       try {
         console.log("saveChildName");
-        var result = await this.http.fetch(
+        var result = await fetch(
           `${DNS}/api/Children/EditChildName/${child.id}/${newName}`,
-          { method: "put", credentials: "include" }
+          {
+            method: "put",
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
         if (result.ok) {
           var data = await result.json();
           this.editingChildName = false;
           this.editing = false;
         } else {
-          this.DisplayError("Failed to update childName - notFound returned from server");
+          this.DisplayError(
+            "Failed to update childName - notFound returned from server"
+          );
         }
       } catch (err) {
         this.editingChildName = false;
@@ -249,9 +268,14 @@ export class Home {
       this.editing = false;
     } else {
       try {
-        var result = await this.http.fetch(
+        var result = await fetch(
           `${DNS}/api/Children/EditReward/${child.id}/${rewardDescription}`,
-          { method: "put", credentials: "include" }
+          {
+            method: "put",
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
         if (result.ok) {
           var data = await result.json();
@@ -271,69 +295,6 @@ export class Home {
     this.editingReward = false;
   }
 
-  // selectChild(child: BrowniePoints) {
-  //   if (this.currentChildPresenting) {
-  //     this.currentChildPresenting.presenting = false;
-  //   }
-  //   this.currentChildPresenting = child;
-  //   this.showingChild = child.childName;
-  //   this.currentChildPresenting.presenting = true;
-  //   this.showChildData = true;
-  //   for (var i = 0; i < Object.keys(this.browniePoints).length; i++) {
-  //     if (
-  //       this.browniePoints[i].childName == this.currentChildPresenting.childName
-  //     ) {
-  //       this.index = i;
-  //       break;
-  //     }
-  //   }
-  // }
-
-  // MoveLeft(index: number) {
-  //   console.log(index);
-  //   console.log(this.browniePoints[index - 1]);
-  //   if (index - 1 >= 0) {
-  //     if (this.currentChildPresenting) {
-  //       this.currentChildPresenting.removeForAnimation = true;
-  //       setTimeout(() => {
-  //         this.currentChildPresenting.presenting = false;
-  //       }, 1000);
-  //     }
-  //     setTimeout(() => {
-  //       this.currentChildPresenting = this.browniePoints[index - 1];
-  //       this.showingChild = this.browniePoints[index - 1].childName;
-  //       this.currentChildPresenting.presenting = true;
-  //       this.currentChildPresenting.removeForAnimation = false;
-  //       this.showChildData = true;
-  //       this.index = index - 1;
-  //     }, 1000);
-  //   } else console.log("out of range left");
-  // }
-
-  // MoveRight(index: number) {
-  //   console.log(this.browniePoints[index + 1]);
-  //   if (index + 1 < Object.keys(this.browniePoints).length) {
-  //     if (this.currentChildPresenting) {
-  //       this.currentChildPresenting.removeForAnimation = true;
-  //       setTimeout(() => {
-  //         this.currentChildPresenting.presenting = false;
-  //       }, 1000);
-  //     }
-
-  //     setTimeout(() => {
-  //       this.currentChildPresenting = this.browniePoints[index + 1];
-  //       this.showingChild = this.browniePoints[index + 1].childName;
-  //       this.currentChildPresenting.presenting = true;
-  //       this.currentChildPresenting.removeForAnimation = false;
-  //       this.showChildData = true;
-  //       this.index = index + 1;
-  //     }, 1000);
-  //   } else console.log("out of range right");
-  // }
-
-  // BackToBrowse(child: string) {
-  //   this.router.navigate(child);
-  // }
   attached() {
     let node = document.querySelector(".SnapContainer");
     console.log("node is " + node);
@@ -350,99 +311,49 @@ export class Home {
       // Not awaited so just happends in the background
       //this.achievements = GetAchievements();
     }
-
     this.scrollPos = params.scrollPos;
 
-    console.log("children activated called!!!");
+    console.log("children.ts activated called", params.id, this.browniePoints);
+    let data = GetBrowniePoints();
+    console.log("*** data now ***", data);
     if (params.id === "0") {
       let data = GetBrowniePoints();
+      console.log("**Checking data", data);
       if (data) {
         this.browniePoints = data;
+        console.log("*** we have data already ***", data);
+      } else {
+        console.log("*** calling initial load***");
+        this.InitialLoad()
+          .then(() => {
+            console.log("finished constructor");
+            this.loading = false;
+          })
+          .catch(err => {
+            if (err == "TypeError: Failed to fetch") {
+              console.log("Offline " + err);
+              this.offline = true;
+              this.loading = false;
+            } else {
+              console.log("Some error " + err);
+              this.errorHadOccurred = true;
+              this.errorMessage = err;
+              this.loading = false;
+              this.offline = false;
+            }
+          });
       }
-    } else {
-      this.InitialLoad()
-        .then(() => {
-          console.log("finished constructor");
-          this.loading = false;
-        })
-        .catch(err => {
-          if (err == "TypeError: Failed to fetch") {
-            console.log("Offline " + err);
-            this.offline = true;
-            this.loading = false;
-          } else {
-            console.log("Some error " + err);
-            this.errorHadOccurred = true;
-            this.errorMessage = err;
-            this.loading = false;
-            this.offline = false;
-          }
-        });
     }
   }
 
-  constructor(http: any, Router: Router) {
-    this.http = http;
+  constructor(Router: Router) {
     this.router = Router;
   }
-
-  public async AmISignedIn() {
-    // var result = await this.http.fetch(`${DNS}/Account/AmISignedIn`, {
-    //   method: "get",
-    //   credentials: "same-origin"
-    // });
-    // if (result.ok) {
-    //   var data = await result.json();
-    //   this.signedIn = data.signedIn;
-    //   this.signedInAs = data.signedInAs;
-    // }
-    //this.signedIn = true;
-  }
-
-  // public async CheckOnlineOrNot() {
-  //   try {
-  //     await this.InitialLoad();
-  //     console.log("configure display now");
-  //     this.ConfigureDisplay(this.browniePoints);
-  //     this.offline = false;
-  //     this.errorHadOccurred = false;
-  //   } catch (err) {
-  //     if (err == "TypeError: Failed to fetch") {
-  //       console.log("Offline " + err);
-  //       this.offline = true;
-  //       this.loading = false;
-  //     } else {
-  //       console.log("Error while adding points " + err);
-  //       this.errorHadOccurred = true;
-  //       this.errorMessage = err;
-  //       this.loading = false;
-  //       this.offline = false;
-  //     }
-  //   }
-  // }
 
   public async InitialLoad() {
     let res1;
 
-    if (!dev) {
-      // res1 = await this.http.fetch(`${DNS}/Account/AmISignedIn`, {
-      //   method: "get",
-      //   credentials: "same-origin"
-      // });
-      // data = await res1.json();
-    }
-
-    // if (dev || res1.ok) {
-    //   console.log("sign in info " + data);
-    //   //this.signedIn = dev || data.signedIn;
-    //   //this.signedInAs = dev || data.signedInAs;
-    // } else {
-    //   console.log(
-    //     "The [AmIlogged] in call failed - just assume not logged in here!"
-    //   );
-    //   this.DisplayError("Failed to check the login status");
-    // }
-
+    console.log("**calling initial load***");
     if (dev) {
       let myimport = await import("../devdata/childrendata");
       //console.log(myimport);
@@ -453,9 +364,15 @@ export class Home {
       this.loading = false;
       SetBrowniePoints(this.browniePoints);
     } else {
-      var res2 = await this.http.fetch(`${DNS}/api/Children/all`, {
+      console.log("token inside initial load", token);
+
+      await GetAccessToken();
+
+      var res2 = await fetch(`${DNS}/api/Children/all`, {
         method: "get",
-        credentials: "include"
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
 
       if (res2.ok) {
@@ -502,17 +419,15 @@ export class Home {
     let completedDays: number = 0;
     let data2: ISuperSwat;
 
-    // if (dev) {
-    //   let superswat = await FindAchievement(child, "Super Swat", dev, DNS);
-    //   superswat.progress = 100;
-    // } else {
     console.log("making call");
     try {
-      let result2 = await this.http.fetch(
+      let result2 = await fetch(
         `${DNS}/api/Achievements/GetSuperSwatAddDaySuccess/${child.id}`,
         {
           method: "get",
-          credentials: "include"
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
       );
       if (result2.ok) {
@@ -521,7 +436,8 @@ export class Home {
       } else {
         if (dev) return;
         this.errorHadOccurred = true;
-        this.errorMessage = "Failed to retrieve SuperSwat progress from server NEW";
+        this.errorMessage =
+          "Failed to retrieve SuperSwat progress from server NEW";
       }
     } catch (e) {
       if (dev) return;
@@ -558,7 +474,9 @@ export class Home {
             if (this.IsDateDiffOneDay(data2.day4Date)) {
               // Set achievement to completed!!!!!
               this.SetSuperSwatProgressLocal(child, 100);
-              this.DisplayAchievementEarned("!!! SuperSwat achievement earned !!!");
+              this.DisplayAchievementEarned(
+                "!!! SuperSwat achievement earned !!!"
+              );
               await this.AddSuperSwatSuccesServer(child, 5, now.toString());
             } else if (!this.IsSameDay(data2.day4Date)) {
               this.SetSuperSwatProgressLocal(child, 0);
@@ -569,7 +487,9 @@ export class Home {
               await this.AddSuperSwatSuccesServer(child, 4, now.toString());
               this.SetSuperSwatProgressLocal(child, 80);
               this.DisplayAchievementEarned(
-                `You've earned points on ${DisplayDaysSoFar} and ${moment(now.toString()).format(
+                `You've earned points on ${DisplayDaysSoFar} and ${moment(
+                  now.toString()
+                ).format(
                   "dddd"
                 )} Just earn some points tomorrow to achieve SuperSwat!!!`
               );
@@ -583,7 +503,9 @@ export class Home {
             await this.AddSuperSwatSuccesServer(child, 3, now.toString());
             this.SetSuperSwatProgressLocal(child, 60);
             this.DisplayAchievementEarned(
-              `You've earned points on ${DisplayDaysSoFar} and ${moment(now.toString()).format(
+              `You've earned points on ${DisplayDaysSoFar} and ${moment(
+                now.toString()
+              ).format(
                 "dddd"
               )} Just 2 more days of points to achieve SuperSwat...`
             );
@@ -597,7 +519,9 @@ export class Home {
           await this.AddSuperSwatSuccesServer(child, 2, now.toString());
           this.SetSuperSwatProgressLocal(child, 40);
           this.DisplayAchievementEarned(
-            `You've earned points on ${DisplayDaysSoFar} and ${moment(now.toString()).format(
+            `You've earned points on ${DisplayDaysSoFar} and ${moment(
+              now.toString()
+            ).format(
               "dddd"
             )} Just 3 more days of points to achieve SuperSwat...`
           );
@@ -656,14 +580,20 @@ export class Home {
     }
   }
 
-  async AddSuperSwatSuccesServer(child: BrowniePoints, day: number, date: string) {
+  async AddSuperSwatSuccesServer(
+    child: BrowniePoints,
+    day: number,
+    date: string
+  ) {
     console.log("making call to add a new success day");
     let now = moment().format("YYYYMMDD");
-    let result = await this.http.fetch(
+    let result = await fetch(
       `${DNS}/api/Achievements/SuperSwatAddDaySuccess/${child.id}/${day}/${now}`,
       {
         method: "get",
-        credentials: "include"
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
     );
   }
@@ -671,11 +601,13 @@ export class Home {
   async ResetSuperSwatSuccesServer(child: BrowniePoints) {
     console.log("making call to add a new success day");
     try {
-      let result = await this.http.fetch(
+      let result = await fetch(
         `${DNS}/api/Achievements/ResetSuperSwatAddDaySuccess/${child.id}`,
         {
           method: "get",
-          credentials: "include"
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
       );
       if (!result.ok) {
@@ -711,30 +643,35 @@ export class Home {
       } else {
         SetBrowniePoints(this.browniePoints);
 
-        let result = await this.http.fetch(
+        let result = await fetch(
           `${DNS}/api/Achievements/SetAchivementProgress/${child.id}/${mega.achievementsID}/100`,
           {
             method: "get",
-            credentials: "include"
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
           }
         );
       }
     }
   }
 
-  public async SetLevelMadMyAchievementsProgressServer(child: BrowniePoints, progress: number) {
+  public async SetLevelMadMyAchievementsProgressServer(
+    child: BrowniePoints,
+    progress: number
+  ) {
     let myLevelMad = await FindAchievement(child, "Level Mad", dev, DNS);
     myLevelMad.progress = progress;
 
     SetBrowniePoints(this.browniePoints);
 
-    let result = await this.http.fetch(
-      `${DNS}/api/Achievements/SetAchivementProgress/${child.id}/${
-        myLevelMad.achievementsID
-      }/${progress}`,
+    let result = await fetch(
+      `${DNS}/api/Achievements/SetAchivementProgress/${child.id}/${myLevelMad.achievementsID}/${progress}`,
       {
         method: "get",
-        credentials: "include"
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
     );
   }
@@ -750,15 +687,19 @@ export class Home {
   async SetLevelMadProgressServer(child: BrowniePoints) {
     let now = moment().format("YYYYMMDD");
 
-    let result = await this.http.fetch(
+    let result = await fetch(
       `${DNS}/api/Achievements/SetLevelMadProgressServer/${child.id}/${now}`,
       {
         method: "Get",
-        credentials: "include"
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
     );
     if (result.ok) {
-      console.log("Set levelup for today- if we see another then complete this achievement");
+      console.log(
+        "Set levelup for today- if we see another then complete this achievement"
+      );
     } else {
       this.errorHadOccurred = true;
       this.errorMessage = "Failed to update level to server..";
@@ -786,11 +727,13 @@ export class Home {
       }
     } else {
       try {
-        let result = await this.http.fetch(
+        let result = await fetch(
           `${DNS}/api/Achievements/GetLevelMadProgress/${child.id}`,
           {
             method: "Get",
-            credentials: "include"
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
           }
         );
         if (result.ok) {
@@ -798,7 +741,10 @@ export class Home {
 
           if (item) {
             let data = (await result.json()) as ILevelMadAchievement;
-            if (data.dateOfLevelCompletion1 === null || data.dateOfLevelCompletion1 === undefined) {
+            if (
+              data.dateOfLevelCompletion1 === null ||
+              data.dateOfLevelCompletion1 === undefined
+            ) {
               this.SetLevelMadProgressServer(child);
               this.SetLevelMadMyAchievementsProgressServer(child, 50);
               item.progress = 50;
@@ -823,7 +769,9 @@ export class Home {
             console.log("printing Level Mad details");
             console.log(data);
           } else {
-            console.log("Warning - could not find levelMAd achievement to update");
+            console.log(
+              "Warning - could not find levelMAd achievement to update"
+            );
           }
         } else {
           this.errorHadOccurred = true;
@@ -836,7 +784,7 @@ export class Home {
     }
   }
 
-  CheckIfLevelCompleted(child: BrowniePoints) {
+  async CheckIfLevelCompleted(child: BrowniePoints) {
     if (child.points >= child.pointsNeeded) {
       this.CheckLevelMadAchievement(child);
 
@@ -860,11 +808,13 @@ export class Home {
         this.router.navigate(`/levelup/${child.id}/${scrollPos}`);
       } else {
         let scrollPos = this.getScrollPos();
-        this.http
-          .fetch(`${DNS}/api/PointsData/LevelUp/${child.id}`, {
-            method: "Get",
-            credentials: "include"
-          })
+        await GetAccessToken();
+        fetch(`${DNS}/api/PointsData/LevelUp/${child.id}`, {
+          method: "Get",
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
           .then(result => {
             if (!result.ok) {
               this.errorHadOccurred = true;
@@ -933,11 +883,12 @@ export class Home {
         this.showingAvailableRewards = false;
       }
     }
-    this.http
-      .fetch(`${DNS}/api/AvailableRewards/SetRewardToUsed/${availableReward.id}`, {
-        method: "put",
-        credentials: "include"
-      })
+    fetch(`${DNS}/api/AvailableRewards/SetRewardToUsed/${availableReward.id}`, {
+      method: "put",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
       .then(result => result.json() as Promise<BrowniePoints[]>)
       .then(data => {
         console.log(data);
@@ -1109,7 +1060,9 @@ export class Home {
 
     if (child.pendingAdds === 0) {
       setTimeout(() => {
-        console.log("making call to server to update with points " + child.pendingAdds);
+        console.log(
+          "making call to server to update with points " + child.pendingAdds
+        );
         // perform the add now
         this.incrementCounterInternal(child, child.pendingAdds);
 
@@ -1139,9 +1092,16 @@ export class Home {
 
       //swReg.sync.register(UpdateScoreDataString);
 
-      var result = await this.http.fetch(
+      await GetAccessToken();
+
+      var result = await fetch(
         `${DNS}/api/PointsData/AddBrowniePointExtra/${child.id}/${amount}`,
-        { method: "Get", credentials: "include" }
+        {
+          method: "Get",
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
       );
       if (result.ok) {
         console.log("successfully added");

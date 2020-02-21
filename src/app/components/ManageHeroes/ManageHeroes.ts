@@ -1,15 +1,25 @@
 import { Router } from "aurelia-router";
 import { inject } from "aurelia-framework";
-import { HttpClient } from "aurelia-fetch-client";
-import { Parent, SignedIn, BrowniePoints, IAvailableRewards } from "../../library/interfaces";
-import { DNS, dev } from "../global";
+import {
+  Parent,
+  SignedIn,
+  BrowniePoints,
+  IAvailableRewards
+} from "../../library/interfaces";
+import {
+  DNS,
+  dev,
+  GetAccessToken,
+  isAuthenticated,
+  token,
+  ConfigureClient
+} from "../global";
 import "@polymer/paper-button";
 import "@polymer/paper-input/paper-input.js";
 
-@inject(Router, HttpClient)
+@inject(Router)
 export class ManageHeroes {
   router: Router;
-  http: HttpClient;
   parent: Parent;
   registeredKids: Array<BrowniePoints>;
   newChildName: string;
@@ -25,6 +35,25 @@ export class ManageHeroes {
     this.router.navigate("/welcome");
   }
 
+  async activate() {
+    await GetAccessToken();
+
+    console.log(token)
+
+    fetch(`${DNS}/api/Children/all`, {
+      method: "get",
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    })
+      .then(result => result.json() as Promise<BrowniePoints[]>)
+      .then(data => {
+        this.registeredKids = data;
+        console.log(data);
+      });
+
+  }
+
   async RemoveChild(child: BrowniePoints) {
     if (this.registeredKids.length > 1) {
       for (var i = 0; i < this.registeredKids.length; i++) {
@@ -38,9 +67,11 @@ export class ManageHeroes {
     console.dir(child);
     this.attemptingDelete = true;
     try {
-      var result = await this.http.fetch(`${DNS}/api/Children/${child.id}`, {
+      var result = await fetch(`${DNS}/api/Children/${child.id}`, {
         method: "delete",
-        credentials: "include"
+        headers: {
+          authorization: `Bearer ${token}`
+        }
       });
       if (result.ok) {
         var data = await result.json();
@@ -93,8 +124,6 @@ export class ManageHeroes {
     //@ts-ignore
     this.newChildName = username.value;
 
-    // console.log(this.myusername)
-
     console.log("adding new child " + this.newChildName);
 
     try {
@@ -103,9 +132,13 @@ export class ManageHeroes {
         this.errorMessage = "Name must be greater than 3 characters";
         this.loading = false;
       } else {
-        var result = await this.http.fetch(`${DNS}/api/Children/${this.newChildName}`, {
+        GetAccessToken();
+
+        var result = await fetch(`${DNS}/api/Children/${this.newChildName}`, {
           method: "post",
-          credentials: "include"
+          headers: {
+            authorization: `Bearer ${token}`
+          }
         });
         if (result.ok) {
           var data = await result.json();
@@ -125,19 +158,7 @@ export class ManageHeroes {
     }
   }
 
-  constructor(router: Router, http: HttpClient) {
+  constructor(router: Router) {
     this.router = router;
-    this.http = http;
-
-    http
-      .fetch(`${DNS}/api/Children/all`, {
-        method: "get",
-        credentials: "include"
-      })
-      .then(result => result.json() as Promise<BrowniePoints[]>)
-      .then(data => {
-        this.registeredKids = data;
-        console.log(data);
-      });
   }
 }
