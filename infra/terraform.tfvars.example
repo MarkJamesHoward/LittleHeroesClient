@@ -1,0 +1,4 @@
+resource_group_name = "rg-littleheroes"
+location            = "newzealandnorth"
+app_name            = "littleheroesclient"
+github_repo         = "MarkJamesHoward/LittleHeroesClient"

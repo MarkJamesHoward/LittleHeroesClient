@@ -5,7 +5,7 @@ import * as auth_config from "./auth_config.json";
 // let DNS: string = "https://dojopoints.azurewebsites.net";
 //let DNS: string = "https://littleheroes-api.azurewebsites.net";
 //let DNS: string = "https://api.littleheroes.online";
-let DNS: string = "http://localhost:53068";
+let DNS: string = "https://littleheroesapi.azurewebsites.net";
 let dev: boolean = false;
 let token: string = "";
 let auth0: any;
