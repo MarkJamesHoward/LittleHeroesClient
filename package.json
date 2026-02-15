@@ -27,7 +27,6 @@
     "popmotion": "^8.4.0",
     "unique-names-generator": "^2.0.2"
   },
-  "peerDependencies": {},
   "devDependencies": {
     "@types/bluebird": "^3.5.24",
     "@types/lodash": "^4.14.117",
@@ -52,10 +51,10 @@
     "json-loader": "^0.5.7",
     "mini-css-extract-plugin": "^0.4.3",
     "minimatch": "^3.0.4",
-    "node-sass": "^4.11.0",
     "nps": "^5.9.3",
     "nps-utils": "^1.7.0",
     "opn": "^5.4.0",
+    "sass": "^1.97.3",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "through2": "^2.0.3",

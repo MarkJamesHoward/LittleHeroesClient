@@ -23,11 +23,11 @@ module.exports = {
         development: {
           default: series(
             'nps webpack.build.before',
-            'webpack --progress -d'
+            crossEnv('NODE_OPTIONS=--openssl-legacy-provider webpack --progress -d')
           ),
           extractCss: series(
             'nps webpack.build.before',
-            'webpack --progress -d --env.extractCss'
+            crossEnv('NODE_OPTIONS=--openssl-legacy-provider webpack --progress -d --env.extractCss')
           ),
           serve: series.nps(
             'webpack.build.development',
@@ -37,11 +37,11 @@ module.exports = {
         production: {
           inlineCss: series(
             'nps webpack.build.before',
-            crossEnv('NODE_ENV=production webpack --progress -p --env.production')
+            crossEnv('NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=production webpack --progress -p --env.production')
           ),
           default: series(
             'nps webpack.build.before',
-            crossEnv('NODE_ENV=production webpack --progress -p --env.production --env.extractCss')
+            crossEnv('NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=production webpack --progress -p --env.production --env.extractCss')
           ),
           serve: series.nps(
             'webpack.build.production',
@@ -50,9 +50,9 @@ module.exports = {
         }
       },
       server: {
-        default: `webpack-dev-server -d --devtool '#source-map' --inline --env.server`,
-        extractCss: `webpack-dev-server -d --devtool '#source-map' --inline --env.server --env.extractCss`,
-        hmr: `webpack-dev-server -d --devtool '#source-map' --inline --hot --env.server`
+        default: crossEnv(`NODE_OPTIONS=--openssl-legacy-provider webpack-dev-server -d --devtool '#source-map' --inline --env.server`),
+        extractCss: crossEnv(`NODE_OPTIONS=--openssl-legacy-provider webpack-dev-server -d --devtool '#source-map' --inline --env.server --env.extractCss`),
+        hmr: crossEnv(`NODE_OPTIONS=--openssl-legacy-provider webpack-dev-server -d --devtool '#source-map' --inline --hot --env.server`)
       },
     },
     serve: 'http-server dist --cors',
