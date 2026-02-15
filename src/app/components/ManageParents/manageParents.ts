@@ -1,12 +1,10 @@
-import { Router } from 'aurelia-router';
-import { inject } from 'aurelia-framework';
-import { HttpClient } from 'aurelia-fetch-client';
+import { resolve } from '@aurelia/kernel';
+import { IHttpClient } from '@aurelia/fetch-client';
 import { Parent, BrowniePoints } from '../../library/interfaces';
 
 
-@inject(HttpClient)
 export class ManageParents {
-    http: HttpClient;
+    private http = resolve(IHttpClient);
     parent: Parent;
     registeredKids: Array<BrowniePoints>;
     addingChildActivated: boolean = false;
@@ -85,9 +83,7 @@ export class ManageParents {
         this.loading = false;
     }
 
-    constructor(http: HttpClient) {
-        this.http = http;
-
+    constructor() {
         //http.fetch('api/Setup/', { method: 'get', credentials: 'same-origin' })
         //    .then(result => result.json() as Promise<Parent>)
         //    .then(data => {

@@ -1,12 +1,8 @@
-import "@polymer/paper-progress/paper-progress.js";
-import { inject } from "aurelia-framework";
-import { Router } from "aurelia-router";
-import { HttpClient } from "aurelia-fetch-client";
-import "@polymer/paper-button";
+import { IRouter } from '@aurelia/router-lite';
+import { resolve } from '@aurelia/kernel';
 
-@inject(Router)
 export class Unlock {
-  router: Router;
+  private router = resolve(IRouter);
 
   UnlockEyes1 = 1;
   UnlockEyes2 = 5;
@@ -50,10 +46,10 @@ export class Unlock {
   level: number = 0;
 
   Continue() {
-    this.router.navigate(`/children/0/${this.scrollPos}`);
+    this.router.load(`/children/0/${this.scrollPos}`);
   }
 
-  activate(params: any) {
+  loading(params: any) {
     this.scrollPos = params.scrollPos;
 
     let foundOne = false;
@@ -126,9 +122,5 @@ export class Unlock {
     if (!foundOne) {
       this.Continue();
     }
-  }
-
-  constructor(router: Router) {
-    this.router = router;
   }
 }

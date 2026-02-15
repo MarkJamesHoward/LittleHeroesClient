@@ -1,21 +1,20 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
-    "target": "es2015",
+    "target": "es2022",
     "module": "esnext",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "sourceRoot": "src",
     "sourceMap": true,
-    "allowJs": true,
-    "baseUrl": "src",
     "skipLibCheck": true,
-    "lib": ["es2017", "dom"]
+    "strict": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": false,
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "baseUrl": "src",
+    "paths": {
+      "@app/*": ["app/*"]
+    }
   },
-  "include": ["./src/**/*.ts", "./test/**/*.ts", "./custom_typings/**/*.d.ts"],
-  "atom": {
-    "rewriteTsconfig": false
-  }
+  "include": ["src/**/*.ts"]
 }

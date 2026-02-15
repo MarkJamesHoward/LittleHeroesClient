@@ -1,6 +1,5 @@
-<template>
-  <require from="./unlock.css"></require>
-  
+  <import from="./unlock.css" />
+
   <div class="au-animate UnlockFadeIn UnlockFadeOut VerticalList">
 
     <div>
@@ -33,7 +32,7 @@
         ID="EyesID4"
         src="../../../../images/eyes/eyes4.png"
       />
-  
+
       <img
         class="${UnlockMouth1Visible ? '' : 'hidden'}"
         ID="MouthID1"
@@ -54,7 +53,7 @@
         ID="MouthID1"
         src="../../../../images/mouths/mouth1.png"
       />
-  
+
       <img
         class="${UnlockLegs1Visible ? '' : 'hidden'}"
         ID="LegsID1"
@@ -75,7 +74,7 @@
         ID="LegsID4"
         src="../../../../images/legs/Legs4.png"
       />
-  
+
         <svg width="200" height="200" viewBox="0 0 200 200"  class="${UnlockSilhouette2Visible ? '' : 'hidden'}" ID="Silhouette2">
           <path
             style="fill:#13a306;fill-opacity:1;stroke-width:0.56993049"
@@ -97,9 +96,8 @@
         </svg>
 
     </div>
-  
-    <paper-button class="Continue" raised click.trigger="Continue()">
+
+    <button class="btn Continue" click.trigger="Continue()">
       Continue
-    </paper-button>
+    </button>
   </div>
-</template>

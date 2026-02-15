@@ -1,37 +1,17 @@
-import { PLATFORM } from "aurelia-pal";
-import { achievements } from "./../devdata/childrendata";
+import { resolve } from '@aurelia/kernel';
+import { IRouter } from '@aurelia/router-lite';
 import {
-  IMyAchievements,
   IAchievements,
-  ILevelMadAchievement
-} from "./../../library/interfaces";
-import { LitElement, html, property, customElement } from "lit-element";
-import { GestureEventListeners } from "@polymer/polymer/lib/mixins/gesture-event-listeners";
-import * as Gestures from "@polymer/polymer/lib/utils/gestures";
-import { tween, styler, easing } from "popmotion";
-import * as moment from "moment";
-import { FindAchievement } from "../../library/AchievementsCommon";
-
-//@ts-ignore
-import { interpolate } from "flubber";
-
-import { inject, child } from "aurelia-framework";
-import { Router } from "aurelia-router";
-import "@polymer/paper-icon-button";
-import "@polymer/iron-icons/iron-icons.js";
-import "@polymer/paper-button";
-import { CssAnimator } from "aurelia-animator-css";
-
-import {
-  SignedIn,
+  ILevelMadAchievement,
   BrowniePoints,
   IAvailableRewards,
   ISuperSwat
-} from "../../library/interfaces";
+} from "./../../library/interfaces";
+import moment from "moment";
+import { FindAchievement } from "../../library/AchievementsCommon";
 import "monster-creator";
 import "./circle.scss";
 import "./pulse.scss";
-import { setTimeout } from "timers";
 import {
   DNS,
   dev,
@@ -39,14 +19,13 @@ import {
   GetBrowniePoints,
   GetAccessToken,
   token,
-  ConfigureClient,
-  isAuthenticated
 } from "../global";
-import { runInThisContext } from "vm";
-import { number } from "style-value-types";
+import clickSound from "../../sounds/click.mp3";
+import bellSound from "../../sounds/bell.mp3";
+import failSound from "../../sounds/fail.mp3";
+import whistleSound from "../../sounds/whistle.mp3";
 
-@inject(Router)
-export class Home {
+export class Children {
   storedChildName: string = "";
   storedReward: string = "";
   scrollPos: number = 0;
@@ -60,8 +39,8 @@ export class Home {
   public browniePoints: Array<BrowniePoints>;
   public currentReward: string;
   public levelledUp: boolean = false;
-  public loading: boolean = true;
-  public router: Router;
+  public isLoading: boolean = true;
+  private router = resolve(IRouter);
   public signedIn: boolean = false;
   public signedInAs: string;
   public errorMessage: string;
@@ -88,9 +67,9 @@ export class Home {
   countdown: number = -1;
   BonusBallRunning: boolean = false;
 
-  Home() {
+  goHome() {
     console.log("home");
-    this.router.navigate(`welcome`);
+    this.router.load(`welcome`);
   }
 
   getScrollPos() {
@@ -102,10 +81,10 @@ export class Home {
     console.log("display pet " + child.childName);
     SetBrowniePoints(this.browniePoints);
     const sound = new Audio();
-    sound.src = require("../../sounds/click.mp3");
+    sound.src = clickSound;
     sound.play();
     let scrollPos = this.getScrollPos();
-    this.router.navigate(`pet/${child.id}/${scrollPos}`);
+    this.router.load(`pet/${child.id}/${scrollPos}`);
   }
 
   EditAvatar(child: BrowniePoints) {
@@ -306,7 +285,21 @@ export class Home {
     }
   }
 
-  async activate(params) {
+  scrollPrev() {
+    const container = document.querySelector(".SnapContainer");
+    if (container) {
+      container.scrollBy({ left: -window.innerWidth, behavior: 'smooth' });
+    }
+  }
+
+  scrollNext() {
+    const container = document.querySelector(".SnapContainer");
+    if (container) {
+      container.scrollBy({ left: window.innerWidth, behavior: 'smooth' });
+    }
+  }
+
+  async loading(params) {
     if (!this.achievements) {
       // Not awaited so just happends in the background
       //this.achievements = GetAchievements();
@@ -327,18 +320,18 @@ export class Home {
         this.InitialLoad()
           .then(() => {
             console.log("finished constructor");
-            this.loading = false;
+            this.isLoading = false;
           })
           .catch(err => {
             if (err == "TypeError: Failed to fetch") {
               console.log("Offline " + err);
               this.offline = true;
-              this.loading = false;
+              this.isLoading = false;
             } else {
               console.log("Some error " + err);
               this.errorHadOccurred = true;
               this.errorMessage = err;
-              this.loading = false;
+              this.isLoading = false;
               this.offline = false;
             }
           });
@@ -346,8 +339,7 @@ export class Home {
     }
   }
 
-  constructor(Router: Router) {
-    this.router = Router;
+  constructor() {
   }
 
   public async InitialLoad() {
@@ -361,7 +353,7 @@ export class Home {
       //@ts-ignore
       this.achievements = myimport.achievements;
       this.currentCount = 3; //myimport.length;
-      this.loading = false;
+      this.isLoading = false;
       SetBrowniePoints(this.browniePoints);
     } else {
       console.log("token inside initial load", token);
@@ -375,14 +367,17 @@ export class Home {
         }
       });
 
+      console.log("API response status:", res2.status, res2.statusText);
       if (res2.ok) {
         this.browniePoints = await res2.json();
+        console.log("browniePoints received:", this.browniePoints);
         SetBrowniePoints(this.browniePoints);
-        //console.log("set globalbrownie points");
-        //console.log(this.browniePoints);
 
         this.currentCount = Object.keys(this.browniePoints).length;
+        console.log("currentCount:", this.currentCount);
       } else {
+        const errorBody = await res2.text();
+        console.error("API error:", errorBody);
         this.DisplayError("Unable to retrieve children");
       }
     }
@@ -805,7 +800,7 @@ export class Home {
       if (dev) {
         child.availableRewards.push(reward);
         let scrollPos = this.getScrollPos();
-        this.router.navigate(`/levelup/${child.id}/${scrollPos}`);
+        this.router.load(`/levelup/${child.id}/${scrollPos}`);
       } else {
         let scrollPos = this.getScrollPos();
         await GetAccessToken();
@@ -827,23 +822,23 @@ export class Home {
           });
 
         child.availableRewards.push(reward);
-        this.router.navigate(`/levelup/${child.id}/${scrollPos}`);
+        this.router.load(`/levelup/${child.id}/${scrollPos}`);
       }
     }
   }
 
   public DisplayWaitingIcon() {
-    this.loading = true;
+    this.isLoading = true;
   }
 
   public HideWaitingIcon() {
-    this.loading = false;
+    this.isLoading = false;
   }
 
   public ViewAvailableRewards() {
     this.showingAvailableRewards = !this.showingAvailableRewards;
     const sound = new Audio();
-    sound.src = require("../../sounds/click.mp3");
+    sound.src = clickSound;
     sound
       .play()
       .then(() => {
@@ -856,9 +851,9 @@ export class Home {
 
   public ViewAchievements(child: BrowniePoints) {
     let scrollPos = this.getScrollPos();
-    this.router.navigate(`achievements/${child.id}/${scrollPos}`);
+    this.router.load(`achievements/${child.id}/${scrollPos}`);
     const sound = new Audio();
-    sound.src = require("../../sounds/click.mp3");
+    sound.src = clickSound;
     sound
       .play()
       .then(_ => {
@@ -898,7 +893,7 @@ export class Home {
   public ViewPoints() {
     this.showingAvailableRewards = false;
     const sound = new Audio();
-    sound.src = require("../../sounds/click.mp3");
+    sound.src = clickSound;
     sound
       .play()
       .then(() => {
@@ -912,7 +907,7 @@ export class Home {
   public async incrementCounter(child: BrowniePoints) {
     this.combineAdds(child, 1);
     const sound = new Audio();
-    sound.src = require("../../sounds/bell.mp3");
+    sound.src = bellSound;
     try {
       let result = await sound.play();
     } catch (e) {
@@ -924,7 +919,7 @@ export class Home {
   public async DeductCounter(child: BrowniePoints) {
     this.combineAdds(child, -1);
     const sound = new Audio();
-    sound.src = require("../../sounds/fail.mp3");
+    sound.src = failSound;
     sound
       .play()
       .then(() => {
@@ -938,7 +933,7 @@ export class Home {
   public async incrementCounterExtra(child: BrowniePoints) {
     this.combineAdds(child, 10);
     const sound = new Audio();
-    sound.src = require("../../sounds/whistle.mp3");
+    sound.src = whistleSound;
     sound
       .play()
       .then(() => {
@@ -1116,12 +1111,12 @@ export class Home {
       if (err == "TypeError: Failed to fetch") {
         console.log("Offline " + err);
         this.offline = true;
-        this.loading = false;
+        this.isLoading = false;
       } else {
         console.log("Error while adding points " + err);
         this.errorHadOccurred = true;
         this.errorMessage = err;
-        this.loading = false;
+        this.isLoading = false;
       }
     }
   }

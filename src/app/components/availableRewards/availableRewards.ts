@@ -1,5 +1,5 @@
-import { inject } from "aurelia-framework";
-import { Router } from "aurelia-router";
+import { resolve } from '@aurelia/kernel';
+import { IRouter } from '@aurelia/router-lite';
 import {
   SignedIn,
   BrowniePoints,
@@ -8,7 +8,6 @@ import {
 import { GetAccessToken, token, ConfigureClient } from "../global.ts";
 import { isAuthenticated } from "../global";
 
-@inject(Router)
 export class AvailableRewards {
   public currentCount: number = 0;
   public showingChild: string;
@@ -16,12 +15,12 @@ export class AvailableRewards {
   public showChildData: boolean = false;
   public browniePoints: Array<BrowniePoints>;
   public currentReward: string;
-  public loading: boolean = true;
-  public router: Router;
+  public isLoading: boolean = true;
+  private router = resolve(IRouter);
   public signedIn: boolean = false;
   public signedInAs: string;
 
-  public activate(params: any, routeData: any) {
+  public loading(params: any, routeData: any) {
     console.log(routeData.name);
 
     //Pick this child as the active display
@@ -38,7 +37,7 @@ export class AvailableRewards {
   }
 
   BackToBrowse(child: string) {
-    this.router.navigate(child);
+    this.router.load(child);
   }
 
   public DetermineReward() {
@@ -49,9 +48,7 @@ export class AvailableRewards {
     }
   }
 
-  constructor(Router: Router) {
-    this.router = Router;
-
+  constructor() {
     ConfigureClient().then(() => {
       console.log("completed Auth0 configure client");
       if (isAuthenticated) {
@@ -69,7 +66,7 @@ export class AvailableRewards {
               this.browniePoints = data;
               this.currentCount = Object.keys(this.browniePoints).length;
               console.log(data);
-              this.loading = false;
+              this.isLoading = false;
             });
         });
       }

@@ -1,10 +1,7 @@
-import { BrowniePoints } from "./../library/interfaces";
-import createAuth0Client from "@auth0/auth0-spa-js";
-import * as auth_config from "./auth_config.json";
+import { BrowniePoints } from "../library/interfaces";
+import { createAuth0Client } from "@auth0/auth0-spa-js";
+import auth_config from "./auth_config.json";
 
-// let DNS: string = "https://dojopoints.azurewebsites.net";
-//let DNS: string = "https://littleheroes-api.azurewebsites.net";
-//let DNS: string = "https://api.littleheroes.online";
 let DNS: string = "https://littleheroesapi.azurewebsites.net";
 let dev: boolean = false;
 let token: string = "";
@@ -13,12 +10,14 @@ let isAuthenticated: boolean = false;
 let username: string = "";
 
 interface LoadData {
-  firstLoad;
+  firstLoad: boolean;
 }
 
 async function GlobalLogout() {
   auth0.logout({
-    returnTo: window.location.origin
+    logoutParams: {
+      returnTo: window.location.origin,
+    },
   });
 }
 
@@ -29,7 +28,11 @@ async function CheckIfAuthenticated() {
 async function GlobalLogin() {
   console.log("attempting login");
 
-  await auth0.loginWithRedirect({ redirect_uri: window.location.origin });
+  await auth0.loginWithRedirect({
+    authorizationParams: {
+      redirect_uri: window.location.origin,
+    },
+  });
 
   isAuthenticated = await auth0.isAuthenticated();
   console.log("Authenticated", isAuthenticated);
@@ -45,7 +48,6 @@ async function GlobalLogin() {
 
 async function GetAccessToken() {
   if (auth0) {
-    // Get the access token from the Auth0 client
     token = await auth0.getTokenSilently();
   } else {
     await ConfigureClient();
@@ -57,8 +59,10 @@ async function GetAccessToken() {
 async function ConfigureClient() {
   auth0 = await createAuth0Client({
     domain: auth_config.domain,
-    client_id: auth_config.clientId,
-    audience: auth_config.audience
+    clientId: auth_config.clientId,
+    authorizationParams: {
+      audience: auth_config.audience,
+    },
   });
   console.log("Completed Configure Client");
 }
@@ -71,7 +75,7 @@ function GetBrowniePoints() {
   return globalBrowniePoints;
 }
 
-function SetBrowniePoints(bp) {
+function SetBrowniePoints(bp: Array<BrowniePoints>) {
   globalBrowniePoints = bp;
 }
 
@@ -89,5 +93,5 @@ export {
   GlobalLogin,
   GlobalLogout,
   username,
-  CheckIfAuthenticated
+  CheckIfAuthenticated,
 };

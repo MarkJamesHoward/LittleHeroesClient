@@ -1,174 +1,168 @@
-<template>
+<style>
+    /** {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }*/
 
-    <style>
-        /** {
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-        }*/
+    html {
+        font-size: calc(10px + 1vw);
+        box-sizing: border-box;
+    }
 
-        html {
-            font-size: calc(10px + 1vw);
-            box-sizing: border-box;
-        }
+    .availableRewardName{
+           font-size: 1rem;
+    }
 
-        .availableRewardName{
-               font-size: 1rem;
-        }
-        
+    .myContainer {
+        position: relative;
+        box-sizing: border-box;
+        height: 100vh;
+        /*border: 10px solid red;*/
+        display: grid;
+        grid-template-rows: 30% 30% 40%;
+        justify-content: center;
+        position: relative;
+    }
+
+    .nameTitle {
+        text-align: center;
+        font-size: 4rem;
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+
+    .DojoButton {
+        /*min-width: 25rem;*/
+        font-size: 1.5rem;
+        margin-top: 0.2rem;
+        display: block;
+        margin: 2px;
+    }
+
+    .level {
+        color: orange;
+        font-size: 1rem;
+    }
+
+    .points {
+        color: orange;
+        font-size: 2rem;
+        text-align: center;
+        margin-top: 0;
+        text-shadow: 2px 2px 5px #000000 ;
+    }
+
+    .levelUp {
+        display: block;
+    }
+
+    .Loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        opacity: 0.8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 8rem;
+    }
+
+    #kidPicture {
+        width: 200px;
+    }
+
+    .FirstRow {
+        grid-row: 1/2;
+    }
+
+    .AvailableRewardsRow {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+
+    .Buttons {
+        grid-row: 3/4;
+    }
+
+    @media screen and (max-width: 768px ) {
         .myContainer {
-            position: relative;
-            box-sizing: border-box;
-            height: 100vh;
-            /*border: 10px solid red;*/
-            display: grid;
-            grid-template-rows: 30% 30% 40%;
-            justify-content: center;
-            position: relative;
+            height: 90vh;
         }
+    }
 
-        .nameTitle {
-            text-align: center;
-            font-size: 4rem;
-            margin-bottom: 0;
-            margin-top: 0;
-        }
+    .childSelection button {
+        margin: 10px;
+        font-size: 3rem;
+    }
+</style>
 
-        .DojoButton {
-            /*min-width: 25rem;*/
-            font-size: 1.5rem;
-            margin-top: 0.2rem;
-            display: block;
-            margin: 2px;
-        }
-
-        .level {
-            color: orange;
-            font-size: 1rem;
-        }
-
-        .points {
-            color: orange;
-            font-size: 2rem;
-            text-align: center;
-            margin-top: 0;
-            text-shadow: 2px 2px 5px #000000 ;
-        }
-
-        .levelUp {
-            display: block;
-        }
-
-        .Loading {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 100;
-            opacity: 0.8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 8rem;
-        }
-
-        #kidPicture {
-            width: 200px;
-        }
-
-        .FirstRow {
-            grid-row: 1/2;
-        }
-
-        .AvailableRewardsRow {
-          display:flex;
-          align-items:center;
-          justify-content:space-between;
-        }
-
-
-        .Buttons {
-            grid-row: 3/4;
-        }
-
-        @media screen and (max-width: 768px ) {
-            .myContainer {
-                height: 90vh;
-            }
-        }
-
-        .childSelection button {
-            margin: 10px;
-            font-size: 3rem;
-        }
-    </style>
-
-    <div show.bind="levelledUp">
-        <div class="center">
-            <h1>
-                You Levelled Up!
-            </h1>
-            <button class="btn btn-primary btn-lg " click.delegate="CloseLevelUp()">Continue</button>
-        </div>    
+<div show.bind="levelledUp">
+    <div class="center">
+        <h1>
+            You Levelled Up!
+        </h1>
+        <button class="btn btn-primary btn-lg " click.trigger="CloseLevelUp()">Continue</button>
     </div>
+</div>
 
-    <div if.bind="!showChildData" class="childSelection">
-        <h2 style="text-align:center">Select the child to view</h2>
+<div if.bind="!showChildData" class="childSelection">
+    <h2 style="text-align:center">Select the child to view</h2>
 
-        <div style="display:flex;justify-content:center;align-items: center;flex-wrap: wrap">
-            <div repeat.for="child of browniePoints">
-                <button click.delegate="selectChild(child)" class="dojobutton btn btn-primary">${child.childName}</button>
-            </div>
-        </div>
-    </div>
-
-    <div if.bind="!loading">
-
+    <div style="display:flex;justify-content:center;align-items: center;flex-wrap: wrap">
         <div repeat.for="child of browniePoints">
+            <button click.trigger="selectChild(child)" class="dojobutton btn btn-primary">${child.childName}</button>
+        </div>
+    </div>
+</div>
 
-            <div if.bind="child.presenting" class="myContainer">
+<div if.bind="!loading">
 
-                <div if.bind="!$first" style="font-size: 4rem;position:absolute;
-                    top:5px;left:5px;cursor:pointer;"
-                     click.delegate="MoveLeft($index)">
-                    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center">
-                        <div class="glyphicon glyphicon-circle-arrow-left "></div>
-                        <span style="font-size:0.5rem;"> switch to ${browniePoints[$index-1].childName}</span>
-                    </div>
+    <div repeat.for="child of browniePoints">
+
+        <div if.bind="child.presenting" class="myContainer">
+
+            <div if.bind="!$first" style="font-size: 4rem;position:absolute;
+                top:5px;left:5px;cursor:pointer;"
+                 click.trigger="MoveLeft($index)">
+                <div style="display:flex;flex-direction:column;justify-content:center;align-items:center">
+                    <div class="glyphicon glyphicon-circle-arrow-left "></div>
+                    <span style="font-size:0.5rem;"> switch to ${browniePoints[$index-1].childName}</span>
                 </div>
-
-                <div show.bind="!$last" style="font-size: 4rem;position:absolute;
-                    top:5px;right:5px;cursor:pointer;"
-                     click.delegate="MoveRight($index)">
-                    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center">
-                        <div class="glyphicon glyphicon-circle-arrow-right "></div>
-                        <span style="font-size:0.5rem;"> switch to ${browniePoints[$index+1].childName}</span>
-                    </div>
-                </div>
-
-                <div class="FirstRow">
-                    <div>
-                        <h1 class="nameTitle">
-                            ${child.childName} <span>Level ${child.level}</span>
-                        </h1>
-                    </div>
-                
-                </div>
-                <div>
-                    <h2> Rewards available for use</h2>
-
-                    <div repeat.for="availableReward of child.availableRewards">
-                        <div class="AvailableRewardsRow">
-                            <div class="availableRewardName">${availableReward.reward}</div>
-                            <button if.bind="availableReward.used" class="btn btn-default glyphicon glyphicon-lock" style="color: red" click.delegate="Use(availableReward)"></button>
-                            <button if.bind="!availableReward.used" class="btn btn-default glyphicon glyphicon-play" style="color: green" click.delegate="Use(availableReward)"></button>
-                        </div>
-                    </div>
-                </div>
-               
             </div>
+
+            <div show.bind="!$last" style="font-size: 4rem;position:absolute;
+                top:5px;right:5px;cursor:pointer;"
+                 click.trigger="MoveRight($index)">
+                <div style="display:flex;flex-direction:column;justify-content:center;align-items:center">
+                    <div class="glyphicon glyphicon-circle-arrow-right "></div>
+                    <span style="font-size:0.5rem;"> switch to ${browniePoints[$index+1].childName}</span>
+                </div>
+            </div>
+
+            <div class="FirstRow">
+                <div>
+                    <h1 class="nameTitle">
+                        ${child.childName} <span>Level ${child.level}</span>
+                    </h1>
+                </div>
+
+            </div>
+            <div>
+                <h2> Rewards available for use</h2>
+
+                <div repeat.for="availableReward of child.availableRewards">
+                    <div class="AvailableRewardsRow">
+                        <div class="availableRewardName">${availableReward.reward}</div>
+                        <button if.bind="availableReward.used" class="btn btn-default glyphicon glyphicon-lock" style="color: red" click.trigger="Use(availableReward)"></button>
+                        <button if.bind="!availableReward.used" class="btn btn-default glyphicon glyphicon-play" style="color: green" click.trigger="Use(availableReward)"></button>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        </div>
-
-</template>
-
-
+    </div>
+    </div>

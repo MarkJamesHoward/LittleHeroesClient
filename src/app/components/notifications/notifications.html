@@ -1,11 +1,8 @@
-﻿<template>
   <style>
-    paper-button {
-      margin-top: 3rem;
-    }
     .btn {
       min-width: 200px;
       margin-bottom: 20px;
+      margin-top: 3rem;
     }
 
     span {
@@ -60,22 +57,21 @@
             </div>
             <br />
 
-            <paper-button
-              raised
+            <button
+              class="btn"
               if.bind="!isSubscribed"
               click.trigger="subscribe()"
-              >Enable notifications</paper-button
-            >
-            <paper-button
-              raised
+              >Enable notifications</button>
+            <button
+              class="btn"
               if.bind="isSubscribed"
               click.trigger="unsubscribe()"
               >Disable notifications
-            </paper-button>
+            </button>
 
-            <paper-button raised click.trigger="Home()"
+            <button class="btn" click.trigger="Home()"
               >Back Home
-            </paper-button>
+            </button>
 
             <!--<br />
                 <label for="friendlyname">Optional: enter a subscription name</label>
@@ -101,4 +97,3 @@
       </form>
     </div>
   </div>
-</template>

@@ -1,5 +1,4 @@
 import { data } from "./../devdata/childrendata";
-import { inject } from "aurelia-framework";
 import { FindAchievement } from "../../library/AchievementsCommon";
 import {
   Parent,
@@ -7,8 +6,8 @@ import {
   IAvailableRewards,
   IMyAchievements
 } from "../../library/interfaces";
-import { Router } from "aurelia-router";
-import "@polymer/paper-button";
+import { IRouter } from '@aurelia/router-lite';
+import { resolve } from '@aurelia/kernel';
 import "monster-creator";
 import {
   DNS,
@@ -21,11 +20,10 @@ import {
   isAuthenticated
 } from "../global";
 
-@inject(Router)
 export class Pet {
   AchievementCompleted: boolean = false;
   AchievementCompletedMessage: string = "";
-  router: Router;
+  private router = resolve(IRouter);
   child: BrowniePoints;
   childID: number;
   browniePoints: Array<BrowniePoints>;
@@ -61,7 +59,7 @@ export class Pet {
   }
 
   Cancel() {
-    this.router.navigate("children");
+    this.router.load("children");
   }
 
   SavePet(
@@ -95,10 +93,10 @@ export class Pet {
       { method: "put", headers: { authorization: `Bearer ${token}` } }
     );
 
-    this.router.navigate(`children/0/${this.scrollPos}`);
+    this.router.load(`children/0/${this.scrollPos}`);
   }
 
-  activate(params: any) {
+  loading(params: any) {
     console.log(`loading pety for ${params.id}`);
     console.log(`return scroll Pos ${params.scrollPos}`);
     this.scrollPos = params.scrollPos;
@@ -175,9 +173,5 @@ export class Pet {
         //this.errorMessage = e;
       }
     }
-  }
-
-  constructor(Router: Router) {
-    this.router = Router;
   }
 }

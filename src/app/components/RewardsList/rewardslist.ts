@@ -1,6 +1,6 @@
-import { Router } from 'aurelia-router';
-import { inject } from 'aurelia-framework';
-import { HttpClient } from 'aurelia-fetch-client';
+import { IRouter } from '@aurelia/router-lite';
+import { IHttpClient } from '@aurelia/fetch-client';
+import { resolve } from '@aurelia/kernel';
 
  interface Parent {
     ID: number,
@@ -26,20 +26,16 @@ import { HttpClient } from 'aurelia-fetch-client';
     presenting: boolean;
 }
 
-@inject(Router, HttpClient)
 export class RewardsList {
-    router: Router;
-    http: HttpClient;
+    private router = resolve(IRouter);
+    private http = resolve(IHttpClient);
     browniePoints: Array<BrowniePoints> = [];
     rewards: Rewards;
     addingRewardActivated: Array<boolean> = [];
     rewardTextBoxState: Array<string> = [];
     test: string;
 
-    constructor(router: Router, http: HttpClient) {
-        this.router = router;
-        this.http = http;
-
+    constructor() {
         console.log('calling rewards get')
         this.http.fetch('api/Children', { method: 'get', credentials: 'same-origin' })
             .then(result => result.json() as Promise<BrowniePoints[]>)
@@ -101,5 +97,5 @@ export class RewardsList {
             });
     }
 
-   
+
 }

@@ -1,5 +1,5 @@
-import { Router } from "aurelia-router";
-import { inject } from "aurelia-framework";
+import { resolve } from '@aurelia/kernel';
+import { IRouter } from '@aurelia/router-lite';
 import {
   Parent,
   SignedIn,
@@ -14,28 +14,25 @@ import {
   token,
   ConfigureClient
 } from "../global";
-import "@polymer/paper-button";
-import "@polymer/paper-input/paper-input.js";
 
-@inject(Router)
 export class ManageHeroes {
-  router: Router;
+  private router = resolve(IRouter);
   parent: Parent;
   registeredKids: Array<BrowniePoints>;
   newChildName: string;
   addingChildActivated: boolean = false;
   groupMembers: Array<Parent>;
-  loading: boolean = false;
+  isLoading: boolean = false;
   newUserInviteEmailAddress: string;
   displayError: boolean = false;
   errorMessage: string;
   attemptingDelete: boolean = false;
 
   Home() {
-    this.router.navigate("/welcome");
+    this.router.load("/welcome");
   }
 
-  async activate() {
+  async loading(params) {
     await GetAccessToken();
 
     console.log(token)
@@ -117,7 +114,7 @@ export class ManageHeroes {
   }
 
   async AddChild() {
-    this.loading = true;
+    this.isLoading = true;
 
     let username = document.querySelector("#InputBox");
 
@@ -130,7 +127,7 @@ export class ManageHeroes {
       if (this.newChildName.length < 3) {
         this.displayError = true;
         this.errorMessage = "Name must be greater than 3 characters";
-        this.loading = false;
+        this.isLoading = false;
       } else {
         GetAccessToken();
 
@@ -149,16 +146,15 @@ export class ManageHeroes {
           this.displayError = true;
         }
         this.addingChildActivated = false;
-        this.loading = false;
+        this.isLoading = false;
       }
     } catch (e) {
       this.errorMessage = "Failed to add child " + e;
       this.displayError = true;
-      this.loading = false;
+      this.isLoading = false;
     }
   }
 
-  constructor(router: Router) {
-    this.router = router;
+  constructor() {
   }
 }

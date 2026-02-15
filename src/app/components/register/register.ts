@@ -1,34 +1,22 @@
-import { MetadataType } from 'aurelia-metadata';
-import { HttpClient } from "aurelia-fetch-client";
-import "@polymer/paper-button";
-import "@polymer/paper-input/paper-input.js";
-import "@polymer/paper-icon-button";
-import "@polymer/iron-icons/iron-icons.js";
-import "@polymer/paper-checkbox/paper-checkbox.js";
-import { inject } from "aurelia-framework";
-import { Router } from "aurelia-router";
+import { IHttpClient } from '@aurelia/fetch-client';
+import { IRouter } from '@aurelia/router-lite';
+import { resolve } from '@aurelia/kernel';
 import { DNS, dev } from "../global";
 
-@inject(Router, HttpClient)
 export class Register {
   DelayInCreationOfAccount: boolean;
-  router: Router;
+  private router = resolve(IRouter);
   addedNewUserOk: boolean = false;
   attemptedAddNewUser: boolean = false;
   connecting: boolean = false;
   error: boolean = false;
   errorMsg: string = '';
-  http: HttpClient;
+  private http = resolve(IHttpClient);
   myusername: string;
   mypassword: string;
 
-  constructor(router: Router, http: HttpClient) {
-    this.router = router;
-    this.http = http;
-  }
-
   Home() {
-    this.router.navigate("welcome");
+    this.router.load("welcome");
   }
 
   AllGood() {
@@ -38,7 +26,7 @@ export class Register {
       this.connecting = false;
 
       setTimeout(() => {
-      this.router.navigate("/welcome");
+      this.router.load("/welcome");
       }, 3000);
 
     }, 2000);

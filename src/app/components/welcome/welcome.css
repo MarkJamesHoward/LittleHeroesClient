@@ -54,7 +54,7 @@ font-family: "Gochi Hand", cursive;
 font-size: 3rem;
 }
 
-paper-button {
+button.btn {
 padding: 1rem;
 margin: 1rem;
 }
@@ -208,11 +208,10 @@ place-items: center;
 
 .welcomeTitle {
 grid-area: welcome;
-height: 100vh;
-max-height: 100vh;
+min-height: 100vh;
 display: grid;
 justify-content: center;
-grid-template-rows: 1fr 5fr 2fr 2fr;
+grid-template-rows: 1fr 5fr 2fr auto;
 grid-template-areas:
   "title"
   "image"

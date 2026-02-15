@@ -1,10 +1,6 @@
-import { PLATFORM } from "aurelia-pal";
-import { inject } from "aurelia-framework";
-import { Router } from "aurelia-router";
+import { resolve } from '@aurelia/kernel';
+import { IRouter } from '@aurelia/router-lite';
 import { SignedIn, Parent } from "../../library/interfaces";
-import "@polymer/paper-button";
-import "@polymer/paper-icon-button";
-import "@polymer/iron-icons/iron-icons.js";
 import {
   DNS,
   dev,
@@ -20,13 +16,12 @@ import {
 } from "../global";
 import "LittleHeroesHomePageAnimation";
 
-@inject(Router)
 export class Welcome {
   private showFCA: boolean = false;
   private observer: IntersectionObserver;
   private proceedToChildrenScreen: boolean = true;
-  public loading: boolean = true;
-  public router: Router;
+  private router = resolve(IRouter);
+  public isLoading: boolean = true;
   public signedIn: boolean = false;
   public signedInAs: string;
   public newUserInviteEmailAddress: string;
@@ -47,20 +42,20 @@ export class Welcome {
   public async AmISignedIn() {
     if (await CheckIfAuthenticated()) {
       this.signedIn = true;
-      this.loading = false;
+      this.isLoading = false;
 
       let user = await auth0.getUser();
       this.signedInAs = user.name;
 
       if (this.proceedToChildrenScreen) {
-        //this.router.navigate("children/0/0");
+        //this.router.load("children/0/0");
       } else {
         //this.GetUsername();
       }
     } else {
       console.log("@## show that we are not logged in");
       this.signedIn = false;
-      this.loading = false;
+      this.isLoading = false;
 
       const query = window.location.search;
       if (query.includes("code=") && query.includes("state=")) {
@@ -70,7 +65,7 @@ export class Welcome {
         console.log("*** Showing the logged in user detils ***");
 
         this.signedIn = true;
-        this.loading = false;
+        this.isLoading = false;
         this.offline = false;
 
         let user = await auth0.getUser();
@@ -89,19 +84,19 @@ export class Welcome {
   }
 
   ManageHeroes() {
-    this.router.navigate("ManageHeroes");
+    this.router.load("ManageHeroes");
   }
 
   Privacy() {
-    this.router.navigate("privacy");
+    this.router.load("privacy");
   }
 
   ManageNotifications() {
-    this.router.navigate("notifications");
+    this.router.load("notifications");
   }
 
   QuickStart() {
-    this.router.navigate("QuickStart");
+    this.router.load("quickstart");
   }
 
   offlineHandler() {
@@ -113,9 +108,7 @@ export class Welcome {
     this.offline = false;
   }
 
-  constructor(router: Router) {
-    this.router = router;
-
+  constructor() {
     window.addEventListener("offline", this.offlineHandler.bind(this));
     window.addEventListener("online", this.onlineHandler.bind(this));
   }
@@ -130,7 +123,7 @@ export class Welcome {
   }
 
   ViewHeroTastic() {
-    this.router.navigate("children/0/0");
+    this.router.load("children/0/0");
   }
 
   // Activate animations as the element comes into view
@@ -151,7 +144,7 @@ export class Welcome {
     this.observer.observe(myImg);
   }
 
-  async activate(params: any) {
+  async loading(params: any) {
     await ConfigureClient();
 
     this.AmISignedIn()
@@ -160,18 +153,18 @@ export class Welcome {
           // this.startup();
         }
         console.log("finished constructor");
-        // this.loading = false;
+        // this.isLoading = false;
       })
       .catch(err => {
         if (err == "TypeError: Failed to fetch") {
           console.log("Offline " + err);
           this.offline = true;
-          this.loading = false;
+          this.isLoading = false;
         } else {
           console.log("Some error " + err);
           this.errorHadOccurred = true;
           this.errorMessage = err;
-          this.loading = false;
+          this.isLoading = false;
         }
       });
 

@@ -135,6 +135,33 @@
   display: flex;
 }
 
+.nav-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  font-size: 3rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  z-index: 100;
+  border-radius: 8px;
+  user-select: none;
+}
+
+.nav-arrow:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.nav-arrow-left {
+  left: 0.5rem;
+}
+
+.nav-arrow-right {
+  right: 0.5rem;
+}
+
 .SnapChild {
   min-width: 100vw;
   scroll-snap-align: start;

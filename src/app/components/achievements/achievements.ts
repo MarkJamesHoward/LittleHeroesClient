@@ -1,13 +1,12 @@
+import { resolve } from '@aurelia/kernel';
+import { IRouter } from '@aurelia/router-lite';
+import { IHttpClient } from '@aurelia/fetch-client';
 import {
   BrowniePoints,
   ISuperSwat,
   IAchievementsPlusSuperSwatDays
 } from "../../library/interfaces";
 import { IAchievements, IMyAchievements } from "../../library/interfaces";
-import "@polymer/paper-progress/paper-progress.js";
-import { inject } from "aurelia-framework";
-import { Router } from "aurelia-router";
-import { HttpClient } from "aurelia-fetch-client";
 import {
   DNS,
   dev,
@@ -19,14 +18,12 @@ import {
   isAuthenticated
 } from "../global";
 import { data } from "../devdata/childrendata";
-import "@polymer/paper-button";
-import * as moment from "moment";
+import moment from "moment";
 
-@inject(Router, HttpClient)
 export class Achievements {
   achievements: Array<IAchievementsPlusSuperSwatDays>;
-  router: Router;
-  http: HttpClient;
+  private router = resolve(IRouter);
+  private http = resolve(IHttpClient);
   browniePoints: Array<BrowniePoints>;
   child: BrowniePoints;
   TotalAchievementCount: number;
@@ -99,10 +96,10 @@ export class Achievements {
   }
 
   Back() {
-    this.router.navigate(`/children/0/${this.scrollPos}`);
+    this.router.load(`/children/0/${this.scrollPos}`);
   }
 
-  async activate(params: any) {
+  async loading(params: any) {
     this.scrollPos = params.scrollPos;
 
     console.log(`loading achievements for ${params.id}`);
@@ -165,10 +162,7 @@ export class Achievements {
     }
   }
 
-  constructor(router: Router, http: HttpClient) {
-    this.router = router;
-    this.http = http;
-
+  constructor() {
     ConfigureClient().then(() => {
       console.log("configured client");
       if (isAuthenticated) {

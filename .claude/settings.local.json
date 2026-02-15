@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet build:*)",
+      "Bash(gh secret list:*)",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:docs.aurelia.io)",
+      "WebFetch(domain:aurelia.io)",
+      "Bash(wc:*)",
+      "Bash(npm view:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm link:*)",
+      "Bash(npm install:*)",
+      "Bash(npm ls:*)",
+      "Bash(npx esbuild:*)",
+      "WebFetch(domain:discourse.aurelia.io)"
+    ]
+  }
+}

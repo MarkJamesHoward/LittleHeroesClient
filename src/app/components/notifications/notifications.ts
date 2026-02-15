@@ -1,32 +1,28 @@
-﻿import { Router } from "aurelia-router";
-import { Aurelia, inject } from "aurelia-framework";
-import { MetadataType } from "aurelia-metadata";
-import { HttpClient, json } from "aurelia-fetch-client";
+import { IRouter } from '@aurelia/router-lite';
+import { IHttpClient } from '@aurelia/fetch-client';
+import { json } from '@aurelia/fetch-client';
+import { resolve } from '@aurelia/kernel';
 import { DNS, dev } from "../global";
-import "@polymer/paper-button";
 
-@inject(HttpClient, Router)
-export class notifications {
+export class Notifications {
   message: string;
   serviceWorker: boolean;
   reg: any;
   subscription: any;
   subscriptionJSONified: string;
   isSubscribed = false;
-  http: HttpClient;
+  private http = resolve(IHttpClient);
   applicationServerKey: string;
   friendlyName: string;
-  router: Router;
+  private router = resolve(IRouter);
 
-  constructor(httpClient: HttpClient, router: Router) {
+  constructor() {
     this.serviceWorker = false;
-    this.router = router;
     this.friendlyName = "My Device";
 
     if ("serviceWorker" in navigator) {
       this.serviceWorker = true;
     }
-    this.http = httpClient;
 
     //this.checkSubscription();
     this.http.configure(config => {
@@ -88,7 +84,7 @@ export class notifications {
   }
 
   Home() {
-    this.router.navigate("welcome");
+    this.router.load("welcome");
   }
 
   async checkSubscription() {

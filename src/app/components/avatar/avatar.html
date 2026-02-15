@@ -1,70 +1,66 @@
-<template>
-    <style>
-        /*body {
-            font-size: calc(10px + 1vw);
-        }*/
+<style>
+    /*body {
+        font-size: calc(10px + 1vw);
+    }*/
 
-        div.currentAvatar img 
-        {
-            border: 5px solid black;
-            border-radius: 2rem;
-        }
+    div.currentAvatar img
+    {
+        border: 5px solid black;
+        border-radius: 2rem;
+    }
 
-        div.selectAvatarSection > img, div.currentAvatar img {
-            width: 100px;
-            height: 130px;
-        }
+    div.selectAvatarSection > img, div.currentAvatar img {
+        width: 100px;
+        height: 130px;
+    }
 
-        .avatars {
-            display:flex;
-            justify-content:center;
-            margin-left: 1rem;
-        }
-        .selectAvatarSection {
-            cursor: pointer;
-            display: flex;
-            margin-left: 5rem;
-            flex-wrap: wrap;
-        }
+    .avatars {
+        display:flex;
+        justify-content:center;
+        margin-left: 1rem;
+    }
+    .selectAvatarSection {
+        cursor: pointer;
+        display: flex;
+        margin-left: 5rem;
+        flex-wrap: wrap;
+    }
 
-        .currentAvatar {
-            font-size: 1.8rem;
-        }
+    .currentAvatar {
+        font-size: 1.8rem;
+    }
 
-        .childName {
-            color: black;
-        }
+    .childName {
+        color: black;
+    }
 
-        .childSubTitle {
-            font-size: 1.8rem;
-            color: black;
-        }
-    </style>
+    .childSubTitle {
+        font-size: 1.8rem;
+        color: black;
+    }
+</style>
 
 
-    <div repeat.for="child of children">
-        <h1  style="margin-left: 1rem" class="childName">${child.childName} </h1>
-        <div class="avatars">
-            <div class="currentAvatar">
-                <img src="${child.avatar}" alt="Alternate Text" />
-            </div>
-            <br />
-
-            <div class="childSubTitle"></div>
-            <div class="circle-container">
-                <img src="../../../../images/superman.png" click.delegate="selectAvatar($event, child.childName)" />
-                <img src="../../../../images/batgirl.png" click.delegate="selectAvatar($event, child.childName)" />
-                <img src="../../../../images/batman.png" click.delegate="selectAvatar($event, child.childName)" />
-                <img src="../../../../images/captain-american.png" click.delegate="selectAvatar($event, child.childName)" />
-                <img src="../../../../images/hero.png" click.delegate="selectAvatar($event, child.childName)" />
-                <img src="../../../../images/spider-girl.png" click.delegate="selectAvatar($event, child.childName)" />
-                <img src="../../../../images/master.png" click.delegate="selectAvatar($event, child.childName)" />
-            </div>
+<div repeat.for="child of children">
+    <h1  style="margin-left: 1rem" class="childName">${child.childName} </h1>
+    <div class="avatars">
+        <div class="currentAvatar">
+            <img src="${child.avatar}" alt="Alternate Text" />
         </div>
+        <br />
 
-        <hr />
-
+        <div class="childSubTitle"></div>
+        <div class="circle-container">
+            <img src="../../../../images/superman.png" click.trigger="selectAvatar($event, child.childName)" />
+            <img src="../../../../images/batgirl.png" click.trigger="selectAvatar($event, child.childName)" />
+            <img src="../../../../images/batman.png" click.trigger="selectAvatar($event, child.childName)" />
+            <img src="../../../../images/captain-american.png" click.trigger="selectAvatar($event, child.childName)" />
+            <img src="../../../../images/hero.png" click.trigger="selectAvatar($event, child.childName)" />
+            <img src="../../../../images/spider-girl.png" click.trigger="selectAvatar($event, child.childName)" />
+            <img src="../../../../images/master.png" click.trigger="selectAvatar($event, child.childName)" />
+        </div>
     </div>
 
+    <hr />
 
-</template>
+</div>

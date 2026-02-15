@@ -1,5 +1,4 @@
-<template>
-  <require from="./pet.css"></require>
+  <import from="./pet.css" />
 
   <div class="au-animate FadeIn FadeOut MasterContainerPet">
 
@@ -8,21 +7,21 @@
           if.bind="AchievementCompleted">
         <h3>${AchievementCompletedMessage}</h3>
       </div>
-      
+
     <div style="height: 100%; grid-area: main; max-height: 300px">
       <monster-creator
         customize="Yes"
-        selectedmouthindex.two-way="child.pet.mouth"
-        selectedeyeindex.two-way="child.pet.eyes"
-        selectedlegsindex.two-way="child.pet.legs"
-        selectedsilhouetteindex.two-way="child.pet.silhouette"
-        selectedmouthy.two-way="child.pet.selectedmouthy"
-        selectedmouthx.two-way="child.pet.selectedmouthx"
-        selectedlegsy.two-way="child.pet.selectedlegsy"
-        selectedlegsx.two-way="child.pet.selectedlegsx"
-        selectedeyey.two-way="child.pet.selectedeyey"
-        selectedeyex.two-way="child.pet.selectedeyex"
-        level.two-way="child.level"
+        selectedmouthindex.bind="child.pet.mouth"
+        selectedeyeindex.bind="child.pet.eyes"
+        selectedlegsindex.bind="child.pet.legs"
+        selectedsilhouetteindex.bind="child.pet.silhouette"
+        selectedmouthy.bind="child.pet.selectedmouthy"
+        selectedmouthx.bind="child.pet.selectedmouthx"
+        selectedlegsy.bind="child.pet.selectedlegsy"
+        selectedlegsx.bind="child.pet.selectedlegsx"
+        selectedeyey.bind="child.pet.selectedeyey"
+        selectedeyex.bind="child.pet.selectedeyex"
+        level.bind="child.level"
       >
         <svg viewBox="0 0 200 200" slot="silhouette1">
           <path
@@ -95,24 +94,23 @@
 
     <div class="PetButtons" style="grid-area: main; height:100vh;">
       <div style="display:flex;height: 100%;flex-direction:row; align-items: flex-end">
-        <paper-button
+        <button
+          class="btn"
           style="flex-grow:1;height: 10vh;z-index:2000;background: blue"
-          raised
-          click.trigger="SavePet(child.id, child.pet.eyes, child.pet.mouth, child.pet.legs, 
+          click.trigger="SavePet(child.id, child.pet.eyes, child.pet.mouth, child.pet.legs,
           child.pet.silhouette, child.pet.selectedmouthx, child.pet.selectedmouthy,
           child.pet.selectedeyex, child.pet.selectedeyey,
           child.pet.selectedlegsx, child.pet.selectedlegsy)"
         >
           Accept
-        </paper-button>
-        <paper-button
-          raised
+        </button>
+        <button
+          class="btn"
           click.trigger="Reset()"
           style="flex-grow:1;height: 10vh;z-index:200; background: red"
         >
           Reset
-        </paper-button>
+        </button>
       </div>
     </div>
   </div>
-</template>

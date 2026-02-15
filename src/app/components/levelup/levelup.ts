@@ -1,14 +1,13 @@
-import { inject, child } from "aurelia-framework";
-import { Router } from "aurelia-router";
-import "@polymer/paper-button";
+import { resolve } from '@aurelia/kernel';
+import { IRouter } from '@aurelia/router-lite';
 import { BrowniePoints } from "app/library/interfaces";
 import { dev, SetBrowniePoints, GetBrowniePoints } from "../global";
 import { data } from "../devdata/childrendata";
+import clappingSound from "../../sounds/clapping.mp3";
 
-@inject(Router)
 export class LevelUp {
   scrollPos: number = 0;
-  router: Router;
+  private router = resolve(IRouter);
   name: String;
   reward: String;
   child: BrowniePoints;
@@ -17,10 +16,10 @@ export class LevelUp {
 
   Continue() {
     this.sound.pause();
-    this.router.navigate(`/children/0/${this.scrollPos}`);
+    this.router.load(`/children/0/${this.scrollPos}`);
   }
 
-  activate(params: any) {
+  loading(params: any) {
     this.scrollPos = params.scrollPos;
 
     console.log(`loading achievements for ${params.id}`);
@@ -32,7 +31,7 @@ export class LevelUp {
 
     this.child = this.browniePoints.find(item => item.id == params.id);
 
-    this.sound.src = require("../../sounds/clapping.mp3");
+    this.sound.src = clappingSound;
     this.sound
       .play()
       .then(() => {
@@ -45,10 +44,9 @@ export class LevelUp {
 
   public CloseLevelUp() {
     this.sound.pause();
-    this.router.navigate(`unlock/${this.child.level}/${this.scrollPos}`);
+    this.router.load(`unlock/${this.child.level}/${this.scrollPos}`);
   }
 
-  constructor(router: Router) {
-    this.router = router;
+  constructor() {
   }
 }

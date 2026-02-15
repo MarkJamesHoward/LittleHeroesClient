@@ -1,5 +1,3 @@
-<template>
-
     <style>
         body {
             font-size: calc(10px + 1vw);
@@ -18,20 +16,20 @@
     <div class="container">
         <h2>Rewards Admin</h2>
 
-     
+
         <div repeat.for="child of browniePoints">
             <div style="display:flex;justify-content:space-between;margin-top:3.5rem;max-width: 50vw">
                 <div style="margin-right: 1rem;">
                     ${child.childName}
-                </div>                
-                <button click.delegate="ActivateAddRewards($index)"  class="btn btn-default addButton glyphicon glyphicon-plus"
+                </div>
+                <button click.trigger="ActivateAddRewards($index)"  class="btn btn-default addButton glyphicon glyphicon-plus"
                       aria-hidden="true">
                 </button>
-            </div> 
+            </div>
 
             <div class="rewardText" if.bind="addingRewardActivated[$index]">
                 <input type="text" name="rewardName" value.bind="newrewardName" />
-                <button click.delegate="AddReward(child)">Confirm Add</button>
+                <button click.trigger="AddReward(child)">Confirm Add</button>
             </div>
 
             <div repeat.for="reward of child.rewards">
@@ -42,15 +40,12 @@
                         <input type="text" disabled.bind="!reward.editing" value.bind="reward.reward" />
                     </div>
                     <div>
-                        <button click.delegate="RemoveReward(reward)" class="btn btn-default removeButton glyphicon glyphicon-remove"></button>
-                        <button click.delegate="EditReward(reward)" class="btn btn-default editButton glyphicon glyphicon-pencil"></button>
-                        <button click.delegate="SaveReward(reward)" class="btn btn-default saveButton glyphicon glyphicon-floppy-disk"></button>
-                    </div>                
+                        <button click.trigger="RemoveReward(reward)" class="btn btn-default removeButton glyphicon glyphicon-remove"></button>
+                        <button click.trigger="EditReward(reward)" class="btn btn-default editButton glyphicon glyphicon-pencil"></button>
+                        <button click.trigger="SaveReward(reward)" class="btn btn-default saveButton glyphicon glyphicon-floppy-disk"></button>
+                    </div>
                 </div>
             </div>
         </div>
 
     </div>
-
-</template>
- 

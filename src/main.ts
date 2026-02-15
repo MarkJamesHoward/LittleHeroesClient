@@ -1,25 +1,11 @@
-/// <reference types="aurelia-loader-webpack/src/webpack-hot-interface"/>
-// we want font-awesome to load as soon as possible to show the fa-spinner
-import { Aurelia } from "aurelia-framework";
-import environment from "./environment";
-import { PLATFORM } from "aurelia-pal";
-import * as Bluebird from "bluebird";
+import Aurelia from 'aurelia';
+import { RouterConfiguration } from '@aurelia/router-lite';
+import { App } from './app/components/app/app';
 
-export function configure(aurelia: Aurelia) {
-  aurelia.use
-    .standardConfiguration()
-    .feature(PLATFORM.moduleName("resources/index"));
-
-  // Uncomment the line below to enable animation.
-  aurelia.use.plugin(PLATFORM.moduleName("aurelia-animator-css"));
-  // if the css animator is enabled, add swap-order="after" to all router-view elements
-
-  // Anyone wanting to use HTMLImports to load views, will need to install the following plugin.
-  // aurelia.use.plugin(PLATFORM.moduleName('aurelia-html-import-template-loader'));
-
-  aurelia.use.developmentLogging(environment.debug ? "debug" : "warn");
-
-  return aurelia
-    .start()
-    .then(() => aurelia.setRoot(PLATFORM.moduleName("app/components/app/app")));
-}
+const au = new Aurelia();
+au.register(RouterConfiguration.customize({ useUrlFragmentHash: false }));
+au.app({
+  component: App,
+  host: document.body,
+});
+au.start();

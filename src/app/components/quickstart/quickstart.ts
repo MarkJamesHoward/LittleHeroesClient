@@ -1,12 +1,10 @@
-import { Router } from "aurelia-router";
-import { inject } from "aurelia-framework";
+import { IRouter } from '@aurelia/router-lite';
+import { resolve } from '@aurelia/kernel';
 import { dev, DNS } from "../global";
 import { uniqueNamesGenerator } from "unique-names-generator";
-import "@polymer/paper-button";
 
-@inject(Router)
 export class QuickStart {
-  router: Router;
+  private router = resolve(IRouter);
   connecting: boolean = true;
   displayError: boolean = false;
   DelayInCreationOfAccount: boolean = false;
@@ -22,17 +20,13 @@ export class QuickStart {
     this.RegisterAsGuest();
   }
 
-  constructor(router: Router) {
-    this.router = router;
-  }
-
   Start() {
     //this.router.navigate("/children/1");
-    this.router.navigate("/welcome");
+    this.router.load("welcome");
   }
 
   Home() {
-    this.router.navigate("welcome");
+    this.router.load("welcome");
   }
 
   // TODO:This needs to be completed
